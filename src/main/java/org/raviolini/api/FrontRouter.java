@@ -22,7 +22,7 @@ public class FrontRouter<T extends Entity> {
     
     public void route(Class<T> entityClass) {
         
-        String entityName = entityClass.toString().toLowerCase();
+        String entityName = entityClass.getSimpleName().toLowerCase();
         String entityListUri = "/".concat(entityName);
         String entityUri = entityListUri.concat("/:id");
         
