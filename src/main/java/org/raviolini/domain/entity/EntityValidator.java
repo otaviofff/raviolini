@@ -1,10 +1,10 @@
-package org.raviolini.domain.dog;
+package org.raviolini.domain.entity;
 
 import org.raviolini.api.exception.BadRequestException;
 
 public class EntityValidator {
     
-    public static void validate(Dog entity) throws BadRequestException {
+    public void validate(Entity entity) throws BadRequestException {
         if (!entity.isValid()) {
             throw new BadRequestException("Invalid payload given.");
         }

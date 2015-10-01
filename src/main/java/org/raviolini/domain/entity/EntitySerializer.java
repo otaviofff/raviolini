@@ -1,4 +1,4 @@
-package org.raviolini.domain.dog;
+package org.raviolini.domain.entity;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -9,31 +9,28 @@ import org.raviolini.api.exception.InternalServerException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EntitySerializer {
+public class EntitySerializer<T extends Entity> {
     
-    public static Dog unserialize(String payload) throws BadRequestException {
+    public T unserialize(String payload, Class<T> entityClass) throws BadRequestException {
         ObjectMapper mapper = new ObjectMapper();
-        Dog entity;
         
         try {
-            entity = mapper.readValue(payload, Dog.class);
+            return mapper.readValue(payload, entityClass);
         } catch (IOException e) {
             logException(e);
             throw new BadRequestException("Cannot unserialize the payload given.");
         }
-        
-        return entity;
     }
     
-    public static String serialize(Dog entity) throws InternalServerException {
+    public String serialize(T entity) throws InternalServerException {
         return serializeObject(entity);
     }
     
-    public static String serialize(List<Dog> list) throws InternalServerException {
+    public String serialize(List<T> list) throws InternalServerException {
         return serializeObject(list);
     }
     
-    private static String serializeObject(Object object) throws InternalServerException {
+    private String serializeObject(Object object) throws InternalServerException {
         ObjectMapper mapper = new ObjectMapper();
         StringWriter writer = new StringWriter();
         
@@ -47,7 +44,7 @@ public class EntitySerializer {
         return writer.toString();
     }
     
-    private static void logException(Exception e) {
+    private void logException(Exception e) {
         //TODO: Implement logging.
         e.printStackTrace();
     }

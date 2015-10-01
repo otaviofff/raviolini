@@ -1,17 +1,20 @@
 package org.raviolini.api.adapter;
 
 import org.raviolini.api.exception.BadRequestException;
-import org.raviolini.domain.dog.Dog;
-import org.raviolini.domain.dog.EntitySerializer;
-import org.raviolini.domain.dog.EntityValidator;
+import org.raviolini.domain.entity.Entity;
+import org.raviolini.domain.entity.EntitySerializer;
+import org.raviolini.domain.entity.EntityValidator;
 
 import spark.Request;
 
-public abstract class WriteRequestAdapter extends AbstractRequestAdapter {
+public abstract class WriteRequestAdapter<T extends Entity> extends AbstractRequestAdapter<T> {
 
-    protected Dog readRequestBody(Request request) throws BadRequestException {
-        Dog entity = EntitySerializer.unserialize(request.body());
-        EntityValidator.validate(entity);
+    protected T unserializeRequestBody(Request request, Class<T> entityClass) throws BadRequestException {
+        EntitySerializer<T> serializer = new EntitySerializer<>();
+        EntityValidator validator = new EntityValidator();
+        
+        T entity = serializer.unserialize(request.body(), entityClass);
+        validator.validate(entity);
         
         return entity;
     }

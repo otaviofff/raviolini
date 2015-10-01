@@ -2,25 +2,27 @@ package org.raviolini.api.adapter;
 
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.api.exception.NotFoundException;
-import org.raviolini.domain.dog.Dog;
-import org.raviolini.domain.dog.EntitySerializer;
-import org.raviolini.domain.dog.EntityService;
+import org.raviolini.domain.entity.Entity;
+import org.raviolini.domain.entity.EntitySerializer;
+import org.raviolini.domain.entity.EntityService;
 
 import spark.Request;
 import spark.Response;
 
-public class GetRequestAdapter extends ReadRequestAdaptar {
+public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
     
     @Override
-    public Response handle(Request request, Response response) throws InternalServerException, NotFoundException {
-        Integer id = Integer.valueOf(request.params("id"));
-        Dog entity = EntityService.get(id);
+    public Response handle(Request request, Response response, Class<T> entityCLass) throws InternalServerException, NotFoundException {
+        EntityService<T> service = new EntityService<>();
+        EntitySerializer<T> serializer = new EntitySerializer<>();
+        
+        T entity = service.get(Integer.valueOf(request.params("id")), entityCLass);
         
         if (entity == null) {
             throw new NotFoundException();
         }
         
-        String body = EntitySerializer.serialize(entity);
+        String body = serializer.serialize(entity);
         
         response.body(body);
         response.status(200);

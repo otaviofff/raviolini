@@ -1,5 +1,7 @@
 package org.raviolini.api.adapter;
 
-public abstract class ReadRequestAdaptar extends AbstractRequestAdapter {
+import org.raviolini.domain.entity.Entity;
+
+public abstract class ReadRequestAdaptar<T extends Entity> extends AbstractRequestAdapter<T> {
 
 }

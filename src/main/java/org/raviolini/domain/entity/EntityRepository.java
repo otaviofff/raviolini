@@ -1,4 +1,4 @@
-package org.raviolini.domain.dog;
+package org.raviolini.domain.entity;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,9 +10,9 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
-public class EntityRepository {
+public class EntityRepository<T extends Entity> {
     
-    private Dao<Dog, String> db;
+    private Dao<T, String> db;
     private ConnectionSource dbConnection;
     private String dbConnectionUrl;
     private String dbConnectionUsername;
@@ -47,53 +47,53 @@ public class EntityRepository {
         return this.dbConnection;
     }
     
-    private Dao<Dog, String> getDatabase() throws SQLException {
+    private Dao<T, String> getDatabase(Class<T> entityClass) throws SQLException {
         if (this.db == null) {
-            this.db = DaoManager.createDao(getConnection(), Dog.class);
+            this.db = DaoManager.createDao(getConnection(), entityClass);
         }
         
         return this.db;
     }
     
-    public List<Dog> select() throws InternalServerException {
+    public List<T> select(Class<T> entityClass) throws InternalServerException {
         try {
-            return getDatabase().queryForAll();
+            return getDatabase(entityClass).queryForAll();
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException(e.getMessage());
         }
     }
     
-    public Dog select(Integer id) throws InternalServerException {
+    public T select(Integer entityId, Class<T> entityClass) throws InternalServerException {
         try {
-            return getDatabase().queryForId(id.toString());
+            return getDatabase(entityClass).queryForId(entityId.toString());
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException(e.getMessage());
         }
     }
     
-    public Integer insert(Dog entity) throws InternalServerException {
+    public Integer insert(T entity, Class<T> entityClass) throws InternalServerException {
         try {
-            return getDatabase().create(entity);
+            return getDatabase(entityClass).create(entity);
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException(e.getMessage());
         }
     }
     
-    public Integer update(Dog entity) throws InternalServerException {
+    public Integer update(T entity, Class<T> entityClass) throws InternalServerException {
         try {
-            return getDatabase().update(entity);
+            return getDatabase(entityClass).update(entity);
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException(e.getMessage());
         }
     }
     
-    public Integer delete(Integer id) throws InternalServerException {
+    public Integer delete(Integer entityId, Class<T> entityClass) throws InternalServerException {
         try {
-            return getDatabase().deleteById(id.toString());
+            return getDatabase(entityClass).deleteById(entityId.toString());
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException(e.getMessage());
