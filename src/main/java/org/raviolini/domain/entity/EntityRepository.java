@@ -3,12 +3,14 @@ package org.raviolini.domain.entity;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.muttie.domain.dog.Dog;
 import org.raviolini.api.exception.InternalServerException;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 
 public class EntityRepository<T extends Entity> {
     
@@ -31,7 +33,7 @@ public class EntityRepository<T extends Entity> {
         this.dbConnectionPassword = password;
     }
 
-    private ConnectionSource getConnection() throws SQLException {
+    private ConnectionSource getConnection(Class<T> entityClass) throws SQLException {
         if (this.dbConnection == null) {
             this.dbConnection =  new JdbcConnectionSource(
                     this.dbConnectionUrl, 
@@ -41,7 +43,7 @@ public class EntityRepository<T extends Entity> {
             
             //TODO: Check whether DB exists.
             //More info: https://github.com/j256/ormlite-core/issues/20
-            //TableUtils.createTableIfNotExists(this.dbConnection, Dog.class);
+            //TableUtils.createTableIfNotExists(this.dbConnection, entityClass);
         }
         
         return this.dbConnection;
@@ -49,7 +51,7 @@ public class EntityRepository<T extends Entity> {
     
     private Dao<T, String> getDatabase(Class<T> entityClass) throws SQLException {
         if (this.db == null) {
-            this.db = DaoManager.createDao(getConnection(), entityClass);
+            this.db = DaoManager.createDao(getConnection(entityClass), entityClass);
         }
         
         return this.db;
