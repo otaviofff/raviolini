@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.service.LoggingService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,7 +46,7 @@ public class EntitySerializer<T extends Entity> {
     }
     
     private void logException(Exception e) {
-        //TODO: Implement logging.
-        e.printStackTrace();
+        LoggingService logger = new LoggingService();
+        logger.logException(e);
     }
 }

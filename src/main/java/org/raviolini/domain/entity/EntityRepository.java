@@ -3,14 +3,13 @@ package org.raviolini.domain.entity;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.muttie.domain.dog.Dog;
 import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.service.LoggingService;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.TableUtils;
 
 public class EntityRepository<T extends Entity> {
     
@@ -22,7 +21,7 @@ public class EntityRepository<T extends Entity> {
     
     public EntityRepository() {
         //TODO: Implement configuration.
-        this("jdbc:postgresql://localhost:15432/muttie", "muttie_usr", "muttie_pwd");
+        this("jdbc:postgresql://localhost:15432/muttie", "muttie_usr", "muttie_pwd_");
     }
     
     public EntityRepository(String url, String username, String password) {
@@ -103,7 +102,7 @@ public class EntityRepository<T extends Entity> {
     }
     
     private void logException(Exception e) {
-        //TODO: Implement logging.
-        e.printStackTrace();
+        LoggingService logger = new LoggingService();
+        logger.logException(e);
     }
 }

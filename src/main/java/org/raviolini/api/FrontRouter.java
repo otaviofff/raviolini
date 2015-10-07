@@ -15,6 +15,7 @@ import org.raviolini.api.adapter.PostRequestAdapter;
 import org.raviolini.api.adapter.PutRequestAdapter;
 import org.raviolini.api.exception.AbstractException;
 import org.raviolini.domain.entity.Entity;
+import org.raviolini.service.LoggingService;
 
 public class FrontRouter<T extends Entity> {
 
@@ -60,9 +61,15 @@ public class FrontRouter<T extends Entity> {
         });
         
         exception(AbstractException.class, (e, request, response) -> {
+            logException(e);
             response.status(((AbstractException) e).getCode());
             response.body(e.getMessage());
             response.type("text/plain");
         });
+    }
+    
+    private static void logException(Exception e) {
+        LoggingService logger = new LoggingService();
+        logger.logException(e, false);
     }
 }
