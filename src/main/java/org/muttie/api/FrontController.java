@@ -1,7 +1,7 @@
 package org.muttie.api;
 
-import org.muttie.domain.dog.Dog;
-import org.muttie.domain.dog.Organization;
+import org.muttie.domain.Dog;
+import org.muttie.domain.Organization;
 import org.raviolini.api.RequestRouter;
 
 public class FrontController {

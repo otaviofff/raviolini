@@ -1,4 +1,4 @@
-package org.muttie.domain.dog;
+package org.muttie.domain;
 
 import org.raviolini.domain.Entity;
 
