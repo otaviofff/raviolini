@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -17,11 +18,10 @@ public class LoggingService {
     private Handler handler;
 
     //TODO: Set logging directory.
-    //TODO: Create logging configuration file.
     
     private String getFileName() {
-        String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        String name = ("raviolini_").concat(date).concat(".log");
+        String date = new SimpleDateFormat("yyyyMM").format(new Date());
+        String name = ("log/raviolini_").concat(date).concat(".log");
         
         return name;
     }
@@ -37,9 +37,10 @@ public class LoggingService {
     
     private Logger getLogger() throws SecurityException, IOException {
         if (logger == null) {
+            LogManager.getLogManager().reset();
             logger = Logger.getLogger("org.raviolini");
             logger.addHandler(getHandler());
-            logger.setLevel(Level.SEVERE);
+            logger.setLevel(Level.ALL);
         }
         
         return logger;
@@ -63,7 +64,7 @@ public class LoggingService {
         if (logTrace) {
             getLogger().severe(getStackTrace(e));
         } else {
-            getLogger().warning(e.getMessage());
+            getLogger().warning(e.getMessage() + "\n");
         }
         
         getHandler().close();

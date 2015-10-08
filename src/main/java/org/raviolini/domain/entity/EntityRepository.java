@@ -62,7 +62,7 @@ public class EntityRepository<T extends Entity> {
             return getDatabase(entityClass).queryForAll();
         } catch (SQLException e) {
             logException(e);
-            throw new InternalServerException(e.getMessage());
+            throw new InternalServerException("Database failed to SELECT data.");
         }
     }
     
@@ -71,7 +71,7 @@ public class EntityRepository<T extends Entity> {
             return getDatabase(entityClass).queryForId(entityId.toString());
         } catch (SQLException e) {
             logException(e);
-            throw new InternalServerException(e.getMessage());
+            throw new InternalServerException("Database failed to SELECT data.");
         }
     }
     
@@ -80,7 +80,7 @@ public class EntityRepository<T extends Entity> {
             return getDatabase(entityClass).create(entity);
         } catch (SQLException e) {
             logException(e);
-            throw new InternalServerException(e.getMessage());
+            throw new InternalServerException("Database failed to INSERT data.");
         }
     }
     
@@ -89,7 +89,7 @@ public class EntityRepository<T extends Entity> {
             return getDatabase(entityClass).update(entity);
         } catch (SQLException e) {
             logException(e);
-            throw new InternalServerException(e.getMessage());
+            throw new InternalServerException("Database failed to UPDATE data.");
         }
     }
     
@@ -98,7 +98,7 @@ public class EntityRepository<T extends Entity> {
             return getDatabase(entityClass).deleteById(entityId.toString());
         } catch (SQLException e) {
             logException(e);
-            throw new InternalServerException(e.getMessage());
+            throw new InternalServerException("Database failed to DELETE data.");
         }
     }
     
