@@ -17,6 +17,7 @@ public @Data class Organization implements Entity {
     private String name;
     
     public Organization() {
+        //Required by ORM.
     }
     
     @Override

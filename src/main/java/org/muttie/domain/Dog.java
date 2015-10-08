@@ -20,6 +20,7 @@ public @Data class Dog implements Entity {
     private Boolean neutered;
     
     public Dog() {
+        //Required by ORM.
     }
     
     @Override
