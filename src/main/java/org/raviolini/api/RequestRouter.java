@@ -19,22 +19,22 @@ import org.raviolini.api.exception.AbstractException;
 import org.raviolini.domain.entity.Entity;
 import org.raviolini.service.LoggingService;
 
-public class FrontRouter<T extends Entity> {
+public class RequestRouter<T extends Entity> {
 
     private AbstractRequestAdapter<T> adapter;  
     
     public void route(Class<T> entityClass) {
         
         String entityName = entityClass.getSimpleName().toLowerCase();
-        String entityListUri = "/".concat(entityName);
+        String entityListUri = ("/").concat(entityName);
         String entityUri = entityListUri.concat("/:id");
         
         before((request, response) -> {
-            FrontValidator.validateRequest(request);
+            RequestValidator.validateRequest(request);
         });
         
         before(entityUri, (request, response) -> {
-            FrontValidator.validateUri(request);
+            RequestValidator.validateUri(request);
         });
         
         post(entityListUri, (request, response) -> {

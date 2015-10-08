@@ -11,7 +11,7 @@ import org.raviolini.api.exception.UnsupportedMediaTypeException;
 
 import spark.Request;
 
-public class FrontValidator {
+public class RequestValidator {
     
     //TODO: Implement authentication.
     
