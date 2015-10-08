@@ -1,8 +1,9 @@
-package org.raviolini.domain.entity;
+package org.raviolini.service.generic;
 
 import org.raviolini.api.exception.BadRequestException;
+import org.raviolini.domain.Entity;
 
-public class EntityValidator {
+public class ValidationService {
     
     public void validate(Entity entity) throws BadRequestException {
         if (!entity.isValid()) {

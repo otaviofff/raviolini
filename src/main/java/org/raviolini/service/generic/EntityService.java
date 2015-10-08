@@ -1,18 +1,19 @@
-package org.raviolini.domain.entity;
+package org.raviolini.service.generic;
 
 import java.util.List;
 
 import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.domain.Entity;
 
 public class EntityService<T extends Entity> {
 
     //TODO: Implement caching.
     
-    private EntityRepository<T> repository;
+    private DatabaseService<T> repository;
     
-    private EntityRepository<T> getRepository() {
+    private DatabaseService<T> getRepository() {
         if (repository == null) {
-            repository = new EntityRepository<T>();
+            repository = new DatabaseService<T>();
         }
         
         return repository;

@@ -1,4 +1,4 @@
-package org.raviolini.domain.entity;
+package org.raviolini.service.generic;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -6,11 +6,12 @@ import java.util.List;
 
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
-import org.raviolini.service.LoggingService;
+import org.raviolini.domain.Entity;
+import org.raviolini.service.concrete.LoggingService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class EntitySerializer<T extends Entity> {
+public class SerializationService<T extends Entity> {
     
     public T unserialize(String payload, Class<T> entityClass) throws BadRequestException {
         ObjectMapper mapper = new ObjectMapper();

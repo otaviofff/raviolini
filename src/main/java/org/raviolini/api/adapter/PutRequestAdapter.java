@@ -2,8 +2,8 @@ package org.raviolini.api.adapter;
 
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
-import org.raviolini.domain.entity.Entity;
-import org.raviolini.domain.entity.EntityService;
+import org.raviolini.domain.Entity;
+import org.raviolini.service.generic.EntityService;
 
 import spark.Request;
 import spark.Response;

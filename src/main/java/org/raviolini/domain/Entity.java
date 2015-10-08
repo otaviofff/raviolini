@@ -1,4 +1,4 @@
-package org.raviolini.domain.entity;
+package org.raviolini.domain;
 
 public interface Entity {
 

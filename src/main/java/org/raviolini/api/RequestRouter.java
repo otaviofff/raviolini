@@ -14,8 +14,8 @@ import org.raviolini.api.adapter.ListRequestAdapter;
 import org.raviolini.api.adapter.PostRequestAdapter;
 import org.raviolini.api.adapter.PutRequestAdapter;
 import org.raviolini.api.exception.AbstractException;
-import org.raviolini.domain.entity.Entity;
-import org.raviolini.service.LoggingService;
+import org.raviolini.domain.Entity;
+import org.raviolini.service.concrete.LoggingService;
 
 public class RequestRouter<T extends Entity> {
 

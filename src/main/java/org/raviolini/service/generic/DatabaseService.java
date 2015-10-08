@@ -1,17 +1,18 @@
-package org.raviolini.domain.entity;
+package org.raviolini.service.generic;
 
 import java.sql.SQLException;
 import java.util.List;
 
 import org.raviolini.api.exception.InternalServerException;
-import org.raviolini.service.LoggingService;
+import org.raviolini.domain.Entity;
+import org.raviolini.service.concrete.LoggingService;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
-public class EntityRepository<T extends Entity> {
+public class DatabaseService<T extends Entity> {
     
     private Dao<T, String> db;
     private ConnectionSource dbConnection;
@@ -19,12 +20,12 @@ public class EntityRepository<T extends Entity> {
     private String dbConnectionUsername;
     private String dbConnectionPassword;
     
-    public EntityRepository() {
+    public DatabaseService() {
         //TODO: Implement configuration.
-        this("jdbc:postgresql://localhost:15432/muttie", "muttie_usr", "muttie_pwd_");
+        this("jdbc:postgresql://localhost:15432/muttie", "muttie_usr", "muttie_pwd");
     }
     
-    public EntityRepository(String url, String username, String password) {
+    public DatabaseService(String url, String username, String password) {
         this.db = null;
         this.dbConnection = null;
         this.dbConnectionUrl = url;
