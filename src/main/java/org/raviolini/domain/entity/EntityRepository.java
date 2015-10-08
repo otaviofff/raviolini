@@ -1,6 +1,5 @@
 package org.raviolini.domain.entity;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -104,11 +103,6 @@ public class EntityRepository<T extends Entity> {
     
     private void logException(Exception e) {
         LoggingService logger = new LoggingService();
-        
-        try {
-            logger.logException(e, true);
-        } catch (SecurityException | IOException e1) {
-            e1.printStackTrace();
-        }
+        logger.logException(e, true);
     }
 }

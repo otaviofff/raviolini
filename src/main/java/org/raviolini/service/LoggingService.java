@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -26,16 +27,21 @@ public class LoggingService {
         return name;
     }
     
-    private Handler getHandler() throws SecurityException, IOException {
+    private Handler getHandler() {
         if (handler == null) {
-            handler = new FileHandler(getFileName(), 524288000, 1, true);
-            handler.setFormatter(new SimpleFormatter());
+            try {
+                handler = new FileHandler(getFileName(), 524288000, 1, true);
+            } catch (SecurityException | IOException e) {
+                handler = new ConsoleHandler();
+            } finally {
+                handler.setFormatter(new SimpleFormatter());
+            }
         }
         
         return handler;
     }
     
-    private Logger getLogger() throws SecurityException, IOException {
+    private Logger getLogger() {
         if (logger == null) {
             LogManager.getLogManager().reset();
             logger = Logger.getLogger("org.raviolini");
@@ -55,12 +61,12 @@ public class LoggingService {
         return sw.toString();
     }
 
-    public void logMessage(String message) throws SecurityException, IOException {
+    public void logMessage(String message) {
         getLogger().info(message);
         getHandler().close();
     }
     
-    public void logException(Exception e, Boolean logTrace) throws SecurityException, IOException {
+    public void logException(Exception e, Boolean logTrace) {
         if (logTrace) {
             getLogger().severe(getStackTrace(e));
         } else {

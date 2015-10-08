@@ -7,8 +7,6 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import java.io.IOException;
-
 import org.raviolini.api.adapter.AbstractRequestAdapter;
 import org.raviolini.api.adapter.DeleteRequestAdapter;
 import org.raviolini.api.adapter.GetRequestAdapter;
@@ -72,11 +70,6 @@ public class RequestRouter<T extends Entity> {
     
     private static void logException(Exception e) {
         LoggingService logger = new LoggingService();
-        
-        try {
-            logger.logException(e, false);
-        } catch (SecurityException | IOException e1) {
-            e1.printStackTrace();
-        }
+        logger.logException(e, false);
     }
 }
