@@ -6,60 +6,66 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.FileHandler;
-import java.util.logging.Formatter;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.XMLFormatter;
+import java.util.logging.SimpleFormatter;
 
 public class LoggingService {
 
     private Logger logger;
+    private Handler handler;
 
-    private Handler getHandler() throws SecurityException, IOException {
-        //TODO: Set looging directory.
+    //TODO: Set logging directory.
+    //TODO: Create logging configuration file.
+    
+    private String getFileName() {
         String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
         String name = ("raviolini_").concat(date).concat(".log");
-        Handler handler = new FileHandler(name, 524288000, 1, true);
-        Formatter formatter = new XMLFormatter();
         
-        handler.setFormatter(formatter);
+        return name;
+    }
+    
+    private Handler getHandler() throws SecurityException, IOException {
+        if (handler == null) {
+            handler = new FileHandler(getFileName(), 524288000, 1, true);
+            handler.setFormatter(new SimpleFormatter());
+        }
         
         return handler;
     }
     
-    public LoggingService() {
-        try {
-            //TODO: Create logging configuration file.
-            //TODO: Check why different log files are being created.
+    private Logger getLogger() throws SecurityException, IOException {
+        if (logger == null) {
             logger = Logger.getLogger("org.raviolini");
             logger.addHandler(getHandler());
             logger.setLevel(Level.SEVERE);
-        } catch (SecurityException | IOException e) {
-            e.printStackTrace();
         }
+        
+        return logger;
+    }
+    
+    private String getStackTrace(Exception e) {
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        
+        e.printStackTrace(pw);
+        
+        return sw.toString();
     }
 
-    public void logMessage(String message) {
-        if (logger == null) return;
-        
-        logger.info(message);
+    public void logMessage(String message) throws SecurityException, IOException {
+        getLogger().info(message);
+        getHandler().close();
     }
     
-    public void logException(Exception e, Boolean logTrace) {
-        if (logger == null) return;
-        
+    public void logException(Exception e, Boolean logTrace) throws SecurityException, IOException {
         if (logTrace) {
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
-            e.printStackTrace(pw);
-            logger.severe(sw.toString());
+            getLogger().severe(getStackTrace(e));
         } else {
-            logger.warning(e.getMessage());
+            getLogger().warning(e.getMessage());
         }
-    }
-    
-    public void logException(Exception e) {
-        logException(e, true);
+        
+        getHandler().close();
     }
 }
