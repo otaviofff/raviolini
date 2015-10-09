@@ -13,6 +13,7 @@ public class CachingService<T extends Entity> {
     
     private Jedis getCache() {
         if (cache == null) {
+            //TODO: Implement configuration.
             cache = new Jedis("localhost", 16379);
         }
         
