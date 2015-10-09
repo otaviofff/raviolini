@@ -12,6 +12,21 @@ if ! [ -L /var/www ]; then
   ln -fs /vagrant /var/www/html
 fi
 
+
+############################################
+##  Provision Cache (Redis)
+############################################
+
+echo ""
+echo "Installing Redis..."
+
+add-apt-repository ppa:chris-lea/redis-server
+apt-get update
+apt-get -y install redis-server
+
+echo "Redis installed."
+echo "[IMPORTANT] Allow remote connection: http://goo.gl/z5ij7f"
+
 ############################################
 ##  Define DB Variables
 ############################################

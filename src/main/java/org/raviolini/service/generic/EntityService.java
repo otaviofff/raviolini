@@ -2,16 +2,16 @@ package org.raviolini.service.generic;
 
 import java.util.List;
 
+import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
 
 public class EntityService<T extends Entity> {
 
-    //TODO: Implement caching.
-    
     private DatabaseService<T> repository;
+    private CachingService<T> cache;
     
-    private DatabaseService<T> getRepository() {
+    private DatabaseService<T> getDatabase() {
         if (repository == null) {
             repository = new DatabaseService<T>();
         }
@@ -19,23 +19,41 @@ public class EntityService<T extends Entity> {
         return repository;
     }
     
-    public List<T> get(Class<T> entityClass) throws InternalServerException {
-        return getRepository().select(entityClass);
+    private CachingService<T> getCache() {
+        if (cache == null) {
+            cache = new CachingService<>();
+        }
+        
+        return cache;
     }
     
-    public T get(Integer entityId, Class<T> entityClass) throws InternalServerException {
-        return getRepository().select(entityId, entityClass);
+    public List<T> get(Class<T> entityClass) throws InternalServerException {
+        return getDatabase().select(entityClass);
+    }
+    
+    public T get(Integer entityId, Class<T> entityClass) throws InternalServerException, BadRequestException {
+        if (getCache().exists(entityId)) {
+            return getCache().get(entityId, entityClass);
+        }
+        
+        T entity = getDatabase().select(entityId, entityClass);
+        getCache().set(entity, entityClass);
+        
+        return entity;
     }
     
     public void post(T entity, Class<T> entityClass) throws InternalServerException {
-        getRepository().insert(entity, entityClass);
+        getDatabase().insert(entity, entityClass);
+        getCache().set(entity, entityClass);
     }
     
     public void put(T entity, Class<T> entityClass) throws InternalServerException {
-        getRepository().update(entity, entityClass);
+        getDatabase().update(entity, entityClass);
+        getCache().set(entity, entityClass);
     }
     
     public void delete(Integer entityId, Class<T> entityClass) throws InternalServerException {
-        getRepository().delete(entityId, entityClass);        
+        getDatabase().delete(entityId, entityClass);     
+        getCache().delete(entityId);
     }
 }

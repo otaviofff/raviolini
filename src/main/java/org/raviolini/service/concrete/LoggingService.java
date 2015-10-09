@@ -18,8 +18,6 @@ public class LoggingService {
     private Logger logger;
     private Handler handler;
 
-    //TODO: Set logging directory.
-    
     private String getFileName() {
         String date = new SimpleDateFormat("yyyyMM").format(new Date());
         String name = ("log/raviolini_").concat(date).concat(".log");

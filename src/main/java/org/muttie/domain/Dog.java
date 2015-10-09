@@ -2,6 +2,7 @@ package org.muttie.domain;
 
 import org.raviolini.domain.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -28,6 +29,7 @@ public @Data class Dog implements Entity {
         return id;
     }
     
+    @JsonIgnore
     @Override
     public Boolean isValid() {
         return (neutered != null && name != null && !name.isEmpty());

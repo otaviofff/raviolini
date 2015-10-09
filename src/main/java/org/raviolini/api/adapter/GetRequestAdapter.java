@@ -1,5 +1,6 @@
 package org.raviolini.api.adapter;
 
+import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.api.exception.NotFoundException;
 import org.raviolini.domain.Entity;
@@ -12,7 +13,7 @@ import spark.Response;
 public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
     
     @Override
-    public Response handle(Request request, Response response, Class<T> entityCLass) throws InternalServerException, NotFoundException {
+    public Response handle(Request request, Response response, Class<T> entityCLass) throws InternalServerException, NotFoundException, BadRequestException {
         EntityService<T> service = new EntityService<>();
         SerializationService<T> serializer = new SerializationService<>();
         

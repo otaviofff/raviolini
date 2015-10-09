@@ -2,6 +2,7 @@ package org.muttie.domain;
 
 import org.raviolini.domain.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
@@ -25,6 +26,7 @@ public @Data class Organization implements Entity {
         return id;
     }
 
+    @JsonIgnore
     @Override
     public Boolean isValid() {
         return (name != null && !name.isEmpty());
