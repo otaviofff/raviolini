@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.concrete.LoggingService;
+import org.raviolini.service.io.LoggingService;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;

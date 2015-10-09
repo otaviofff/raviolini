@@ -7,7 +7,7 @@ import java.util.List;
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.concrete.LoggingService;
+import org.raviolini.service.io.LoggingService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
