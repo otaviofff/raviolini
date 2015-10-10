@@ -1,10 +1,14 @@
 package org.raviolini.service.generic;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Map;
 
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
+import org.raviolini.service.io.ConfigurationService;
 import org.raviolini.service.io.LoggingService;
 
 import com.j256.ormlite.dao.Dao;
@@ -16,45 +20,47 @@ public class DatabaseService<T extends Entity> {
     
     private Dao<T, String> db;
     private ConnectionSource dbConnection;
-    private String dbConnectionUrl;
-    private String dbConnectionUsername;
-    private String dbConnectionPassword;
-    
-    public DatabaseService() {
-        //TODO: Implement configuration.
-        this("jdbc:postgresql://localhost:15432/muttie", "muttie_usr", "muttie_pwd");
-    }
-    
-    public DatabaseService(String url, String username, String password) {
-        this.db = null;
-        this.dbConnection = null;
-        this.dbConnectionUrl = url;
-        this.dbConnectionUsername = username;
-        this.dbConnectionPassword = password;
-    }
 
-    private ConnectionSource getConnection(Class<T> entityClass) throws SQLException {
-        if (this.dbConnection == null) {
-            this.dbConnection =  new JdbcConnectionSource(
-                    this.dbConnectionUrl, 
-                    this.dbConnectionUsername, 
-                    this.dbConnectionPassword
-                    );
-            
-            //TODO: Check whether DB exists.
-            //More info: https://github.com/j256/ormlite-core/issues/20
-            //TableUtils.createTableIfNotExists(this.dbConnection, entityClass);
-        }
+    //TODO: Check whether DB exists.
+    //More info: https://github.com/j256/ormlite-core/issues/20
+    //TableUtils.createTableIfNotExists(this.dbConnection, entityClass);
+    
+    private Map<String, String> getProperties() throws IOException {
+        //TODO: Move to super class.
+        String namespace = "raviolini.database";
+        String[] keys = new String[] {"driver", "host", "port", "name", "user", "pass"};
         
-        return this.dbConnection;
+        ConfigurationService config = new ConfigurationService();
+        
+        return config.read(namespace, keys);
     }
     
-    private Dao<T, String> getDatabase(Class<T> entityClass) throws SQLException {
-        if (this.db == null) {
-            this.db = DaoManager.createDao(getConnection(entityClass), entityClass);
+    private ConnectionSource getConnection(Class<T> entityClass) throws SQLException, IOException {
+        if (dbConnection == null) {
+            Map<String, String> properties = getProperties();
+
+            String url = MessageFormat.format("jdbc:{0}://{1}:{2}/{3}", 
+                    properties.get("driver"),
+                    properties.get("host"),
+                    properties.get("port"),
+                    properties.get("name")
+            );
+            
+            String user = properties.get("user");
+            String pass = properties.get("pass");
+            
+            dbConnection =  new JdbcConnectionSource(url, user, pass);
         }
         
-        return this.db;
+        return dbConnection;
+    }
+    
+    private Dao<T, String> getDatabase(Class<T> entityClass) throws SQLException, IOException {
+        if (db == null) {
+            db = DaoManager.createDao(getConnection(entityClass), entityClass);
+        }
+        
+        return db;
     }
     
     public List<T> select(Class<T> entityClass) throws InternalServerException {
@@ -63,6 +69,9 @@ public class DatabaseService<T extends Entity> {
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException("Database failed to SELECT data.");
+        } catch (IOException e) {
+            logException(e);
+            throw new InternalServerException("Database config failed.");
         }
     }
     
@@ -72,6 +81,9 @@ public class DatabaseService<T extends Entity> {
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException("Database failed to SELECT data.");
+        } catch (IOException e) {
+            logException(e);
+            throw new InternalServerException("Database config failed.");
         }
     }
     
@@ -81,6 +93,9 @@ public class DatabaseService<T extends Entity> {
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException("Database failed to INSERT data.");
+        } catch (IOException e) {
+            logException(e);
+            throw new InternalServerException("Database config failed.");
         }
     }
     
@@ -90,6 +105,9 @@ public class DatabaseService<T extends Entity> {
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException("Database failed to UPDATE data.");
+        } catch (IOException e) {
+            logException(e);
+            throw new InternalServerException("Database config failed.");
         }
     }
     
@@ -99,10 +117,15 @@ public class DatabaseService<T extends Entity> {
         } catch (SQLException e) {
             logException(e);
             throw new InternalServerException("Database failed to DELETE data.");
+        } catch (IOException e) {
+            logException(e);
+            throw new InternalServerException("Database config failed.");
         }
     }
     
     private void logException(Exception e) {
+        //TODO: Move to super class.
+        //Avoid creating a new service at every method call.
         LoggingService logger = new LoggingService();
         logger.logException(e, true);
     }
