@@ -1,4 +1,4 @@
-package org.raviolini.api.exception;
+package org.raviolini.api.exceptions;
 
 public abstract class AbstractException extends Exception {
 

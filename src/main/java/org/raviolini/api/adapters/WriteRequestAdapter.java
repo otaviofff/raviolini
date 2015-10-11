@@ -1,8 +1,8 @@
-package org.raviolini.api.adapter;
+package org.raviolini.api.adapters;
 
 import java.io.IOException;
 
-import org.raviolini.api.exception.BadRequestException;
+import org.raviolini.api.exceptions.BadRequestException;
 import org.raviolini.domain.Entity;
 import org.raviolini.services.SerializationService;
 import org.raviolini.services.ValidationService;

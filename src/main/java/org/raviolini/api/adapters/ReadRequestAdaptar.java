@@ -1,4 +1,4 @@
-package org.raviolini.api.adapter;
+package org.raviolini.api.adapters;
 
 import org.raviolini.domain.Entity;
 

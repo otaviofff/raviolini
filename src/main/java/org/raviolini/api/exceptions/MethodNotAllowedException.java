@@ -1,4 +1,4 @@
-package org.raviolini.api.exception;
+package org.raviolini.api.exceptions;
 
 public class MethodNotAllowedException extends AbstractException {
 

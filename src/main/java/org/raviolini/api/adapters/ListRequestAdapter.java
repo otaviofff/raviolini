@@ -1,9 +1,9 @@
-package org.raviolini.api.adapter;
+package org.raviolini.api.adapters;
 
 import java.io.IOException;
 import java.util.List;
 
-import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
 import org.raviolini.services.EntityService;
 import org.raviolini.services.SerializationService;

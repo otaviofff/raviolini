@@ -1,6 +1,6 @@
-package org.raviolini.api.adapter;
+package org.raviolini.api.adapters;
 
-import org.raviolini.api.exception.AbstractException;
+import org.raviolini.api.exceptions.AbstractException;
 import org.raviolini.domain.Entity;
 
 import spark.Request;

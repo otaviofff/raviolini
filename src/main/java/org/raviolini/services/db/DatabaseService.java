@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
-import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
 
 import com.j256.ormlite.dao.Dao;

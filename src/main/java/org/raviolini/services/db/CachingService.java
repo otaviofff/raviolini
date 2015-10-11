@@ -3,7 +3,7 @@ package org.raviolini.services.db;
 import java.io.IOException;
 import java.util.Map;
 
-import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
 import org.raviolini.services.SerializationService;
 

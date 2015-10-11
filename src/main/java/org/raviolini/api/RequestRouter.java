@@ -7,13 +7,13 @@ import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
 
-import org.raviolini.api.adapter.AbstractRequestAdapter;
-import org.raviolini.api.adapter.DeleteRequestAdapter;
-import org.raviolini.api.adapter.GetRequestAdapter;
-import org.raviolini.api.adapter.ListRequestAdapter;
-import org.raviolini.api.adapter.PostRequestAdapter;
-import org.raviolini.api.adapter.PutRequestAdapter;
-import org.raviolini.api.exception.AbstractException;
+import org.raviolini.api.adapters.AbstractRequestAdapter;
+import org.raviolini.api.adapters.DeleteRequestAdapter;
+import org.raviolini.api.adapters.GetRequestAdapter;
+import org.raviolini.api.adapters.ListRequestAdapter;
+import org.raviolini.api.adapters.PostRequestAdapter;
+import org.raviolini.api.adapters.PutRequestAdapter;
+import org.raviolini.api.exceptions.AbstractException;
 import org.raviolini.domain.Entity;
 import org.raviolini.services.io.LoggingService;
 

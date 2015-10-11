@@ -3,11 +3,11 @@ package org.raviolini.api;
 import java.util.Arrays;
 import java.util.List;
 
-import org.raviolini.api.exception.AbstractException;
-import org.raviolini.api.exception.BadRequestException;
-import org.raviolini.api.exception.MethodNotAllowedException;
-import org.raviolini.api.exception.NotAcceptableException;
-import org.raviolini.api.exception.UnsupportedMediaTypeException;
+import org.raviolini.api.exceptions.AbstractException;
+import org.raviolini.api.exceptions.BadRequestException;
+import org.raviolini.api.exceptions.MethodNotAllowedException;
+import org.raviolini.api.exceptions.NotAcceptableException;
+import org.raviolini.api.exceptions.UnsupportedMediaTypeException;
 
 import spark.Request;
 

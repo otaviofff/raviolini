@@ -2,8 +2,8 @@ package org.raviolini.services;
 
 import java.util.List;
 
-import org.raviolini.api.exception.BadRequestException;
-import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.api.exceptions.BadRequestException;
+import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
 import org.raviolini.services.db.CachingService;
 import org.raviolini.services.db.DatabaseService;

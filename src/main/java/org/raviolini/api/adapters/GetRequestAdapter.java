@@ -1,10 +1,10 @@
-package org.raviolini.api.adapter;
+package org.raviolini.api.adapters;
 
 import java.io.IOException;
 
-import org.raviolini.api.exception.BadRequestException;
-import org.raviolini.api.exception.InternalServerException;
-import org.raviolini.api.exception.NotFoundException;
+import org.raviolini.api.exceptions.BadRequestException;
+import org.raviolini.api.exceptions.InternalServerException;
+import org.raviolini.api.exceptions.NotFoundException;
 import org.raviolini.domain.Entity;
 import org.raviolini.services.EntityService;
 import org.raviolini.services.SerializationService;

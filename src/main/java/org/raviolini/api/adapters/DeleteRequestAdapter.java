@@ -1,6 +1,6 @@
-package org.raviolini.api.adapter;
+package org.raviolini.api.adapters;
 
-import org.raviolini.api.exception.InternalServerException;
+import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
 import org.raviolini.services.EntityService;
 
