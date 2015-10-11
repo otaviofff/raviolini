@@ -39,7 +39,10 @@ public class EntityService<T extends Entity> {
         }
         
         T entity = getDatabase().select(entityId, entityClass);
-        getCache().set(entity, entityClass);
+        
+        if (entity != null) {
+            getCache().set(entity, entityClass);
+        }
         
         return entity;
     }
