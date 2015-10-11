@@ -1,22 +1,24 @@
-package org.raviolini.service.generic;
+package org.raviolini.service;
 
 import java.util.List;
 
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
+import org.raviolini.service.db.CachingService;
+import org.raviolini.service.db.DatabaseService;
 
 public class EntityService<T extends Entity> {
 
-    private DatabaseService<T> repository;
+    private DatabaseService<T> database;
     private CachingService<T> cache;
     
     private DatabaseService<T> getDatabase() {
-        if (repository == null) {
-            repository = new DatabaseService<T>();
+        if (database == null) {
+            database = new DatabaseService<T>();
         }
         
-        return repository;
+        return database;
     }
     
     private CachingService<T> getCache() {
