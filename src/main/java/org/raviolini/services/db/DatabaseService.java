@@ -1,4 +1,4 @@
-package org.raviolini.service.db;
+package org.raviolini.services.db;
 
 import java.io.IOException;
 import java.sql.SQLException;

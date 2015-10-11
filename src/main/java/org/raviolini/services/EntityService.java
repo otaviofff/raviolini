@@ -1,12 +1,12 @@
-package org.raviolini.service;
+package org.raviolini.services;
 
 import java.util.List;
 
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.db.CachingService;
-import org.raviolini.service.db.DatabaseService;
+import org.raviolini.services.db.CachingService;
+import org.raviolini.services.db.DatabaseService;
 
 public class EntityService<T extends Entity> {
 

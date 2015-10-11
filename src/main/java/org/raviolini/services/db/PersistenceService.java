@@ -1,10 +1,10 @@
-package org.raviolini.service.db;
+package org.raviolini.services.db;
 
 import java.io.IOException;
 import java.util.Map;
 
-import org.raviolini.service.io.ConfigurationService;
-import org.raviolini.service.io.LoggingService;
+import org.raviolini.services.io.ConfigurationService;
+import org.raviolini.services.io.LoggingService;
 
 public abstract class PersistenceService {
     

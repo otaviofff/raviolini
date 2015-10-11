@@ -1,11 +1,11 @@
-package org.raviolini.service.db;
+package org.raviolini.services.db;
 
 import java.io.IOException;
 import java.util.Map;
 
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.SerializationService;
+import org.raviolini.services.SerializationService;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;

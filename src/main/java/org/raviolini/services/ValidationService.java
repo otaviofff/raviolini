@@ -1,4 +1,4 @@
-package org.raviolini.service;
+package org.raviolini.services;
 
 import org.raviolini.domain.Entity;
 

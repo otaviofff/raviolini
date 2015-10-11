@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.SerializationService;
-import org.raviolini.service.ValidationService;
+import org.raviolini.services.SerializationService;
+import org.raviolini.services.ValidationService;
 
 import spark.Request;
 

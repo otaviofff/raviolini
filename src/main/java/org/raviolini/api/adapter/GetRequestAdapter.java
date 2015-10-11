@@ -6,8 +6,8 @@ import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.api.exception.NotFoundException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.EntityService;
-import org.raviolini.service.SerializationService;
+import org.raviolini.services.EntityService;
+import org.raviolini.services.SerializationService;
 
 import spark.Request;
 import spark.Response;
