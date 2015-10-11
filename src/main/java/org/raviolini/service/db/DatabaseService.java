@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.AbstractService;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -19,7 +18,7 @@ import com.j256.ormlite.support.ConnectionSource;
 //More info: https://github.com/j256/ormlite-core/issues/20
 //TableUtils.createTableIfNotExists(this.dbConnection, entityClass);
 
-public class DatabaseService<T extends Entity> extends AbstractService {
+public class DatabaseService<T extends Entity> extends PersistenceService {
     
     private Dao<T, String> db;
     private ConnectionSource dbConnection;

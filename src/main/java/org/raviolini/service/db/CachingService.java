@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.AbstractService;
 import org.raviolini.service.SerializationService;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -14,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import redis.clients.jedis.Jedis;
 
-public class CachingService<T extends Entity> extends AbstractService {
+public class CachingService<T extends Entity> extends PersistenceService {
 
     private Jedis cache;
     private SerializationService<T> serializer;
