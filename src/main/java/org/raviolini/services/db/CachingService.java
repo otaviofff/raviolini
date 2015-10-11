@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class CachingService<T extends Entity> extends PersistenceService {
 
@@ -44,12 +45,17 @@ public class CachingService<T extends Entity> extends PersistenceService {
         return serializer;
     }
     
-    public void set(T entity, Class<T> entityClass) throws InternalServerException {
+    public Boolean set(T entity, Class<T> entityClass) throws InternalServerException {
         String key = String.valueOf(entity.getId());
 
         try {
             String value = getSerializer().serialize(entity);
             getCache().set(key, value);
+            
+            return true;
+        } catch (JedisConnectionException e) {
+            logException(e);
+            return false;
         } catch (JsonGenerationException | JsonMappingException e) {
             logException(e);
             throw new InternalServerException("Cannot serialize entity to be cached.");
@@ -66,6 +72,9 @@ public class CachingService<T extends Entity> extends PersistenceService {
             String value = getCache().get(key);
             
             return getSerializer().unserialize(value, entityClass);
+        } catch (JedisConnectionException e) {
+            logException(e);
+            return null;
         } catch (JsonParseException | JsonMappingException e) {
             logException(e);
             throw new InternalServerException("Cannot unserialize entity cached.");
@@ -75,10 +84,15 @@ public class CachingService<T extends Entity> extends PersistenceService {
         }
     }
     
-    public void delete(Integer id) throws InternalServerException {
+    public Boolean delete(Integer id) throws InternalServerException {
         try {
             String key = String.valueOf(id);
             getCache().del(key);
+            
+            return true;
+        } catch (JedisConnectionException e) {
+            logException(e);
+            return false;
         } catch (IOException e) {
             logException(e);
             throw new InternalServerException("Cache config failed upon DEL.");
@@ -90,6 +104,9 @@ public class CachingService<T extends Entity> extends PersistenceService {
             String key = String.valueOf(id);
             
             return getCache().exists(key);
+        } catch (JedisConnectionException e) {
+            logException(e);
+            return false;
         } catch (IOException e) {
             logException(e);
             throw new InternalServerException("Cache config failed.");

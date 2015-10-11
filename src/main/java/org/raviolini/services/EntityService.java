@@ -30,6 +30,7 @@ public class EntityService<T extends Entity> {
     }
     
     public List<T> get(Class<T> entityClass) throws InternalServerException {
+        //TODO: Implement list filtering and sorting.
         return getDatabase().select(entityClass);
     }
     
