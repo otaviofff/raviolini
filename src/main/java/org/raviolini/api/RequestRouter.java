@@ -61,15 +61,11 @@ public class RequestRouter<T extends Entity> {
         });
         
         exception(AbstractException.class, (e, request, response) -> {
-            logException(e);
+            new LoggingService().logException(e, false);
+            
             response.status(((AbstractException) e).getCode());
             response.body(e.getMessage());
             response.type("text/plain");
         });
-    }
-    
-    private static void logException(Exception e) {
-        LoggingService logger = new LoggingService();
-        logger.logException(e, false);
     }
 }
