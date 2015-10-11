@@ -3,7 +3,7 @@ package org.raviolini.api.adapter;
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.generic.EntityService;
+import org.raviolini.service.EntityService;
 
 import spark.Request;
 import spark.Response;

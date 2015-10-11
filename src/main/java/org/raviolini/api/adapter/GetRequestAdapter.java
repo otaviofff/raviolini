@@ -1,11 +1,13 @@
 package org.raviolini.api.adapter;
 
+import java.io.IOException;
+
 import org.raviolini.api.exception.BadRequestException;
 import org.raviolini.api.exception.InternalServerException;
 import org.raviolini.api.exception.NotFoundException;
 import org.raviolini.domain.Entity;
-import org.raviolini.service.generic.EntityService;
-import org.raviolini.service.generic.SerializationService;
+import org.raviolini.service.EntityService;
+import org.raviolini.service.SerializationService;
 
 import spark.Request;
 import spark.Response;
@@ -14,6 +16,7 @@ public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
     
     @Override
     public Response handle(Request request, Response response, Class<T> entityCLass) throws InternalServerException, NotFoundException, BadRequestException {
+        String body;
         EntityService<T> service = new EntityService<>();
         SerializationService<T> serializer = new SerializationService<>();
         
@@ -23,7 +26,11 @@ public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
             throw new NotFoundException();
         }
         
-        String body = serializer.serialize(entity);
+        try {
+            body = serializer.serialize(entity);
+        } catch (IOException e) {
+            throw new InternalServerException("Cannot serialize the object stored.");
+        }
         
         response.body(body);
         response.status(200);
