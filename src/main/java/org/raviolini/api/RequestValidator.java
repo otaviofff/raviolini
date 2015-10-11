@@ -41,14 +41,14 @@ public class RequestValidator {
     private static void validateHeaders(Request request) throws NotAcceptableException, UnsupportedMediaTypeException {
         switch (request.requestMethod()) {
             case "GET":
-                if (!request.headers("Accept").equals(supportedMediaType)) {
+                if (request.headers("Accept") == null || !request.headers("Accept").equals(supportedMediaType)) {
                     throw new NotAcceptableException();
                 }
                 break;
                 
             case "PUT":
             case "POST":
-                if (!request.headers("Content-Type").equals(supportedMediaType)) {
+                if (request.headers("Content-Type") == null || !request.headers("Content-Type").equals(supportedMediaType)) {
                     throw new UnsupportedMediaTypeException();
                 }
                 break;
