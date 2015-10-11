@@ -18,8 +18,8 @@ public class ConfigurationService {
         return stream;
     }
     
-    public Map<String, String> read(String namespace, String[] keys) throws IOException {
-        if (namespace.charAt(namespace.length() - 1) != '.') {
+    public Map<String, String> read(String namespace, String[] keys) throws IOException  {
+        if (!namespace.isEmpty() && namespace.charAt(namespace.length() - 1) != '.') {
             namespace += '.';
         }
         

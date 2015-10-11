@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
@@ -17,7 +18,14 @@ public class LoggingService {
 
     private Logger logger;
     private Handler handler;
-
+    
+    protected Map<String, String> getProperties() throws IOException {
+        String namespace = "raviolini.log";
+        String[] keys = new String[] {"limit", "count", "append"};
+        
+        return new ConfigurationService().read(namespace, keys);
+    }
+    
     private String getFileName() {
         String date = new SimpleDateFormat("yyyyMM").format(new Date());
         String name = ("log/raviolini_").concat(date).concat(".log");
@@ -28,7 +36,13 @@ public class LoggingService {
     private Handler getHandler() {
         if (handler == null) {
             try {
-                handler = new FileHandler(getFileName(), 524288000, 1, true);
+                Map<String, String> properties = getProperties();
+                
+                handler = new FileHandler(getFileName(), 
+                        Integer.valueOf(properties.get("limit")),
+                        Integer.valueOf(properties.get("count")), 
+                        Boolean.valueOf(properties.get("append"))
+                        );
             } catch (SecurityException | IOException e) {
                 handler = new ConsoleHandler();
             } finally {
