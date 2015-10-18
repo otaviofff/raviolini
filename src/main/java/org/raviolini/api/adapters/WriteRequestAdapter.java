@@ -3,9 +3,10 @@ package org.raviolini.api.adapters;
 import java.io.IOException;
 
 import org.raviolini.api.exceptions.BadRequestException;
+import org.raviolini.aspects.data.validation.ValidationService;
+import org.raviolini.aspects.data.validation.exceptions.InvalidEntityException;
+import org.raviolini.aspects.io.serialization.SerializationService;
 import org.raviolini.domain.Entity;
-import org.raviolini.services.SerializationService;
-import org.raviolini.services.ValidationService;
 
 import spark.Request;
 
@@ -22,7 +23,7 @@ public abstract class WriteRequestAdapter<T extends Entity> extends AbstractRequ
             return entity;
         } catch (IOException e) {
             throw new BadRequestException("Cannot unserialize the payload given.");
-        } catch (IllegalArgumentException e) {
+        } catch (InvalidEntityException e) {
             throw new BadRequestException("Invalid payload given.");
         }
     }

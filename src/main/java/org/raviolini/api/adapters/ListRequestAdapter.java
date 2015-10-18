@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.raviolini.api.exceptions.InternalServerException;
+import org.raviolini.aspects.io.serialization.SerializationService;
 import org.raviolini.domain.Entity;
-import org.raviolini.services.EntityService;
-import org.raviolini.services.SerializationService;
+import org.raviolini.domain.EntityService;
 
 import spark.Request;
 import spark.Response;
