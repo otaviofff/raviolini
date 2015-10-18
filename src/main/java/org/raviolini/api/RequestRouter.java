@@ -14,8 +14,8 @@ import org.raviolini.api.adapters.ListRequestAdapter;
 import org.raviolini.api.adapters.PostRequestAdapter;
 import org.raviolini.api.adapters.PutRequestAdapter;
 import org.raviolini.api.exceptions.AbstractException;
+import org.raviolini.aspects.io.logging.LogService;
 import org.raviolini.domain.Entity;
-import org.raviolini.services.io.LoggingService;
 
 public class RequestRouter<T extends Entity> {
 
@@ -61,8 +61,7 @@ public class RequestRouter<T extends Entity> {
         });
         
         exception(AbstractException.class, (e, request, response) -> {
-            new LoggingService().logException(e, false);
-            
+            new LogService().logException(e, false);
             response.status(((AbstractException) e).getCode());
             response.body(e.getMessage());
             response.type("text/plain");
