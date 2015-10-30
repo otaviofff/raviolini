@@ -21,9 +21,9 @@ public class PutRequestAdapter<T extends Entity> extends WriteRequestAdapter<T> 
         EntityService<T> service = new EntityService<>();
         service.put(entity, entityClass);
         
-        response.body("");
         response.status(200);
-        response.type("application/json");
+        response.body("");
+        response.type("text/plain");
         
         return response;
     }

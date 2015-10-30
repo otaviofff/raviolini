@@ -21,6 +21,10 @@ public class SerializationService<T extends Entity> {
         return driver;
     }
     
+    public String getContentType() throws UnloadableConfigException, InvalidPropertyException {
+        return getDriver().getContentType();
+    }
+    
     public T unserialize(String entitySerialized, Class<T> entityClass) throws UnserializationException, UnloadableConfigException, InvalidPropertyException {
         return getDriver().unserialize(entitySerialized, entityClass);
     }

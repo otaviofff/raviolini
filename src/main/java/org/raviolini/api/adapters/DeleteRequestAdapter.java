@@ -16,9 +16,9 @@ public class DeleteRequestAdapter<T extends Entity> extends AbstractRequestAdapt
         EntityService<T> service = new EntityService<>();
         service.delete(entityId, entityClass);
         
-        response.body("");
         response.status(200);
-        response.type("application/json");
+        response.body("");
+        response.type("text/plain");
         
         return response;
     }

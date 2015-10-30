@@ -15,7 +15,7 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
 
     @Override
     public Response handle(Request request, Response response, Class<T> entityClass) throws InternalServerException {
-        String body;
+        String body, type;
         EntityService<T> service = new EntityService<>();
         SerializationService<T> serializer = new SerializationService<>(); 
 
@@ -23,13 +23,14 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
         
         try {
             body = serializer.serialize(list);
+            type = serializer.getContentType();
         } catch (IOException e) {
             throw new InternalServerException("Cannot serialize the object stored.");
         }
         
-        response.body(body);
         response.status(200);
-        response.type("application/json");
+        response.body(body);
+        response.type(type);
 
         return response;
     }

@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public abstract class AbstractSerializationDriver<T extends Entity> {
     
     protected abstract ObjectMapper getObjectMapper();
+
+    public abstract String getContentType();
     
     public T unserialize(String entitySerialized, Class<T> entityClass) throws UnserializationException {
         ObjectMapper mapper = getObjectMapper();

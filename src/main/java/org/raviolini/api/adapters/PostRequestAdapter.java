@@ -17,9 +17,9 @@ public class PostRequestAdapter<T extends Entity> extends WriteRequestAdapter<T>
         EntityService<T> service = new EntityService<>();
         service.post(entity, entityClass);
         
-        response.body("");
         response.status(201);
-        response.type("application/json");
+        response.body("");
+        response.type("text/plain");
         
         return response;
     }

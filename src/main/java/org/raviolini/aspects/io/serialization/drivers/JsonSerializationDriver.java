@@ -10,4 +10,9 @@ public class JsonSerializationDriver<T extends Entity> extends AbstractSerializa
     protected ObjectMapper getObjectMapper() {
         return new ObjectMapper();
     }
+
+    @Override
+    public String getContentType() {
+        return "application/json";
+    }
 }
