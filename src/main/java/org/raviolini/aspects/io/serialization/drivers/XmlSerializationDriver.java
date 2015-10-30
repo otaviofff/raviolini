@@ -11,9 +11,4 @@ public class XmlSerializationDriver<T extends Entity> extends AbstractSerializat
     protected ObjectMapper getObjectMapper() {
         return new XmlMapper();
     }
-
-    @Override
-    public String getContentType() {
-        return "application/xml";
-    }
 }

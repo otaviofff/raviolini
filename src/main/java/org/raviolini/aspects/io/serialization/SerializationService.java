@@ -11,18 +11,19 @@ import org.raviolini.domain.Entity;
 
 public class SerializationService<T extends Entity> {
     
+    private String mediaType;
     private AbstractSerializationDriver<T> driver;
+
+    public SerializationService(String mediaType) {
+        this.mediaType = mediaType;
+    }
     
     private AbstractSerializationDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
         if (driver == null) {
-            driver = SerializationFactory.getDriver();
+            driver = SerializationFactory.getDriver(mediaType);
         }
         
         return driver;
-    }
-    
-    public String getContentType() throws UnloadableConfigException, InvalidPropertyException {
-        return getDriver().getContentType();
     }
     
     public T unserialize(String entitySerialized, Class<T> entityClass) throws UnserializationException, UnloadableConfigException, InvalidPropertyException {

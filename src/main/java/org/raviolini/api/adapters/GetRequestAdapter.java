@@ -16,11 +16,13 @@ public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
     
     @Override
     public Response handle(Request request, Response response, Class<T> entityCLass) throws InternalServerException, NotFoundException, BadRequestException {
-        String body, type;
+        String body = "";
+        String type = request.headers("Accept");
+        Integer entityId = Integer.valueOf(request.params("id"));
         EntityService<T> service = new EntityService<>();
-        SerializationService<T> serializer = new SerializationService<>();
+        SerializationService<T> serializer = new SerializationService<>(type);
         
-        T entity = service.get(Integer.valueOf(request.params("id")), entityCLass);
+        T entity = service.get(entityId, entityCLass);
         
         if (entity == null) {
             throw new NotFoundException();
@@ -28,7 +30,6 @@ public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
         
         try {
             body = serializer.serialize(entity);
-            type = serializer.getContentType();
         } catch (IOException e) {
             throw new InternalServerException("Cannot serialize the object stored.");
         }

@@ -15,17 +15,17 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
 
     @Override
     public Response handle(Request request, Response response, Class<T> entityClass) throws InternalServerException {
-        String body, type;
+        String body = "";
+        String type = request.headers("Accept");
         EntityService<T> service = new EntityService<>();
-        SerializationService<T> serializer = new SerializationService<>(); 
+        SerializationService<T> serializer = new SerializationService<>(type); 
 
         List<T> list = service.get(entityClass);
         
         try {
             body = serializer.serialize(list);
-            type = serializer.getContentType();
         } catch (IOException e) {
-            throw new InternalServerException("Cannot serialize the object stored.");
+            throw new InternalServerException("Cannot serialize the objects stored.");
         }
         
         response.status(200);

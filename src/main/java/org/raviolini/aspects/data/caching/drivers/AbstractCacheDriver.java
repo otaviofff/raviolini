@@ -27,10 +27,20 @@ public abstract class AbstractCacheDriver<T extends Entity> {
     public Integer getPort() {
         return port;
     }
-    
+
+    /***
+     * Loads the serialization service, which will be used to serialize
+     *  objects to be cached, as well as unserialize objects previously
+     *  cached.
+     * 
+     * Objects are always cached in JSON, which does not affect how objects
+     *  are returned to API clients.
+     * 
+     * @return SerializationService
+     */
     protected SerializationService<T> getSerializer() {
         if (serializer == null) {
-            serializer = new SerializationService<>();
+            serializer = new SerializationService<>("application/json");
         }
         
         return serializer;

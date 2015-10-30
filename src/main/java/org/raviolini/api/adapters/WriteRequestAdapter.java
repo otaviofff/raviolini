@@ -13,7 +13,8 @@ import spark.Request;
 public abstract class WriteRequestAdapter<T extends Entity> extends AbstractRequestAdapter<T> {
 
     protected T unserializeRequestBody(Request request, Class<T> entityClass) throws BadRequestException {
-        SerializationService<T> serializer = new SerializationService<>();
+        String type = request.headers("Content-Type");
+        SerializationService<T> serializer = new SerializationService<>(type);
         ValidationService validator = new ValidationService();
         
         try {
