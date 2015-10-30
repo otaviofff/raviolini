@@ -16,7 +16,7 @@ public class RequestValidator {
     //TODO: Implement authentication.
     
     private static List<String> allowedMethods = Arrays.asList("GET", "POST", "PUT", "DELETE");
-    private static String supportedMediaType = "application/json";
+    private static List<String> supportedMediaTypes = Arrays.asList("application/json", "application/xml");
 
     public static void validateRequest(Request request) throws AbstractException {
         validateMethod(request);
@@ -41,14 +41,14 @@ public class RequestValidator {
     private static void validateHeaders(Request request) throws NotAcceptableException, UnsupportedMediaTypeException {
         switch (request.requestMethod()) {
             case "GET":
-                if (request.headers("Accept") == null || !request.headers("Accept").equals(supportedMediaType)) {
+                if (request.headers("Accept") == null || !request.headers("Accept").equals(supportedMediaTypes)) {
                     throw new NotAcceptableException();
                 }
                 break;
                 
             case "PUT":
             case "POST":
-                if (request.headers("Content-Type") == null || !request.headers("Content-Type").equals(supportedMediaType)) {
+                if (request.headers("Content-Type") == null || !request.headers("Content-Type").equals(supportedMediaTypes)) {
                     throw new UnsupportedMediaTypeException();
                 }
                 break;
