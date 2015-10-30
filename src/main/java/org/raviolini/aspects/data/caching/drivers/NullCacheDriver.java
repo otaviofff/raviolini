@@ -2,7 +2,7 @@ package org.raviolini.aspects.data.caching.drivers;
 
 import org.raviolini.domain.Entity;
 
-public class NullCacheDriver<T extends Entity> extends CacheDriver<T> {
+public class NullCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
 
     public NullCacheDriver(String host, Integer port) {
         super(host, port);

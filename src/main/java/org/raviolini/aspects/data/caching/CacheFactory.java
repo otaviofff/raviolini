@@ -3,7 +3,7 @@ package org.raviolini.aspects.data.caching;
 import java.io.IOException;
 import java.util.Map;
 
-import org.raviolini.aspects.data.caching.drivers.CacheDriver;
+import org.raviolini.aspects.data.caching.drivers.AbstractCacheDriver;
 import org.raviolini.aspects.data.caching.drivers.NullCacheDriver;
 import org.raviolini.aspects.data.caching.drivers.RedisCacheDriver;
 import org.raviolini.aspects.io.configuration.ConfigService;
@@ -21,7 +21,7 @@ public class CacheFactory {
         return new String[] {"driver", "host", "port"};
     }
     
-    public static <T extends Entity> CacheDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
+    public static <T extends Entity> AbstractCacheDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
         String name, host;
         Integer port;
         
@@ -42,7 +42,7 @@ public class CacheFactory {
         return instantiateDriver(name, host, port);
     }
     
-    private static <T extends Entity> CacheDriver<T> instantiateDriver(String name, String host, Integer port) throws InvalidPropertyException {
+    private static <T extends Entity> AbstractCacheDriver<T> instantiateDriver(String name, String host, Integer port) throws InvalidPropertyException {
         switch (name) {
             case "redis":
                 return new RedisCacheDriver<T>(host, port);

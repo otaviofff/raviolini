@@ -1,6 +1,6 @@
 package org.raviolini.aspects.data.caching;
 
-import org.raviolini.aspects.data.caching.drivers.CacheDriver;
+import org.raviolini.aspects.data.caching.drivers.AbstractCacheDriver;
 import org.raviolini.aspects.data.caching.exceptions.CacheConnectionException;
 import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
 import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
@@ -10,9 +10,9 @@ import org.raviolini.domain.Entity;
 
 public class CacheService<T extends Entity> {
 
-    private CacheDriver<T> driver;
+    private AbstractCacheDriver<T> driver;
     
-    private CacheDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
+    private AbstractCacheDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
         if (driver == null) {
             driver = CacheFactory.<T>getDriver();
         }

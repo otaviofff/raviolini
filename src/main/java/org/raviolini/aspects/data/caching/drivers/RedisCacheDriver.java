@@ -10,7 +10,7 @@ import org.raviolini.domain.Entity;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
-public class RedisCacheDriver<T extends Entity> extends CacheDriver<T> {
+public class RedisCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
 
     private Jedis cache;
     

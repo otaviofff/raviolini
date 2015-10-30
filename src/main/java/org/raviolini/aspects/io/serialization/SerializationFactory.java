@@ -6,12 +6,12 @@ import org.raviolini.aspects.io.configuration.ConfigService;
 import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
 import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
 import org.raviolini.aspects.io.serialization.drivers.JsonSerializationDriver;
-import org.raviolini.aspects.io.serialization.drivers.SerializationDriver;
+import org.raviolini.aspects.io.serialization.drivers.AbstractSerializationDriver;
 import org.raviolini.domain.Entity;
 
 public class SerializationFactory {
     
-    public static <T extends Entity> SerializationDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
+    public static <T extends Entity> AbstractSerializationDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
         String driver;
         ConfigService config = new ConfigService();
         

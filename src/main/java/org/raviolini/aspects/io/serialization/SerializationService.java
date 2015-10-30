@@ -4,16 +4,16 @@ import java.util.List;
 
 import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
 import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
-import org.raviolini.aspects.io.serialization.drivers.SerializationDriver;
+import org.raviolini.aspects.io.serialization.drivers.AbstractSerializationDriver;
 import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.aspects.io.serialization.exceptions.UnserializationException;
 import org.raviolini.domain.Entity;
 
 public class SerializationService<T extends Entity> {
     
-    private SerializationDriver<T> driver;
+    private AbstractSerializationDriver<T> driver;
     
-    private SerializationDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
+    private AbstractSerializationDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
         if (driver == null) {
             driver = SerializationFactory.getDriver();
         }

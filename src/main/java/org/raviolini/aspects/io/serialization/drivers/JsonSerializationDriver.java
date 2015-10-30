@@ -10,7 +10,7 @@ import org.raviolini.domain.Entity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JsonSerializationDriver<T extends Entity> extends SerializationDriver<T> {
+public class JsonSerializationDriver<T extends Entity> extends AbstractSerializationDriver<T> {
 
     @Override
     public T unserialize(String entitySerialized, Class<T> entityClass) throws UnserializationException {

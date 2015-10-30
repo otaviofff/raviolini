@@ -8,13 +8,13 @@ import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.aspects.io.serialization.exceptions.UnserializationException;
 import org.raviolini.domain.Entity;
 
-public abstract class CacheDriver<T extends Entity> {
+public abstract class AbstractCacheDriver<T extends Entity> {
 
     private String host;
     private Integer port;
     private SerializationService<T> serializer;
     
-    public CacheDriver(String host, Integer port) {
+    public AbstractCacheDriver(String host, Integer port) {
         this.host = host;
         this.port = port;
         this.serializer = null;

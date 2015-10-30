@@ -6,7 +6,7 @@ import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.aspects.io.serialization.exceptions.UnserializationException;
 import org.raviolini.domain.Entity;
 
-public abstract class SerializationDriver<T extends Entity> {
+public abstract class AbstractSerializationDriver<T extends Entity> {
     
     public abstract T unserialize(String entitySerialized, Class<T> entityClass) throws UnserializationException;
     
