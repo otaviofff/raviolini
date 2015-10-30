@@ -6,6 +6,7 @@ import org.raviolini.aspects.io.configuration.ConfigService;
 import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
 import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
 import org.raviolini.aspects.io.serialization.drivers.JsonSerializationDriver;
+import org.raviolini.aspects.io.serialization.drivers.XmlSerializationDriver;
 import org.raviolini.aspects.io.serialization.drivers.AbstractSerializationDriver;
 import org.raviolini.domain.Entity;
 
@@ -24,6 +25,8 @@ public class SerializationFactory {
         switch (driver) {
             case "json":
                 return new JsonSerializationDriver<T>();
+            case "xml":
+                return new XmlSerializationDriver<T>();
             default:
                 throw new InvalidPropertyException();
         }
