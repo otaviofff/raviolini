@@ -151,6 +151,9 @@ public class EntityService<T extends Entity> {
         } catch (InvalidPropertyException e) {
             getLog().logException(e, true);
             throw new InternalServerException("Failed to delete entity due to invalid config property.");
+        } catch (CacheConnectionException e) {
+            getLog().logException(e, true);
+            throw new InternalServerException("Failed to delete entity due to cache connectivity issues.");
         }
     }
 }

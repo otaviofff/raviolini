@@ -34,7 +34,8 @@ public abstract class AbstractCacheDriver<T extends Entity> {
      *  cached.
      * 
      * Objects are always cached in JSON, which does not affect how objects
-     *  are returned to API clients.
+     *  are returned to API clients, which could be in either JSON or XML, 
+     *  pending on the HTTP request header Accept.
      * 
      * @return SerializationService
      */
@@ -46,11 +47,39 @@ public abstract class AbstractCacheDriver<T extends Entity> {
         return serializer;
     }
     
-    public abstract T get(Integer entityId, Class<T> entityClass) throws CacheConnectionException, UnserializationException, UnloadableConfigException, InvalidPropertyException;
+    public T get(Integer entityId, Class<T> entityClass) throws CacheConnectionException, UnserializationException, UnloadableConfigException, InvalidPropertyException {
+        String key = String.valueOf(entityId);
+        String value = doGet(key);
+        
+        T entity = getSerializer().unserialize(value, entityClass);
+        
+        return entity;
+    }
     
-    public abstract Boolean set(T entity, Class<T> entityClass) throws CacheConnectionException, SerializationException, UnloadableConfigException, InvalidPropertyException;
+    public Boolean set(T entity, Class<T> entityClass) throws CacheConnectionException, SerializationException, UnloadableConfigException, InvalidPropertyException {
+        String key = String.valueOf(entity.getId());
+        String value = getSerializer().serialize(entity);
+        
+        return doSet(key, value);
+    }
     
-    public abstract Boolean delete(Integer entityId) throws CacheConnectionException;
+    public Boolean delete(Integer entityId) throws CacheConnectionException {
+        String key = String.valueOf(entityId);
+
+        return doDelete(key);
+    }
     
-    public abstract Boolean exists(Integer entityId) throws CacheConnectionException;
+    public Boolean exists(Integer entityId) throws CacheConnectionException {
+        String key = String.valueOf(entityId);
+        
+        return doExists(key);
+    }
+    
+    protected abstract String doGet(String key) throws CacheConnectionException;
+    
+    protected abstract Boolean doSet(String key, String value) throws CacheConnectionException;
+    
+    protected abstract Boolean doDelete(String key) throws CacheConnectionException;
+    
+    protected abstract Boolean doExists(String key) throws CacheConnectionException;
 }

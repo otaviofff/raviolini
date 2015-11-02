@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.raviolini.aspects.data.caching.drivers.AbstractCacheDriver;
+import org.raviolini.aspects.data.caching.drivers.MemcachedCacheDriver;
 import org.raviolini.aspects.data.caching.drivers.NullCacheDriver;
 import org.raviolini.aspects.data.caching.drivers.RedisCacheDriver;
 import org.raviolini.aspects.io.configuration.ConfigService;
@@ -46,6 +47,8 @@ public class CacheFactory {
         switch (name) {
             case "redis":
                 return new RedisCacheDriver<T>(host, port);
+            case "memcached":
+                return new MemcachedCacheDriver<T>(host, port);
             case "null":
                 return new NullCacheDriver<T>(host, port);
             default:

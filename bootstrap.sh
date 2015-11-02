@@ -25,7 +25,18 @@ apt-get update
 apt-get -y install redis-server
 
 echo "Redis installed."
-echo "[IMPORTANT] Allow remote connection: http://goo.gl/z5ij7f"
+echo "[IMPORTANT] Allow remote connection to Redis server: http://goo.gl/z5ij7f"
+
+############################################
+##  Provision Cache (Memcached)
+############################################
+
+echo ""
+echo "Installing Memcached..."
+
+apt-get install -y memcached
+
+echo "Memcached installed."
 
 ############################################
 ##  Define DB Variables

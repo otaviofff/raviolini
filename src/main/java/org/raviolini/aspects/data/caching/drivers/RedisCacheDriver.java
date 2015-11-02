@@ -1,10 +1,6 @@
 package org.raviolini.aspects.data.caching.drivers;
 
 import org.raviolini.aspects.data.caching.exceptions.CacheConnectionException;
-import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
-import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
-import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
-import org.raviolini.aspects.io.serialization.exceptions.UnserializationException;
 import org.raviolini.domain.Entity;
 
 import redis.clients.jedis.Jedis;
@@ -25,58 +21,48 @@ public class RedisCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
         
         return cache;
     }
-    
+
     @Override
-    public T get(Integer entityId, Class<T> entityClass) throws CacheConnectionException, UnloadableConfigException, InvalidPropertyException, UnserializationException {
-        String key = String.valueOf(entityId);
-        String value;
-        
+    protected String doGet(String key) throws CacheConnectionException {
         try {
-            value = getCache().get(key);
+            return getCache().get(key);
         } catch (JedisConnectionException e) {
             throw new CacheConnectionException();
+        } finally {
+            getCache().close();
         }
-        
-        T entity = getSerializer().unserialize(value, entityClass);
-        
-        return entity;
     }
 
     @Override
-    public Boolean set(T entity, Class<T> entityClass) throws CacheConnectionException, UnloadableConfigException, InvalidPropertyException, SerializationException {
-        String key = String.valueOf(entity.getId());
-        String value = getSerializer().serialize(entity);
-        
+    protected Boolean doSet(String key, String value) throws CacheConnectionException {
         try {
-            getCache().set(key, value);
+            return getCache().set(key, value).equals("OK");
         } catch (JedisConnectionException e) {
             throw new CacheConnectionException();
+        } finally {
+            getCache().close();
         }
-       
-        return true;
     }
 
     @Override
-    public Boolean delete(Integer entityId) throws CacheConnectionException {
-        String key = String.valueOf(entityId);
-        
+    protected Boolean doDelete(String key) throws CacheConnectionException {
         try {
-            getCache().del(key);
+            return getCache().del(key) > 0;
         } catch (JedisConnectionException e) {
             throw new CacheConnectionException();
+        } finally {
+            getCache().close();
         }
-
-        return true;
     }
 
     @Override
-    public Boolean exists(Integer entityId) throws CacheConnectionException {
-        String key = String.valueOf(entityId);
-        
+    protected Boolean doExists(String key) throws CacheConnectionException {
         try {
             return getCache().exists(key);
         } catch (JedisConnectionException e) {
             throw new CacheConnectionException();
+        } finally {
+            getCache().close();
         }
     }
 }
