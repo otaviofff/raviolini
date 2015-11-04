@@ -51,6 +51,10 @@ public abstract class AbstractCacheDriver<T extends Entity> {
         String key = String.valueOf(entityId);
         String value = doGet(key);
         
+        if (value == null) {
+            return null;
+        }
+        
         T entity = getSerializer().unserialize(value, entityClass);
         
         return entity;
