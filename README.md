@@ -65,6 +65,117 @@ public class FrontController {
 
 This is it. Your RESTful API is done. Enjoy your day =)
 
+## Execution
+
+### Create Object
+
+Request:
+```
+POST /dog HTTP/1.1
+Host: localhost:4567
+Content-Type: application/json
+
+{
+    "name": "Madalena",
+    "neutered": true
+}
+```
+
+Response:
+```
+HTTP/1.1 201 Created
+Date: Thu, 05 Nov 2015 12:17:48 GMT
+Content-Type: text/plain
+
+```
+### Read Object
+
+Request:
+```
+GET /dog/1 HTTP/1.1
+Host: localhost:4567
+Accept: application/json
+
+```
+
+Response:
+```
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Madalena",
+    "neutered": true
+}
+```
+
+### Update Object
+
+Request:
+```
+PUT /dog/1 HTTP/1.1
+Host: localhost:4567
+Content-Type: application/json
+
+{
+    "id": 1,
+    "name": "Madalena",
+    "neutered": false
+}
+```
+
+Response:
+```
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: text/plain
+
+```
+
+### Delete Object
+
+Request:
+```
+DELETE /dog/1 HTTP/1.1
+Host: localhost:4567
+
+```
+
+Response:
+```
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: text/plain
+
+```
+
+### Read List
+
+Request:
+```
+GET /dog HTTP/1.1
+Host: localhost:4567
+Accept: application/json
+
+```
+
+Response:
+```
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: application/json
+
+[
+    {
+        "id": 1,
+        "name": "Madalena",
+        "neutered": true
+    }
+]
+```
+
 ## Aspects
 
 By default, Raviolini addresses six major non-functional requirements for your API, namely caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. For example, you can define whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MongoDB, whether serialization will output JSON or XML, and whether logging will output to File or Memory.
