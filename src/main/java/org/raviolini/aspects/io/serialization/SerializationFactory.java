@@ -1,6 +1,5 @@
 package org.raviolini.aspects.io.serialization;
 
-import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
 import org.raviolini.aspects.io.serialization.drivers.AbstractSerializationDriver;
 import org.raviolini.aspects.io.serialization.drivers.JsonSerializationDriver;
 import org.raviolini.aspects.io.serialization.drivers.XmlSerializationDriver;
@@ -8,14 +7,22 @@ import org.raviolini.domain.Entity;
 
 public class SerializationFactory {
     
-    public static <T extends Entity> AbstractSerializationDriver<T> getDriver(String mediaType) throws InvalidPropertyException {
+    public static <T extends Entity> AbstractSerializationDriver<T> getDriver(String mediaType) {
+        AbstractSerializationDriver<T> driver;
+        
         switch (mediaType) {
             case "application/json":
-                return new JsonSerializationDriver<T>();
+                driver = new JsonSerializationDriver<T>();
+                break;
             case "application/xml":
-                return new XmlSerializationDriver<T>();
+                driver = new XmlSerializationDriver<T>();
+                break;
             default:
-                throw new InvalidPropertyException();
+                //Should never be executed.
+                //Media type has already been checked by RequestValidator.
+                driver = null;
         }
+        
+        return driver;
     }
 }

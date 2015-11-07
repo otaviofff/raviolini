@@ -2,8 +2,6 @@ package org.raviolini.aspects.io.serialization;
 
 import java.util.List;
 
-import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
-import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
 import org.raviolini.aspects.io.serialization.drivers.AbstractSerializationDriver;
 import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.aspects.io.serialization.exceptions.UnserializationException;
@@ -18,7 +16,7 @@ public class SerializationService<T extends Entity> {
         this.mediaType = mediaType;
     }
     
-    private AbstractSerializationDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
+    private AbstractSerializationDriver<T> getDriver() {
         if (driver == null) {
             driver = SerializationFactory.getDriver(mediaType);
         }
@@ -26,15 +24,15 @@ public class SerializationService<T extends Entity> {
         return driver;
     }
     
-    public T unserialize(String entitySerialized, Class<T> entityClass) throws UnserializationException, UnloadableConfigException, InvalidPropertyException {
+    public T unserialize(String entitySerialized, Class<T> entityClass) throws UnserializationException {
         return getDriver().unserialize(entitySerialized, entityClass);
     }
     
-    public String serialize(T entity) throws SerializationException, UnloadableConfigException, InvalidPropertyException {
+    public String serialize(T entity) throws SerializationException {
         return getDriver().serialize(entity);
     }
     
-    public String serialize(List<T> list) throws SerializationException, UnloadableConfigException, InvalidPropertyException {
+    public String serialize(List<T> list) throws SerializationException {
         return getDriver().serialize(list);
     }
 }
