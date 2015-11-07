@@ -29,7 +29,7 @@ public class EntityService<T extends Entity> {
     
     protected CacheService<T> getCache() {
         if (cache == null) {
-            cache = new CacheService<>();
+            cache = new CacheService<T>();
         }
         
         return cache;
