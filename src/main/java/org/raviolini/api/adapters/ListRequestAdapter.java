@@ -1,10 +1,10 @@
 package org.raviolini.api.adapters;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.aspects.io.serialization.SerializationService;
+import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.domain.Entity;
 import org.raviolini.domain.EntityService;
 
@@ -24,7 +24,7 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
         
         try {
             body = serializer.serialize(list);
-        } catch (IOException e) {
+        } catch (SerializationException e) {
             throw new InternalServerException("Cannot serialize the objects stored.");
         }
         

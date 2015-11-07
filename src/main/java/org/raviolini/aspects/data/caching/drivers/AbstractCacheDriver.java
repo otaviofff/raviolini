@@ -1,8 +1,6 @@
 package org.raviolini.aspects.data.caching.drivers;
 
 import org.raviolini.aspects.data.caching.exceptions.CacheConnectionException;
-import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
-import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
 import org.raviolini.aspects.io.serialization.SerializationService;
 import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.aspects.io.serialization.exceptions.UnserializationException;
@@ -47,7 +45,7 @@ public abstract class AbstractCacheDriver<T extends Entity> {
         return serializer;
     }
     
-    public T get(Integer entityId, Class<T> entityClass) throws CacheConnectionException, UnserializationException, UnloadableConfigException, InvalidPropertyException {
+    public T get(Integer entityId, Class<T> entityClass) throws CacheConnectionException, UnserializationException {
         String key = String.valueOf(entityId);
         String value = doGet(key);
         
@@ -60,7 +58,7 @@ public abstract class AbstractCacheDriver<T extends Entity> {
         return entity;
     }
     
-    public Boolean set(T entity, Class<T> entityClass) throws CacheConnectionException, SerializationException, UnloadableConfigException, InvalidPropertyException {
+    public Boolean set(T entity, Class<T> entityClass) throws CacheConnectionException, SerializationException {
         String key = String.valueOf(entity.getId());
         String value = getSerializer().serialize(entity);
         

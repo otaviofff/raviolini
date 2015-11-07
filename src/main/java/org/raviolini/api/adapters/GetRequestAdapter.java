@@ -1,11 +1,10 @@
 package org.raviolini.api.adapters;
 
-import java.io.IOException;
-
 import org.raviolini.api.exceptions.BadRequestException;
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.api.exceptions.NotFoundException;
 import org.raviolini.aspects.io.serialization.SerializationService;
+import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.domain.Entity;
 import org.raviolini.domain.EntityService;
 
@@ -30,7 +29,7 @@ public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
         
         try {
             body = serializer.serialize(entity);
-        } catch (IOException e) {
+        } catch (SerializationException e) {
             throw new InternalServerException("Cannot serialize the object stored.");
         }
         
