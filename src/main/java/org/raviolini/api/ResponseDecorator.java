@@ -6,14 +6,10 @@ import spark.Response;
 
 public class ResponseDecorator {
     
-    public static void decorateFromException(Response response, Throwable e) {
-        response.status(composeStatus(e));
+    public static void decorateFromException(Response response, AbstractException e) {
+        response.status(e.getCode());
         response.body(composeBody(e));
-        response.type(composeType());
-    }
-    
-    private static Integer composeStatus(Throwable e) {
-        return ((AbstractException) e).getCode();
+        response.type("text/plain");
     }
     
     private static String composeBody(Throwable e) {
@@ -22,9 +18,5 @@ public class ResponseDecorator {
         }
         
         return "";
-    }
-    
-    private static String composeType() {
-        return "text/plain";
     }
 }
