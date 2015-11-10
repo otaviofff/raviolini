@@ -17,7 +17,7 @@ public class ResponseDecorator {
     }
     
     private static String composeBody(Throwable e) {
-        if (e.getClass().getName().startsWith("org.raviolini")) {
+        if (e != null && e.getClass().getName().startsWith("org.raviolini")) {
             return e.getMessage().concat(" ").concat(composeBody(e.getCause()));
         }
         
