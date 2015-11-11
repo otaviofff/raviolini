@@ -1,8 +1,10 @@
 package org.raviolini.aspects.io.serialization.exceptions;
 
-import java.io.IOException;
-
-public class SerializationException extends IOException {
+public class SerializationException extends Exception {
 
     private static final long serialVersionUID = 4954683974406052277L;
+    
+    public SerializationException(Throwable cause) {
+        super("Object serialization failed.", cause);
+    }
 }

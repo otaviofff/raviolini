@@ -20,7 +20,7 @@ public abstract class AbstractSerializationDriver<T extends Entity> {
         try {
             return mapper.readValue(entitySerialized, entityClass);
         } catch (IOException e) {
-            throw new UnserializationException();
+            throw new UnserializationException(e);
         }
     }
 
@@ -39,7 +39,7 @@ public abstract class AbstractSerializationDriver<T extends Entity> {
         try {
             mapper.writeValue(writer, object);
         } catch (IOException e) {
-            throw new SerializationException();
+            throw new SerializationException(e);
         }
         
         return writer.toString();
