@@ -19,7 +19,16 @@ import org.raviolini.domain.Entity;
 
 public class RequestRouter<T extends Entity> {
 
+    private LogService logger;
     private AbstractRequestAdapter<T> adapter;  
+    
+    private LogService getLogger() {
+        if (logger == null) {
+            logger = new LogService();
+        }
+        
+        return logger;
+    }
     
     public void route(Class<T> entityClass) {
         
@@ -61,10 +70,8 @@ public class RequestRouter<T extends Entity> {
         });
         
         exception(AbstractException.class, (e, request, response) -> {
-            new LogService().logException(e, false);
-            response.status(((AbstractException) e).getCode());
-            response.body(e.getMessage());
-            response.type("text/plain");
+            getLogger().logException(e, true);
+            ResponseDecorator.decorateFromException(response, (AbstractException) e);
         });
     }
 }
