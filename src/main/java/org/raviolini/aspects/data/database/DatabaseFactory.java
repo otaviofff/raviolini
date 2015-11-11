@@ -1,6 +1,5 @@
 package org.raviolini.aspects.data.database;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.raviolini.aspects.data.database.drivers.AbstractDatabaseDriver;
@@ -12,6 +11,10 @@ import org.raviolini.domain.Entity;
 
 public class DatabaseFactory {
 
+    private static ConfigService getConfig() {
+        return new ConfigService();
+    }
+    
     private static String getConfigNamespace() {
         return "raviolini.database";
     }
@@ -21,25 +24,21 @@ public class DatabaseFactory {
     }
     
     public static <T extends Entity> AbstractDatabaseDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
-        String driver, engine, host, name, user, pass;
+        Map<String, String> map = getConfig().read(getConfigNamespace(), getConfigKeys());
+        
+        String driver = map.get("driver");
+        String engine = map.get("engine");
+        String host = map.get("host");
+        String name = map.get("name");
+        String user = map.get("user");
+        String pass = map.get("pass");
+        
         Integer port;
         
-        ConfigService config = new ConfigService();
-     
         try {
-            Map<String, String> map = config.read(getConfigNamespace(), getConfigKeys());
-            
-            driver = map.get("driver");
-            engine = map.get("engine");
-            host = map.get("host");
-            port = Integer.valueOf(map.getOrDefault("port", "0"));
-            name = map.get("name");
-            user = map.get("user");
-            pass = map.get("pass");
-        } catch (IOException e) {
-            throw new UnloadableConfigException();
+            port = Integer.valueOf(map.get("port"));    
         } catch (NumberFormatException e) {
-            throw new InvalidPropertyException();
+            throw new InvalidPropertyException(getConfigNamespace().concat(".port"), e);
         }
         
         return instantiateDriver(driver, engine, host, port, name, user, pass);
@@ -48,9 +47,9 @@ public class DatabaseFactory {
     private static <T extends Entity> AbstractDatabaseDriver<T> instantiateDriver(String driver, String engine, String host, Integer port, String name, String user, String pass) throws InvalidPropertyException {
         switch(driver) {
             case "relational":
-                return new RelationalDatabaseDriver<>(engine, host, port, name, user, pass);
+                return new RelationalDatabaseDriver<T>(engine, host, port, name, user, pass);
             default:
-                throw new InvalidPropertyException();
+                throw new InvalidPropertyException(getConfigNamespace().concat(".driver"), null);
         }
     }
 }

@@ -49,8 +49,8 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     public List<T> select(Class<T> entityClass) throws DatabaseCommandException {
         try {
             return getDatabase(entityClass).queryForAll();
-        } catch (SQLException e) {
-            throw new DatabaseCommandException();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("SELECT", e);
         }
     }
 
@@ -58,8 +58,8 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     public T select(Integer entityId, Class<T> entityClass) throws DatabaseCommandException {
         try {
             return getDatabase(entityClass).queryForId(entityId.toString());
-        } catch (SQLException e) {
-            throw new DatabaseCommandException();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("SELECT", e);
         }
     }
 
@@ -67,8 +67,8 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     public Integer insert(T entity, Class<T> entityClass) throws DatabaseCommandException {
         try {
             return getDatabase(entityClass).create(entity);
-        } catch (SQLException e) {
-            throw new DatabaseCommandException();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("INSERT", e);
         }
     }
 
@@ -76,8 +76,8 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     public Integer update(T entity, Class<T> entityClass) throws DatabaseCommandException {
         try {
             return getDatabase(entityClass).update(entity);
-        } catch (SQLException e) {
-            throw new DatabaseCommandException();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("UPDATE", e);
         }
     }
 
@@ -85,8 +85,8 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     public Integer delete(Integer entityId, Class<T> entityClass) throws DatabaseCommandException {
         try {
             return getDatabase(entityClass).deleteById(entityId.toString());
-        } catch (SQLException e) {
-            throw new DatabaseCommandException();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("DELETE", e);
         }
     }
 }
