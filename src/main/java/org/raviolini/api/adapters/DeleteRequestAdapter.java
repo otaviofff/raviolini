@@ -2,7 +2,7 @@ package org.raviolini.api.adapters;
 
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
-import org.raviolini.domain.EntityService;
+import org.raviolini.facade.exceptions.WriteOperationException;
 
 import spark.Request;
 import spark.Response;
@@ -13,8 +13,13 @@ public class DeleteRequestAdapter<T extends Entity> extends AbstractRequestAdapt
     public Response handle(Request request, Response response, Class<T> entityClass) throws InternalServerException {
         Integer entityId = Integer.valueOf(request.params("id"));
         
-        EntityService<T> service = new EntityService<>();
-        service.delete(entityId, entityClass);
+        try {
+            getService().delete(entityId, entityClass);
+        } catch (WriteOperationException e) {
+            throw new InternalServerException(e);
+        } catch (Exception e) {
+            throw new InternalServerException();
+        }
         
         response.status(200);
         response.body("");
