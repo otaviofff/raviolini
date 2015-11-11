@@ -1,6 +1,5 @@
 package org.raviolini.aspects.data.caching.drivers;
 
-import org.raviolini.aspects.data.caching.exceptions.CacheConnectionException;
 import org.raviolini.domain.Entity;
 
 public class NullCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
@@ -10,22 +9,22 @@ public class NullCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
     }
 
     @Override
-    protected String doGet(String key) throws CacheConnectionException {
+    protected String doGet(String key) {
         return null;
     }
 
     @Override
-    protected Boolean doSet(String key, String value) throws CacheConnectionException {
+    protected Boolean doSet(String key, String value) {
         return true;
     }
 
     @Override
-    protected Boolean doDelete(String key) throws CacheConnectionException {
+    protected Boolean doDelete(String key) {
         return true;
     }
 
     @Override
-    protected Boolean doExists(String key) throws CacheConnectionException {
+    protected Boolean doExists(String key) {
         return false;
     }
 }

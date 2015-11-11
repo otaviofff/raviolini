@@ -26,8 +26,8 @@ public class RedisCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
     protected String doGet(String key) throws CacheConnectionException {
         try {
             return getCache().get(key);
-        } catch (JedisConnectionException e) {
-            throw new CacheConnectionException();
+        } catch (JedisConnectionException | IllegalArgumentException e) {
+            throw new CacheConnectionException(e);
         } finally {
             getCache().close();
         }
@@ -37,8 +37,8 @@ public class RedisCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
     protected Boolean doSet(String key, String value) throws CacheConnectionException {
         try {
             return getCache().set(key, value).equals("OK");
-        } catch (JedisConnectionException e) {
-            throw new CacheConnectionException();
+        } catch (JedisConnectionException | IllegalArgumentException e) {
+            throw new CacheConnectionException(e);
         } finally {
             getCache().close();
         }
@@ -48,8 +48,8 @@ public class RedisCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
     protected Boolean doDelete(String key) throws CacheConnectionException {
         try {
             return getCache().del(key) > 0;
-        } catch (JedisConnectionException e) {
-            throw new CacheConnectionException();
+        } catch (JedisConnectionException | IllegalArgumentException e) {
+            throw new CacheConnectionException(e);
         } finally {
             getCache().close();
         }
@@ -59,8 +59,8 @@ public class RedisCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
     protected Boolean doExists(String key) throws CacheConnectionException {
         try {
             return getCache().exists(key);
-        } catch (JedisConnectionException e) {
-            throw new CacheConnectionException();
+        } catch (JedisConnectionException | IllegalArgumentException e) {
+            throw new CacheConnectionException(e);
         } finally {
             getCache().close();
         }

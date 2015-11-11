@@ -38,7 +38,7 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
         try {
             return getCache().get(key).toString();
         } catch (IOException | RuntimeException e) {
-            throw new CacheConnectionException();
+            throw new CacheConnectionException(e);
         } finally {
             closeConnection();
         }
@@ -49,7 +49,7 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
         try {
             return getCache().set(key, 0, value).get();
         } catch (IOException | InterruptedException | ExecutionException | RuntimeException e) {
-            throw new CacheConnectionException();
+            throw new CacheConnectionException(e);
         } finally {
             closeConnection();
         }
@@ -60,7 +60,7 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
         try {
             return getCache().delete(key).get();
         } catch (IOException | InterruptedException | ExecutionException | RuntimeException e) {
-            throw new CacheConnectionException();
+            throw new CacheConnectionException(e);
         } finally {
             closeConnection();
         }
@@ -71,7 +71,7 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
         try {
             return getCache().append(key, "").get();
         } catch (IOException | InterruptedException | ExecutionException | RuntimeException e) {
-            throw new CacheConnectionException();
+            throw new CacheConnectionException(e);
         } finally {
             closeConnection();
         }

@@ -31,9 +31,9 @@ public abstract class AbstractCacheDriver<T extends Entity> {
      *  objects to be cached, as well as unserialize objects previously
      *  cached.
      * 
-     * Objects are always cached in JSON, which does not affect how objects
-     *  are returned to API clients, which could be in either JSON or XML, 
-     *  pending on the HTTP request header Accept.
+     * Objects are always cached in JSON, and this does not affect how objects
+     *  are returned to API clients, which could be either in JSON or in XML, 
+     *  pending on the HTTP request header 'Accept' received.
      * 
      * @return SerializationService
      */

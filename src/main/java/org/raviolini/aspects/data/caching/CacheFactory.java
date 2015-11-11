@@ -1,6 +1,5 @@
 package org.raviolini.aspects.data.caching;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.raviolini.aspects.data.caching.drivers.AbstractCacheDriver;
@@ -14,6 +13,10 @@ import org.raviolini.domain.Entity;
 
 public class CacheFactory {
 
+    private static ConfigService getConfig() {
+        return new ConfigService();
+    }
+    
     private static String getConfigNamespace() {
         return "raviolini.cache";
     }
@@ -23,28 +26,24 @@ public class CacheFactory {
     }
     
     public static <T extends Entity> AbstractCacheDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
-        String name, host;
+        Map<String, String> properties = getConfig().read(getConfigNamespace(), getConfigKeys());
+        
+        String driver = properties.get("driver");
+        String host = properties.get("host");
+        
         Integer port;
         
-        ConfigService config = new ConfigService();
-        
         try {
-            Map<String, String> properties = config.read(getConfigNamespace(), getConfigKeys());
-            
-            name = properties.get("driver");
-            host = properties.get("host");
-            port = Integer.valueOf(properties.getOrDefault("port", "0"));
-        } catch (IOException e ) {
-            throw new UnloadableConfigException();
+            port = Integer.valueOf(properties.get("port"));
         } catch (NumberFormatException e) {
-            throw new InvalidPropertyException();
+            throw new InvalidPropertyException(getConfigNamespace().concat(".port"), e);
         }
         
-        return instantiateDriver(name, host, port);
+        return instantiateDriver(driver, host, port);
     }
     
-    private static <T extends Entity> AbstractCacheDriver<T> instantiateDriver(String name, String host, Integer port) throws InvalidPropertyException {
-        switch (name) {
+    private static <T extends Entity> AbstractCacheDriver<T> instantiateDriver(String driver, String host, Integer port) throws InvalidPropertyException {
+        switch (driver) {
             case "redis":
                 return new RedisCacheDriver<T>(host, port);
             case "memcached":
@@ -52,7 +51,7 @@ public class CacheFactory {
             case "null":
                 return new NullCacheDriver<T>(host, port);
             default:
-                throw new InvalidPropertyException();
+                throw new InvalidPropertyException(getConfigNamespace().concat(".driver"), null);
         }
     }
 }
