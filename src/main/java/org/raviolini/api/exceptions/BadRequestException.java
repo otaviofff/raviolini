@@ -8,4 +8,9 @@ public class BadRequestException extends AbstractException {
         super("Bad request. ".concat(additionalInfo));
         this.code = 400;
     }
+    
+    public BadRequestException(Throwable cause) {
+        super("Bad request.", cause);
+        this.code = 400;
+    }
 }
