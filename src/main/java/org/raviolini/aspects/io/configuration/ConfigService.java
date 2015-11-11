@@ -21,7 +21,7 @@ public class ConfigService {
         return file;
     }
     
-    private Properties getProperties() throws IOException {
+    private Properties getProperties() throws IOException, NullPointerException {
         if (properties == null) {
             properties = new Properties();
             properties.load(getFile());
@@ -39,7 +39,7 @@ public class ConfigService {
         return namespace;
     }
     
-    private Map<String, String> loadMap(String namespace, String[] keys) throws IOException {
+    private Map<String, String> loadMap(String namespace, String[] keys) throws IOException, NullPointerException {
         Properties properties = getProperties();
         
         Map<String, String> map = new HashMap<>();
@@ -56,8 +56,8 @@ public class ConfigService {
         
         try {
             return loadMap(namespace, keys);
-        } catch (IOException e) {
-            throw new UnloadableConfigException();
+        } catch (IOException | NullPointerException e) {
+            throw new UnloadableConfigException(e);
         }
     }
     
