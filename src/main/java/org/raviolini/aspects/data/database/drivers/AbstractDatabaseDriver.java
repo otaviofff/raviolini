@@ -13,14 +13,16 @@ public abstract class AbstractDatabaseDriver<T extends Entity> {
     private String  name;
     private String  user;
     private String  pass;
+    private Boolean boot;
     
-    public AbstractDatabaseDriver(String engine, String host, Integer port, String name, String user, String pass) {
+    public AbstractDatabaseDriver(String engine, String host, Integer port, String name, String user, String pass, Boolean boot) {
         this.engine = engine;
         this.host = host;
         this.port = port;
         this.name = name;
         this.user = user;
         this.pass = pass;
+        this.boot = boot;
     }
     
     public String getEngine() {
@@ -45,6 +47,10 @@ public abstract class AbstractDatabaseDriver<T extends Entity> {
     
     public String getPass() {
         return pass;
+    }
+    
+    public Boolean getBoot() {
+        return boot;
     }
     
     public abstract List<T> select(Class<T> entityClass) throws DatabaseCommandException;

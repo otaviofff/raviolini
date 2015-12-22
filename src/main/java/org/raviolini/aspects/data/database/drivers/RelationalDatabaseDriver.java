@@ -11,6 +11,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.table.TableUtils;
 
 //TODO: Check whether DB table exists.
 //More info: https://github.com/j256/ormlite-core/issues/20
@@ -21,8 +22,8 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     private ConnectionSource databaseConnection;
     private Dao<T, String> database;
     
-    public RelationalDatabaseDriver(String engine, String host, Integer port, String name, String user, String pass) {
-        super(engine, host, port, name, user, pass);
+    public RelationalDatabaseDriver(String engine, String host, Integer port, String name, String user, String pass, Boolean boot) {
+        super(engine, host, port, name, user, pass, boot);
     }
     
     private String getConnectionString() {
@@ -32,6 +33,10 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     private ConnectionSource getConnection(Class<T> entityClass) throws SQLException {
         if (databaseConnection == null) {
             databaseConnection =  new JdbcConnectionSource(getConnectionString(), getUser(), getPass());
+            
+            if (getBoot()) {
+                TableUtils.createTableIfNotExists(databaseConnection, entityClass);
+            }
         }
         
         return databaseConnection;
