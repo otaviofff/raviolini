@@ -20,7 +20,7 @@ public class DatabaseFactory {
     }
     
     private static String[] getConfigKeys() {
-        return new String[] {"driver", "engine", "host", "port", "name", "user", "pass"};
+        return new String[] {"driver", "engine", "host", "port", "name", "user", "pass", "boot"};
     }
     
     public static <T extends Entity> AbstractDatabaseDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
