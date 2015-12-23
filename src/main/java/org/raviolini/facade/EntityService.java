@@ -15,7 +15,7 @@ import org.raviolini.domain.Entity;
 import org.raviolini.facade.exceptions.ReadOperationException;
 import org.raviolini.facade.exceptions.WriteOperationException;
 
-public class EntityService<T extends Entity> {
+public class EntityService<T extends Entity> extends AbstractService<T> {
 
     private DatabaseService<T> database;
     private CacheService<T> cache;
@@ -45,30 +45,35 @@ public class EntityService<T extends Entity> {
         return log;
     }
     
-    public List<T> get(Class<T> entityClass) throws ReadOperationException {
-        //TODO: Implement list filtering, sorting, and pagination.
+    public final List<T> get(Class<T> entityClass) throws ReadOperationException {
+        List<T> list;
+        
         try {
-            return getDatabase().select(entityClass);
+            list = getDatabase().select(entityClass);
         } catch (UnloadableConfigException 
                 | DatabaseCommandException 
                 | InvalidPropertyException e) {
             throw new ReadOperationException("Failed to get entity list.", e);
         }
+        
+        hookOnList();
+        
+        return list;
     }
     
-    public T get(Integer entityId, Class<T> entityClass) throws ReadOperationException {
+    public final T get(Integer entityId, Class<T> entityClass) throws ReadOperationException {
+        T entity;
+        
         try {
             if (getCache().exists(entityId)) {
                 return getCache().get(entityId, entityClass);
             }
             
-            T entity = getDatabase().select(entityId, entityClass);
+            entity = getDatabase().select(entityId, entityClass);
             
             if (entity != null) {
                 getCache().set(entity, entityClass);
             }
-            
-            return entity;
         } catch (UnloadableConfigException 
                 | InvalidPropertyException 
                 | CacheConnectionException
@@ -77,9 +82,13 @@ public class EntityService<T extends Entity> {
                 | SerializationException e) {
             throw new ReadOperationException("Failed to get entity.", e);
         }
+        
+        hookOnGet();
+        
+        return entity;
     }
     
-    public void post(T entity, Class<T> entityClass) throws WriteOperationException {
+    public final void post(T entity, Class<T> entityClass) throws WriteOperationException {
         try {
             getDatabase().insert(entity, entityClass);
             getCache().set(entity, entityClass);
@@ -90,9 +99,11 @@ public class EntityService<T extends Entity> {
                 | SerializationException e) {
             throw new WriteOperationException("Failed to post entity.", e);
         }
+        
+        hookOnPost();
     }
     
-    public void put(T entity, Class<T> entityClass) throws WriteOperationException {
+    public final void put(T entity, Class<T> entityClass) throws WriteOperationException {
         try {
             getDatabase().update(entity, entityClass);
             getCache().set(entity, entityClass);
@@ -103,9 +114,11 @@ public class EntityService<T extends Entity> {
                 | SerializationException e) {
             throw new WriteOperationException("Failed to put entity.", e);
         }
+        
+        hookOnPut();
     }
     
-    public void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException {
+    public final void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException {
         try {
             getDatabase().delete(entityId, entityClass);
             getCache().delete(entityId);
@@ -115,5 +128,7 @@ public class EntityService<T extends Entity> {
                 | CacheConnectionException e) {
             throw new WriteOperationException("Failed to delete entity.", e);
         }
+        
+        kookOnDelete();
     }
 }

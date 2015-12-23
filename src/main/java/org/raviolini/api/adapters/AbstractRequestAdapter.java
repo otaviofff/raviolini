@@ -29,5 +29,18 @@ public abstract class AbstractRequestAdapter<T extends Entity> {
         return service;
     }
     
+    /**
+     * Allows for the inner Entity Service of the HTTP adapter to be replaced.
+     * Thus, framework clients might define their own Entity Service, possibly
+     * leveraging post execution hooks, so that extra behavior might be added
+     * to the resulting API. Consequently, Raviolini might be used beyond the 
+     * scope of CRUD APIs. 
+     * 
+     * @param service
+     */
+    public void setService(EntityService<T> service) {
+        this.service = service;
+    }
+    
     public abstract Response handle(Request request, Response response, Class<T> entityClass) throws AbstractException;
 }

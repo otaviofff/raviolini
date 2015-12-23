@@ -16,11 +16,13 @@ import org.raviolini.api.adapters.PutRequestAdapter;
 import org.raviolini.api.exceptions.AbstractException;
 import org.raviolini.aspects.io.logging.LogService;
 import org.raviolini.domain.Entity;
+import org.raviolini.facade.EntityService;
 
 public class RequestRouter<T extends Entity> {
 
     private LogService logger;
-    private AbstractRequestAdapter<T> adapter;  
+    private EntityService<T> service;
+    private AbstractRequestAdapter<T> adapter;
     
     private LogService getLogger() {
         if (logger == null) {
@@ -28,6 +30,10 @@ public class RequestRouter<T extends Entity> {
         }
         
         return logger;
+    }
+    
+    public void override(EntityService<T> service) {
+        this.service = service;
     }
     
     public void route(Class<T> entityClass) {
@@ -46,26 +52,31 @@ public class RequestRouter<T extends Entity> {
         
         post(entityListUri, (request, response) -> {
             adapter = new PostRequestAdapter<>();
+            prepareAdapter();
             return adapter.handle(request, response, entityClass).body();
         });
         
         get(entityListUri, (request, response) -> {
             adapter = new ListRequestAdapter<>();
+            prepareAdapter();
             return adapter.handle(request, response, entityClass).body();
         });
         
         get(entityUri, (request, response) -> {
             adapter = new GetRequestAdapter<>();
+            prepareAdapter();
             return adapter.handle(request, response, entityClass).body(); 
         });
         
         put(entityUri, (request, response) -> {
             adapter = new PutRequestAdapter<>();
+            prepareAdapter();
             return adapter.handle(request, response, entityClass).body();
         });
         
         delete(entityUri, (request, response) -> {
             adapter = new DeleteRequestAdapter<>();
+            prepareAdapter();
             return adapter.handle(request, response, entityClass).body();
         });
         
@@ -73,5 +84,11 @@ public class RequestRouter<T extends Entity> {
             getLogger().logException(e, true);
             ResponseDecorator.decorateFromException(response, (AbstractException) e);
         });
+    }
+    
+    private void prepareAdapter() {
+        if (adapter != null && service != null) {
+            adapter.setService(service);
+        }
     }
 }
