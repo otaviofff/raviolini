@@ -18,13 +18,13 @@ public abstract class AbstractService<T extends Entity> {
     
     public abstract void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException;
     
-    protected void hookOnList() {}
+    protected void hookOnList(List<T> list) {}
     
-    protected void hookOnGet() {}
+    protected void hookOnGet(T entity) {}
     
-    protected void hookOnPost() {}
+    protected void hookOnPost(T entity) {}
     
-    protected void hookOnPut() {}
+    protected void hookOnPut(T entity) {}
     
-    protected void kookOnDelete() {}
+    protected void kookOnDelete(Integer entityId) {}
 }

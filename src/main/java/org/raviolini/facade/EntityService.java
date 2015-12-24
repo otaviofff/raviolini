@@ -56,7 +56,7 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new ReadOperationException("Failed to get entity list.", e);
         }
         
-        hookOnList();
+        hookOnList(list);
         
         return list;
     }
@@ -83,7 +83,7 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new ReadOperationException("Failed to get entity.", e);
         }
         
-        hookOnGet();
+        hookOnGet(entity);
         
         return entity;
     }
@@ -100,7 +100,7 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new WriteOperationException("Failed to post entity.", e);
         }
         
-        hookOnPost();
+        hookOnPost(entity);
     }
     
     public final void put(T entity, Class<T> entityClass) throws WriteOperationException {
@@ -115,7 +115,7 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new WriteOperationException("Failed to put entity.", e);
         }
         
-        hookOnPut();
+        hookOnPut(entity);
     }
     
     public final void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException {
@@ -129,6 +129,6 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new WriteOperationException("Failed to delete entity.", e);
         }
         
-        kookOnDelete();
+        kookOnDelete(entityId);
     }
 }
