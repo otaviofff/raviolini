@@ -129,6 +129,6 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new WriteOperationException("Failed to delete entity.", e);
         }
         
-        kookOnDelete(entityId);
+        hookOnDelete(entityId);
     }
 }

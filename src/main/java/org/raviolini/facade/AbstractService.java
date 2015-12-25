@@ -26,5 +26,5 @@ public abstract class AbstractService<T extends Entity> {
     
     protected void hookOnPut(T entity) {}
     
-    protected void kookOnDelete(Integer entityId) {}
+    protected void hookOnDelete(Integer entityId) {}
 }
