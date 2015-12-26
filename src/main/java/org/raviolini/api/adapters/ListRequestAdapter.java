@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
+import org.raviolini.facade.exceptions.HookExecutionException;
 import org.raviolini.facade.exceptions.ReadOperationException;
 
 import spark.Request;
@@ -19,7 +20,7 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
         
         try {
             list = getService().get(entityClass);
-        } catch (ReadOperationException e) {
+        } catch (ReadOperationException | HookExecutionException e) {
             throw new InternalServerException(e);
         } catch (Exception e) {
             throw new InternalServerException();

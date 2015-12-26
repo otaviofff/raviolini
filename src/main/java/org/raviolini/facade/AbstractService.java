@@ -3,28 +3,43 @@ package org.raviolini.facade;
 import java.util.List;
 
 import org.raviolini.domain.Entity;
+import org.raviolini.facade.exceptions.HookExecutionException;
 import org.raviolini.facade.exceptions.ReadOperationException;
 import org.raviolini.facade.exceptions.WriteOperationException;
 
 public abstract class AbstractService<T extends Entity> {
 
-    public abstract List<T> get(Class<T> entityClass) throws ReadOperationException;
+    public abstract List<T> get(Class<T> entityClass) throws ReadOperationException, HookExecutionException;
     
-    public abstract T get(Integer entityId, Class<T> entityClass) throws ReadOperationException;
+    public abstract T get(Integer entityId, Class<T> entityClass) throws ReadOperationException, HookExecutionException;
     
-    public abstract void post(T entity, Class<T> entityClass) throws WriteOperationException;
+    public abstract void post(T entity, Class<T> entityClass) throws WriteOperationException, HookExecutionException;
     
-    public abstract void put(T entity, Class<T> entityClass) throws WriteOperationException;
+    public abstract void put(T entity, Class<T> entityClass) throws WriteOperationException, HookExecutionException;
     
-    public abstract void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException;
+    public abstract void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException, HookExecutionException;
     
-    protected void hookOnList(List<T> list) {}
+    /*** Pre-Execution Hooks ***/
     
-    protected void hookOnGet(T entity) {}
+    protected void hookBeforeList() throws HookExecutionException {};
     
-    protected void hookOnPost(T entity) {}
+    protected void hookBeforeGet(Integer entityId) throws HookExecutionException {};
     
-    protected void hookOnPut(T entity) {}
+    protected void hookBeforePost(T entity) throws HookExecutionException {};
     
-    protected void hookOnDelete(Integer entityId) {}
+    protected void hookBeforePut(T entity) throws HookExecutionException {};
+    
+    protected void hookBeforeDelete(Integer entityId) throws HookExecutionException {};
+    
+    /*** Post-Execution Hooks ***/
+    
+    protected void hookAfterList(List<T> list) throws HookExecutionException {}
+    
+    protected void hookAfterGet(T entity) throws HookExecutionException {}
+    
+    protected void hookAfterPost(T entity) throws HookExecutionException {}
+    
+    protected void hookAfterPut(T entity) throws HookExecutionException {}
+    
+    protected void hookAfterDelete(Integer entityId) throws HookExecutionException {}
 }

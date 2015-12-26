@@ -3,6 +3,7 @@ package org.raviolini.api.adapters;
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.api.exceptions.NotFoundException;
 import org.raviolini.domain.Entity;
+import org.raviolini.facade.exceptions.HookExecutionException;
 import org.raviolini.facade.exceptions.ReadOperationException;
 
 import spark.Request;
@@ -19,7 +20,7 @@ public class GetRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> {
         
         try {
             entity = getService().get(entityId, entityCLass);
-        } catch (ReadOperationException e) {
+        } catch (ReadOperationException | HookExecutionException e) {
             throw new InternalServerException(e);
         } catch (Exception e) {
             throw new InternalServerException();

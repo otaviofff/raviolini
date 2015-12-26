@@ -12,6 +12,7 @@ import org.raviolini.aspects.io.logging.LogService;
 import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
 import org.raviolini.aspects.io.serialization.exceptions.UnserializationException;
 import org.raviolini.domain.Entity;
+import org.raviolini.facade.exceptions.HookExecutionException;
 import org.raviolini.facade.exceptions.ReadOperationException;
 import org.raviolini.facade.exceptions.WriteOperationException;
 
@@ -45,7 +46,9 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
         return log;
     }
     
-    public final List<T> get(Class<T> entityClass) throws ReadOperationException {
+    public final List<T> get(Class<T> entityClass) throws ReadOperationException, HookExecutionException {
+        hookBeforeList();
+        
         List<T> list;
         
         try {
@@ -56,12 +59,14 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new ReadOperationException("Failed to get entity list.", e);
         }
         
-        hookOnList(list);
+        hookAfterList(list);
         
         return list;
     }
     
-    public final T get(Integer entityId, Class<T> entityClass) throws ReadOperationException {
+    public final T get(Integer entityId, Class<T> entityClass) throws ReadOperationException, HookExecutionException {
+        hookBeforeGet(entityId);
+        
         T entity;
         
         try {
@@ -83,12 +88,14 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new ReadOperationException("Failed to get entity.", e);
         }
         
-        hookOnGet(entity);
+        hookAfterGet(entity);
         
         return entity;
     }
     
-    public final void post(T entity, Class<T> entityClass) throws WriteOperationException {
+    public final void post(T entity, Class<T> entityClass) throws WriteOperationException, HookExecutionException {
+        hookBeforePost(entity);
+        
         try {
             getDatabase().insert(entity, entityClass);
             getCache().set(entity, entityClass);
@@ -100,10 +107,12 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new WriteOperationException("Failed to post entity.", e);
         }
         
-        hookOnPost(entity);
+        hookAfterPost(entity);
     }
     
-    public final void put(T entity, Class<T> entityClass) throws WriteOperationException {
+    public final void put(T entity, Class<T> entityClass) throws WriteOperationException, HookExecutionException {
+        hookBeforePut(entity);
+        
         try {
             getDatabase().update(entity, entityClass);
             getCache().set(entity, entityClass);
@@ -115,10 +124,12 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new WriteOperationException("Failed to put entity.", e);
         }
         
-        hookOnPut(entity);
+        hookAfterPut(entity);
     }
     
-    public final void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException {
+    public final void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException, HookExecutionException {
+        hookBeforeDelete(entityId);
+        
         try {
             getDatabase().delete(entityId, entityClass);
             getCache().delete(entityId);
@@ -129,6 +140,6 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
             throw new WriteOperationException("Failed to delete entity.", e);
         }
         
-        hookOnDelete(entityId);
+        hookAfterDelete(entityId);
     }
 }

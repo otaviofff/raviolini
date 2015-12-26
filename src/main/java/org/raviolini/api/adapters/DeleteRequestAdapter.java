@@ -2,6 +2,7 @@ package org.raviolini.api.adapters;
 
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
+import org.raviolini.facade.exceptions.HookExecutionException;
 import org.raviolini.facade.exceptions.WriteOperationException;
 
 import spark.Request;
@@ -15,7 +16,7 @@ public class DeleteRequestAdapter<T extends Entity> extends AbstractRequestAdapt
         
         try {
             getService().delete(entityId, entityClass);
-        } catch (WriteOperationException e) {
+        } catch (WriteOperationException | HookExecutionException e) {
             throw new InternalServerException(e);
         } catch (Exception e) {
             throw new InternalServerException();
