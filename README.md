@@ -62,6 +62,7 @@ public class FrontController {
     }
 }
 ```
+The full sample application can be found at repository [raviolini-sample](https://github.com/otaviofff/raviolini-sample).
 
 This is it. Your RESTful API is done. Enjoy your day =)
 
