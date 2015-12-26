@@ -172,6 +172,11 @@ Content-Type: application/json
         "id": 1,
         "name": "Madalena",
         "neutered": true
+    },
+    {
+        "id": 2,
+        "name": "Martin",
+        "neutered": false
     }
 ]
 ```
