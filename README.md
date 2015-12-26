@@ -203,3 +203,7 @@ Many other drivers are available though. Check them out below.
 
 ### Validation
 - Package: [org.raviolini.aspects.data.validation](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/validation)
+
+## Model
+
+![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png)
