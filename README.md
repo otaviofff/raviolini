@@ -1,6 +1,6 @@
 # Raviolini Framework
 
-Raviolini is a lightweight framework for building CRUD RESTful APIs in Java 8.
+Raviolini is a lightweight framework for building RESTful APIs, in Java 8. You simply provide your domain object and, out of the box, Raviolini gives you caching, configuration, logging, persistence, serialization and validation on that object. Moreover, pre- and post-execution hooks wil let you extend Raviolini beyond the original scope of CRUD (Create, Read, Update, Delete) operations.
 
 ## Stack
 
@@ -205,5 +205,6 @@ Many other drivers are available though. Check them out below.
 - Package: [org.raviolini.aspects.data.validation](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/validation)
 
 ## Model
+As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  
 
 ![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png)
