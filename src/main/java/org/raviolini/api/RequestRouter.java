@@ -6,6 +6,7 @@ import static spark.Spark.exception;
 import static spark.Spark.get;
 import static spark.Spark.post;
 import static spark.Spark.put;
+import static spark.SparkBase.port;
 
 import org.raviolini.api.adapters.AbstractRequestAdapter;
 import org.raviolini.api.adapters.DeleteRequestAdapter;
@@ -37,6 +38,8 @@ public class RequestRouter<T extends Entity> {
     }
     
     public void route(Class<T> entityClass) {
+        
+        port(getAssignedPort());
         
         String entityName = entityClass.getSimpleName().toLowerCase();
         String entityListUri = ("/").concat(entityName);
@@ -84,6 +87,17 @@ public class RequestRouter<T extends Entity> {
             getLogger().logException(e, true);
             ResponseDecorator.decorateFromException(response, (AbstractException) e);
         });
+    }
+    
+    private int getAssignedPort() {
+        ProcessBuilder builder = new ProcessBuilder();
+        String port = builder.environment().get("PORT");
+        
+        if (port != null) {
+            return Integer.parseInt(port);
+        }
+        
+        return 4567;
     }
     
     private void prepareAdapter() {
