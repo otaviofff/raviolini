@@ -1,67 +1,27 @@
 package org.raviolini.aspects.io.configuration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
+import org.raviolini.aspects.io.configuration.drivers.AbstractConfigDriver;
 import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
 
 public class ConfigService {
 
-    private InputStream file;
-    private Properties properties;
+    private AbstractConfigDriver driver;
     
-    public InputStream getFile() {
-        if (file == null) {
-            file = getClass().getClassLoader().getResourceAsStream("application.properties");
+    private AbstractConfigDriver getDriver() {
+        if (driver == null) {
+            driver = ConfigFactory.getDriver();
         }
         
-        return file;
-    }
-    
-    private Properties getProperties() throws IOException, NullPointerException {
-        if (properties == null) {
-            properties = new Properties();
-            properties.load(getFile());
-            getFile().close();
-        }
-        
-        return properties;
-    }
-    
-    private String normalizeNamespace(String namespace) {
-        if (!namespace.isEmpty() && namespace.charAt(namespace.length() - 1) != '.') {
-            namespace += '.';
-        }
-        
-        return namespace;
-    }
-    
-    private Map<String, String> loadMap(String namespace, String[] keys) throws IOException, NullPointerException {
-        Properties properties = getProperties();
-        
-        Map<String, String> map = new HashMap<>();
-        
-        for (String key : keys) {
-            map.put(key, properties.getProperty(namespace + key));
-        }
-        
-        return map;
-    }
-    
-    public Map<String, String> read(String namespace, String[] keys) throws UnloadableConfigException  {
-        namespace = normalizeNamespace(namespace);
-        
-        try {
-            return loadMap(namespace, keys);
-        } catch (IOException | NullPointerException e) {
-            throw new UnloadableConfigException(e);
-        }
+        return driver;
     }
     
     public String read(String namespace, String key) throws UnloadableConfigException {
         return read(namespace, new String[] {key}).get(key);
+    }
+    
+    public Map<String, String> read(String namespace, String[] keys) throws UnloadableConfigException  {
+        return getDriver().read(namespace, keys);
     }
 }
