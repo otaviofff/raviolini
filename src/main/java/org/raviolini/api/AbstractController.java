@@ -5,7 +5,7 @@ import static spark.SparkBase.port;
 import org.raviolini.domain.Entity;
 import org.raviolini.facade.EntityService;
 
-public abstract class FrontController {
+public abstract class AbstractController {
 
     protected static int listenToAssignedPort() {
         ProcessBuilder builder = new ProcessBuilder();
