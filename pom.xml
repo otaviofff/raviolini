@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.raviolini</groupId>
 	<artifactId>raviolini</artifactId>
-	<version>0.0.4</version>
+	<version>0.0.5</version>
 	<name>Raviolini Framework</name>
     
     <dependencies>
