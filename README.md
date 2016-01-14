@@ -2,11 +2,38 @@
 
 Raviolini is a lightweight framework for building RESTful APIs, in Java 8. You simply provide your domain object and, out of the box, Raviolini gives you caching, configuration, logging, persistence, serialization and validation on that object. Moreover, pre- and post-execution hooks wil let you extend Raviolini beyond the original scope of CRUD (Create, Read, Update, Delete) operations.
 
-## Stack
+Raviolini is built on top of [Spark](https://github.com/perwendel/spark) (version 2.2) and [ORM Lite](https://github.com/j256/ormlite-core) (version 4.48). The former provides a lightweight HTTP foundation, while the latter provides both a database abstraction layer and object-relational mapping capability.
 
-Raviolini is built on top of [Spark](https://github.com/perwendel/spark) (version 2.2) and [ORM Lite](https://github.com/j256/ormlite-core) (version 4.48). The former provides a lightweight HTTP foundation, while the latter provides both a database abstraction layer and object-relational mapping capability. Raviolini requires Java 8.
+## Install
 
-## Usage
+There are only 2 simple steps for you to install Raviolini in your project.
+
+First, add the [JitPack](https://jitpack.io/) repository to your build file (pom.xml):
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+Second, add the dependency:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>com.github.otaviofff</groupId>
+        <artifactId>raviolini</artifactId>
+        <version>0.0.4</version>
+    </dependency>
+</dependencies>
+```
+
+The above code assumes you use [Maven](https://github.com/apache/maven) to build your project. However, if you use [Gradle](https://github.com/gradle/gradle), [Sbt](https://github.com/sbt/sbt) or [Leiningen](https://github.com/technomancy/leiningen), then you should grab your code from [Raviolini on JitPack](https://jitpack.io/#otaviofff/raviolini/0.0.4).
+
+## Use
 
 First, you need to code the resource you want to expose through your API. In this sample, our domain object is named `Dog`, and is defined by three simple attributes, namely `id`, `name` and `neutered`. Please note the `@JsonIgnore` annotation from [Jackson](https://github.com/FasterXML/jackson), as well as the `@DatabaseTable` and `@DatabaseField` annotations from [ORM Lite](https://github.com/j256/ormlite-core). Also note that `Dog` must implement the `Entity` interface, provided by [Raviolini](https://github.com/otaviofff/raviolini) itself. 
 
@@ -46,19 +73,19 @@ public class Dog implements Entity {
 }
 ```
 
-Second, you need to code a front controller for your API. It will just route the incoming HTTP request, based on the domain object you coded in the previous step.
+Second, you need to code a front controller for your API. It will just make Raviolini listen to the HTTP port assinged, and add an HTTP router for the domain object you coded in the previous step. This router defines all valid URIs that will compose your final RESTful interface. Note that your `FrontController` has to extend `AbstractController`.
 
 ```java
 package org.muttie.api;
 
 import org.muttie.domain.Dog;
-import org.raviolini.api.RequestRouter;
+import org.raviolini.api.AbstractController;
 
-public class FrontController {
+public class FrontController extends AbstractController {
+
     public static void main(String[] args) {
-        RequestRouter<Dog> router = new RequestRouter<>();
-        
-        router.route(Dog.class);
+        listenToAssignedPort();
+        addRouter(Dog.class);
     }
 }
 ```
@@ -66,7 +93,7 @@ The full sample application can be found at repository [raviolini-sample](https:
 
 This is it. Your RESTful API is done. Enjoy your day =)
 
-## Execution
+## Execute
 
 ### Create Object
 
@@ -182,7 +209,7 @@ Content-Type: application/json
 ]
 ```
 
-## Aspects
+## Learn: Built-In Aspects
 
 By default, Raviolini addresses six major non-functional requirements for your API, namely caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. For example, you can define whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MongoDB, whether serialization will output JSON or XML, and whether logging will output to File or Memory.
 
@@ -210,7 +237,7 @@ Many other drivers are available though. Check them out below.
 ### Validation
 - Package: [org.raviolini.aspects.data.validation](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/validation)
 
-## Model
+## Learn: Architecture
 As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  
 
 ![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png)
