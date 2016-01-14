@@ -1,16 +1,15 @@
 package org.raviolini.aspects.io.logging;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import org.raviolini.aspects.io.configuration.ConfigService;
-
 public class LogFactory {
 
-    private static ConfigService getConfig() {
-        return new ConfigService();
+    private static InputStream getConfigFile() {
+        return LogFactory.class.getClassLoader().getResourceAsStream("logging.properties");
     }
     
     private static String getConfigNamespace() {
@@ -19,15 +18,15 @@ public class LogFactory {
     
     public static Logger getLogger() {
         try {
-            return loadFromConfig();
+            return loadConfigured();
         } catch (IOException | NullPointerException | SecurityException e) {
             //Graceful degradation.
             return loadDefault();
         }
     }
     
-    private static Logger loadFromConfig() throws IOException, NullPointerException, SecurityException {
-        LogManager.getLogManager().readConfiguration(getConfig().getFile());
+    private static Logger loadConfigured() throws IOException, NullPointerException, SecurityException {
+        LogManager.getLogManager().readConfiguration(getConfigFile());
         Logger logger = Logger.getLogger(getConfigNamespace()); 
         
         return logger;
