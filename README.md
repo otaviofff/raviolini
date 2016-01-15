@@ -31,7 +31,7 @@ Second, add the dependency:
 </dependencies>
 ```
 
-The above code assumes you use [Maven](https://github.com/apache/maven) to build your project. However, if you use [Gradle](https://github.com/gradle/gradle), [Sbt](https://github.com/sbt/sbt) or [Leiningen](https://github.com/technomancy/leiningen), then you should grab your code from [Raviolini on JitPack](https://jitpack.io/#otaviofff/raviolini/0.0.4).
+The above code assumes you use [Maven](https://github.com/apache/maven) to build your project. However, if you use [Gradle](https://github.com/gradle/gradle), [Sbt](https://github.com/sbt/sbt) or [Leiningen](https://github.com/technomancy/leiningen), then you should grab your code from [Raviolini on JitPack](https://jitpack.io/#otaviofff/raviolini/).
 
 ## Use
 
@@ -277,6 +277,6 @@ As depicted by the following UML diagram, Raviolini is composed of lightweight, 
 
 ![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png)
 
-By Otavio Ferreira ([@otaviofff](https://github.com/otaviofff/)).
+Made in São Paulo, with serendipity, by [Otavio Ferreira](https://github.com/otaviofff/).
 
 EOF
