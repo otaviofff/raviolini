@@ -6,7 +6,7 @@ Raviolini is built on top of [Spark](https://github.com/perwendel/spark) (versio
 
 ## Install
 
-There are only 2 simple steps for you to install Raviolini in your project.
+There are only two simple steps for you to install Raviolini in your project.
 
 First, add the [JitPack](https://jitpack.io/) repository to your build file (pom.xml):
 
@@ -26,7 +26,7 @@ Second, add the dependency:
     <dependency>
         <groupId>com.github.otaviofff</groupId>
         <artifactId>raviolini</artifactId>
-        <version>0.0.4</version>
+        <version>0.0.6</version>
     </dependency>
 </dependencies>
 ```
@@ -89,6 +89,38 @@ public class FrontController extends AbstractController {
     }
 }
 ```
+
+Finally, you just need to create a configuration file (named ```application.properties```) in order to setup your application, database and cache. Optionally, you may also create another config file (named ```logging.properties```) to setup you logging preferences. Raviolini comes with [sample config files](https://github.com/otaviofff/raviolini/tree/master/src/main/resources) to help you out.
+
+```properties
+####################
+#  Application
+####################
+
+application.name    = ${pom.name}
+application.version = ${pom.version}
+
+####################
+#  Database
+####################
+
+raviolini.database.driver = relational
+raviolini.database.engine = postgresql
+raviolini.database.host   = localhost
+raviolini.database.port   = 15432
+raviolini.database.name   = db_name
+raviolini.database.user   = db_user
+raviolini.database.pass   = db_pass
+
+####################
+#  Cache
+####################
+
+raviolini.cache.driver = redis
+raviolini.cache.host   = localhost
+raviolini.cache.port   = 16379
+```
+
 The full sample application can be found at repository [raviolini-sample](https://github.com/otaviofff/raviolini-sample).
 
 This is it. Your RESTful API is done. Enjoy your day =)
@@ -211,9 +243,11 @@ Content-Type: application/json
 
 ## Learn: Built-In Aspects
 
-By default, Raviolini addresses six major non-functional requirements for your API, namely caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. For example, you can define whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MongoDB, whether serialization will output JSON or XML, and whether logging will output to File or Memory.
+By default, Raviolini addresses six major non-functional requirements for your API, namely caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. 
 
-Many other drivers are available though. Check them out below.
+For example, you can define whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MySQL, whether serialization will output JSON or XML, whether configuration will be read from File or Environment, and whether logging will output to File or Memory.
+
+Many other drivers are available. Check them out below.
 
 ### Caching
 - Package: [org.raviolini.aspects.data.caching](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/caching)
@@ -221,6 +255,7 @@ Many other drivers are available though. Check them out below.
 
 ### Configuration
 - Package: [org.raviolini.aspects.io.configuration](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/configuration)
+- Drivers: [Environment](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/EnvConfigDriver.java), [File](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/FileConfigDriver.java)
 
 ### Logging
 - Package: [org.raviolini.aspects.io.logging](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/logging)
@@ -241,3 +276,7 @@ Many other drivers are available though. Check them out below.
 As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  
 
 ![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png)
+
+By Otavio Ferreira ([@otaviofff](https://github.com/otaviofff/)).
+
+EOF
