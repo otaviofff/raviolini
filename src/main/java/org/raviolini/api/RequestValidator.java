@@ -15,8 +15,19 @@ public class RequestValidator {
     
     //TODO: Implement authentication.
     
-    private static List<String> allowedMethods = Arrays.asList("GET", "POST", "PUT", "DELETE");
-    private static List<String> supportedMediaTypes = Arrays.asList("application/json", "application/xml");
+    private static List<String> supportedMethods = Arrays.asList(
+            "GET", 
+            "POST", 
+            "PUT", 
+            "DELETE"
+    );
+    
+    private static List<String> supportedMediaTypes = Arrays.asList(
+            "application/json",
+            "application/json; charset=utf-8", 
+            "application/xml",
+            "application/xml; charset=utf-8"
+    );
 
     public static void validateRequest(Request request) throws AbstractException {
         validateMethod(request);
@@ -33,7 +44,7 @@ public class RequestValidator {
     }
     
     private static void validateMethod(Request request) throws MethodNotAllowedException {
-        if (!allowedMethods.contains(request.requestMethod())) {
+        if (!supportedMethods.contains(request.requestMethod().toUpperCase())) {
             throw new MethodNotAllowedException();
         }
     }
@@ -41,14 +52,16 @@ public class RequestValidator {
     private static void validateHeaders(Request request) throws NotAcceptableException, UnsupportedMediaTypeException {
         switch (request.requestMethod()) {
             case "GET":
-                if (request.headers("Accept") == null || !supportedMediaTypes.contains(request.headers("Accept"))) {
+                if (request.headers("Accept") == null 
+                        || !supportedMediaTypes.contains(request.headers("Accept").toLowerCase())) {
                     throw new NotAcceptableException();
                 }
                 break;
                 
             case "PUT":
             case "POST":
-                if (request.headers("Content-Type") == null || !supportedMediaTypes.contains(request.headers("Content-Type"))) {
+                if (request.headers("Content-Type") == null 
+                        || !supportedMediaTypes.contains(request.headers("Content-Type").toLowerCase())) {
                     throw new UnsupportedMediaTypeException();
                 }
                 break;

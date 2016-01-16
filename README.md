@@ -26,7 +26,7 @@ Second, add the dependency:
     <dependency>
         <groupId>com.github.otaviofff</groupId>
         <artifactId>raviolini</artifactId>
-        <version>0.0.6</version>
+        <version>0.0.7</version>
     </dependency>
 </dependencies>
 ```

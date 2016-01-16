@@ -10,17 +10,14 @@ public class SerializationFactory {
     public static <T extends Entity> AbstractSerializationDriver<T> getDriver(String mediaType) {
         AbstractSerializationDriver<T> driver;
         
-        switch (mediaType) {
-            case "application/json":
-                driver = new JsonSerializationDriver<T>();
-                break;
-            case "application/xml":
-                driver = new XmlSerializationDriver<T>();
-                break;
-            default:
-                //Should never be executed.
-                //Media type has already been checked by RequestValidator.
-                driver = null;
+        if (mediaType.startsWith("application/json")) {
+            driver = new JsonSerializationDriver<>();
+        } else if (mediaType.startsWith("application/xml")) {
+            driver = new XmlSerializationDriver<>();
+        } else {
+            //Should never be executed.
+            //Media type has already been checked by RequestValidator.
+            driver = null;
         }
         
         return driver;
