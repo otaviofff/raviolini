@@ -1,5 +1,6 @@
 package org.raviolini.api;
 
+import static spark.Spark.after;
 import static spark.Spark.before;
 import static spark.Spark.delete;
 import static spark.Spark.exception;
@@ -15,6 +16,7 @@ import org.raviolini.api.adapters.PostRequestAdapter;
 import org.raviolini.api.adapters.PutRequestAdapter;
 import org.raviolini.api.exceptions.AbstractException;
 import org.raviolini.api.filters.AuthFilter;
+import org.raviolini.api.filters.RouteFilter;
 import org.raviolini.aspects.io.logging.LogService;
 import org.raviolini.domain.Entity;
 import org.raviolini.facade.EntityService;
@@ -73,6 +75,8 @@ public class RequestRouter<T extends Entity> {
         delete(entityUri, (request, response) -> {
             return handle(entityClass, request, response, new DeleteRequestAdapter<>());
         });
+        
+        after(new RouteFilter());
         
         exception(AbstractException.class, (e, request, response) -> {
             getLogger().logException(e, true);
