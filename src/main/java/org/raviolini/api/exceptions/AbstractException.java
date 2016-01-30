@@ -16,4 +16,12 @@ public abstract class AbstractException extends Exception {
     public Integer getCode() {
         return code;
     }
+    
+    public static String chainNestedMessages(Throwable e) {
+        if (e != null && e.getClass().getName().startsWith("org.raviolini")) {
+            return e.getMessage().concat(" ").concat(chainNestedMessages(e.getCause()));
+        }
+        
+        return "";
+    }
 }
