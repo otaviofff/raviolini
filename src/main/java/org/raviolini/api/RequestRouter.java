@@ -14,6 +14,7 @@ import org.raviolini.api.adapters.ListRequestAdapter;
 import org.raviolini.api.adapters.PostRequestAdapter;
 import org.raviolini.api.adapters.PutRequestAdapter;
 import org.raviolini.api.exceptions.AbstractException;
+import org.raviolini.api.filters.AuthFilter;
 import org.raviolini.aspects.io.logging.LogService;
 import org.raviolini.domain.Entity;
 import org.raviolini.facade.EntityService;
@@ -37,6 +38,8 @@ public class RequestRouter<T extends Entity> {
     }
     
     public void route(Class<T> entityClass) {
+        before(new AuthFilter());
+        
         String entityName = entityClass.getSimpleName().toLowerCase();
         String entityListUri = ("/").concat(entityName);
         String entityUri = entityListUri.concat("/:id");
