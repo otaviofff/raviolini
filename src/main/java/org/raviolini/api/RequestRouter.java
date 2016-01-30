@@ -19,11 +19,13 @@ import org.raviolini.aspects.io.logging.LogService;
 import org.raviolini.domain.Entity;
 import org.raviolini.facade.EntityService;
 
+import spark.Request;
+import spark.Response;
+
 public class RequestRouter<T extends Entity> {
 
     private LogService logger;
     private EntityService<T> service;
-    private AbstractRequestAdapter<T> adapter;
     
     private LogService getLogger() {
         if (logger == null) {
@@ -53,33 +55,23 @@ public class RequestRouter<T extends Entity> {
         });
         
         post(entityListUri, (request, response) -> {
-            adapter = new PostRequestAdapter<>();
-            prepareAdapter();
-            return adapter.handle(request, response, entityClass).body();
+            return handle(entityClass, request, response, new PostRequestAdapter<>());
         });
         
         get(entityListUri, (request, response) -> {
-            adapter = new ListRequestAdapter<>();
-            prepareAdapter();
-            return adapter.handle(request, response, entityClass).body();
+            return handle(entityClass, request, response, new ListRequestAdapter<>());
         });
         
         get(entityUri, (request, response) -> {
-            adapter = new GetRequestAdapter<>();
-            prepareAdapter();
-            return adapter.handle(request, response, entityClass).body(); 
+            return handle(entityClass, request, response, new GetRequestAdapter<>()); 
         });
         
         put(entityUri, (request, response) -> {
-            adapter = new PutRequestAdapter<>();
-            prepareAdapter();
-            return adapter.handle(request, response, entityClass).body();
+            return handle(entityClass, request, response, new PutRequestAdapter<>());
         });
         
         delete(entityUri, (request, response) -> {
-            adapter = new DeleteRequestAdapter<>();
-            prepareAdapter();
-            return adapter.handle(request, response, entityClass).body();
+            return handle(entityClass, request, response, new DeleteRequestAdapter<>());
         });
         
         exception(AbstractException.class, (e, request, response) -> {
@@ -88,9 +80,11 @@ public class RequestRouter<T extends Entity> {
         });
     }
     
-    private void prepareAdapter() {
-        if (adapter != null && service != null) {
+    private String handle(Class<T> entityClass, Request request, Response response, AbstractRequestAdapter<T> adapter) throws AbstractException {
+        if (service != null) {
             adapter.setService(service);
         }
+        
+        return adapter.handle(request, response, entityClass).body();
     }
 }
