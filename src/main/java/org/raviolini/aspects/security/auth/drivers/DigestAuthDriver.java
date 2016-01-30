@@ -11,6 +11,12 @@ public class DigestAuthDriver extends AbstractAuthDriver {
     }
 
     @Override
+    public String getChallenge() {
+        // TODO: Implement realm generation for Digest authentication. 
+        return null;
+    }
+    
+    @Override
     protected String getName() {
         return "Digest";
     }

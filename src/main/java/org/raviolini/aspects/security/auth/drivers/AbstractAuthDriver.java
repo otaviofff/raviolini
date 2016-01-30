@@ -37,6 +37,8 @@ public abstract class AbstractAuthDriver {
                 && authorizedMethods.contains(method);
     }
     
+    public abstract String getChallenge();
+    
     protected abstract String getName();
     
     protected abstract Credential parseCredential(String encodedCredential);

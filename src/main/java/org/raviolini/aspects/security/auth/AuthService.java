@@ -23,4 +23,8 @@ public class AuthService {
     public Boolean authorize(String method) throws UnloadableConfigException, InvalidPropertyException {
         return getDriver().authorize(method);
     }
+    
+    public String challenge() throws UnloadableConfigException, InvalidPropertyException {
+        return getDriver().getChallenge();
+    }
 }

@@ -13,6 +13,11 @@ public class BasicAuthDriver extends AbstractAuthDriver {
     }
 
     @Override
+    public String getChallenge() {
+        return "Basic realm=\"raviolini.auth\"";
+    }
+    
+    @Override
     protected String getName() {
         return "Basic";
     }

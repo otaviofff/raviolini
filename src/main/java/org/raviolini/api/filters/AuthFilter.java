@@ -1,5 +1,6 @@
 package org.raviolini.api.filters;
 
+import org.raviolini.api.exceptions.ForbiddenException;
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.api.exceptions.UnauthorizedException;
 import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
@@ -23,18 +24,25 @@ public class AuthFilter extends FilterImpl {
     }
     
     @Override
-    public void handle(Request request, Response response) throws UnauthorizedException, InternalServerException {
+    public void handle(Request request, Response response) throws UnauthorizedException, ForbiddenException, InternalServerException {
         Boolean authenticated, authorized;
+        String challenge;
         
         try {
             authenticated = getAuth().authenticate(request.headers("Authorization"));
             authorized = getAuth().authorize(request.requestMethod());
+            challenge = getAuth().challenge();
         } catch (UnloadableConfigException | InvalidPropertyException e) {
             throw new InternalServerException(e);
         }
         
-        if (!authenticated || !authorized) {
+        if (!authenticated) {
+            response.header("WWW-Authenticate", challenge);
             throw new UnauthorizedException();
+        }
+        
+        if (!authorized) {
+            throw new ForbiddenException();
         }
     }
 }

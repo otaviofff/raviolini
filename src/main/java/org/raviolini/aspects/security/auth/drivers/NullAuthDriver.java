@@ -11,17 +11,22 @@ public class NullAuthDriver extends AbstractAuthDriver {
     }
 
     @Override
-    public Boolean authenticate(String envodedCredential) {
-        return true;
-    }
-    
-    @Override
-    protected String getName() {
+    public String getChallenge() {
         return null;
     }
 
     @Override
+    protected String getName() {
+        return null;
+    }
+    
+    @Override
     protected Credential parseCredential(String encodedCredential) {
         return null;
+    }
+    
+    @Override
+    public Boolean authenticate(String envodedCredential) {
+        return true;
     }
 }
