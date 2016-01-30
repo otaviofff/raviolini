@@ -3,7 +3,7 @@
 
 Raviolini is a lightweight framework for building RESTful APIs, in Java 8. You simply provide your domain object and, out of the box, Raviolini gives you caching, configuration, logging, persistence, serialization and validation on that object. Moreover, pre- and post-execution hooks wil let you extend Raviolini beyond the original scope of CRUD (Create, Read, Update, Delete) operations.
 
-Raviolini is built on top of [Spark](https://github.com/perwendel/spark) (version 2.2) and [ORM Lite](https://github.com/j256/ormlite-core) (version 4.48). The former provides a lightweight HTTP foundation, while the latter provides both a database abstraction layer and object-relational mapping capability.
+Raviolini is built on top of [Spark](https://github.com/perwendel/spark) (version 2.2) and [ORM Lite](https://github.com/j256/ormlite-core) (version 4.48). The former provides a lightweight HTTP foundation, while the latter provides both a database abstraction layer and object-relational mapping.
 
 ## Install
 
@@ -27,7 +27,7 @@ Second, add the dependency:
     <dependency>
         <groupId>com.github.otaviofff</groupId>
         <artifactId>raviolini</artifactId>
-        <version>0.0.7</version>
+        <version>0.0.8</version>
     </dependency>
 </dependencies>
 ```
@@ -91,7 +91,7 @@ public class FrontController extends AbstractController {
 }
 ```
 
-Finally, you just need to create a configuration file (named ```application.properties```) in order to setup your application, database and cache. Optionally, you may also create another config file (named ```logging.properties```) to setup you logging preferences. Raviolini comes with [sample config files](https://github.com/otaviofff/raviolini/tree/master/src/main/resources) to help you out.
+Finally, you just need to create a configuration file (named ```application.properties```) in order to setup your application, database, cache, and authentication strategy. Optionally, you may also create another config file (named ```logging.properties```) to setup you logging preferences. Raviolini comes with [sample config files](https://github.com/otaviofff/raviolini/tree/master/src/main/resources) to help you out.
 
 ```properties
 ####################
@@ -120,6 +120,15 @@ raviolini.database.pass   = db_pass
 raviolini.cache.driver = redis
 raviolini.cache.host   = localhost
 raviolini.cache.port   = 16379
+
+####################
+#  Auth
+####################
+
+raviolini.auth.driver  = basic
+raviolini.auth.user    = username
+raviolini.auth.pass    = password
+raviolini.auth.methods = GET,POST,PUT
 ```
 
 The full sample application can be found at repository [raviolini-sample](https://github.com/otaviofff/raviolini-sample).
@@ -242,42 +251,48 @@ Content-Type: application/json
 ]
 ```
 
-## Learn: Built-In Aspects
+## Learn
 
-By default, Raviolini addresses six major non-functional requirements for your API, namely caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. 
+### Built-In Aspects
 
-For example, you can define whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MySQL, whether serialization will output JSON or XML, whether configuration will be read from File or Environment, and whether logging will output to File or Memory.
+By default, Raviolini addresses seven major non-functional requirements for your API, namely authentication, caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. 
+
+For example, you can define whether authentication will be based on Basic or Digest, whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MySQL, whether serialization will output JSON or XML, whether configuration will be read from File or Environment, and whether logging will output to File or Memory.
 
 Many other drivers are available. Check them out below.
 
-### Caching
-- Package: [org.raviolini.aspects.data.caching](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/caching)
-- Drivers: [Null](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/NullCacheDriver.java), [Redis](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/RedisCacheDriver.java), [Memcached](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/MemcachedCacheDriver.java)
+#### Authentication
+- Package: [org.raviolini.aspects.security.auth](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/security/auth)
+- Drivers: [Null](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/NullAuthDriver.java), [Basic](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/BasicAuthDriver.java), [Digest](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/DigestAuthDriver.java)
 
-### Configuration
+#### Caching
+- Package: [org.raviolini.aspects.data.caching](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/caching)
+- Drivers: [Null](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/NullCacheDriver.java), [Memcached](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/MemcachedCacheDriver.java), [Redis](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/RedisCacheDriver.java)
+
+#### Configuration
 - Package: [org.raviolini.aspects.io.configuration](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/configuration)
 - Drivers: [Environment](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/EnvConfigDriver.java), [File](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/FileConfigDriver.java)
 
-### Logging
+#### Logging
 - Package: [org.raviolini.aspects.io.logging](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/logging)
 - Drivers: [DatedFile](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/logging/drivers/DatedFileHandler.java), [java.util.logging.Handler](https://docs.oracle.com/javase/8/docs/api/java/util/logging/Handler.html) (e.g. [Console](https://docs.oracle.com/javase/8/docs/api/java/util/logging/ConsoleHandler.html), [File](https://docs.oracle.com/javase/8/docs/api/java/util/logging/FileHandler.html), [Memory](https://docs.oracle.com/javase/8/docs/api/java/util/logging/MemoryHandler.html), [Socket](https://docs.oracle.com/javase/8/docs/api/java/util/logging/SocketHandler.html), [Stream](https://docs.oracle.com/javase/8/docs/api/java/util/logging/StreamHandler.html))
 
-### Persistence
+#### Persistence
 - Package: [org.raviolini.aspects.data.database](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/database)
-- Drivers: [Relational](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/database/drivers/RelationalDatabaseDriver.java) (e.g. PostgreSQL, MySQL), MongoDB
+- Drivers: [Relational](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/database/drivers/RelationalDatabaseDriver.java) (e.g. PostgreSQL, MySQL)
 
-### Serialization
+#### Serialization
 - Package: [org.raviolini.aspects.io.serialization](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/serialization)
 - Drivers: [JSON](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/serialization/drivers/JsonSerializationDriver.java), [XML](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/serialization/drivers/XmlSerializationDriver.java)
 
-### Validation
+#### Validation
 - Package: [org.raviolini.aspects.data.validation](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/validation)
 
-## Learn: Architecture
+### Architecture
 As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  
 
-![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png)
+![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages-v2.png)
 
-Made in São Paulo, with serendipity, by [Otavio Ferreira](https://github.com/otaviofff/).
+Made in São Paulo, by [Otavio Ferreira](https://github.com/otaviofff/).
 
 EOF
