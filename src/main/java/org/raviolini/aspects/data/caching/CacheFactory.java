@@ -26,15 +26,14 @@ public class CacheFactory {
     }
     
     public static <T extends Entity> AbstractCacheDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
-        Map<String, String> properties = getConfig().read(getConfigNamespace(), getConfigKeys());
+        Map<String, String> map = getConfig().read(getConfigNamespace(), getConfigKeys());
         
-        String driver = properties.get("driver");
-        String host = properties.get("host");
-        
+        String driver = map.get("driver");
+        String host = map.get("host");
         Integer port;
         
         try {
-            port = Integer.valueOf(properties.get("port"));
+            port = (map.get("port") == null ? null : Integer.valueOf(map.get("port")));
         } catch (NumberFormatException e) {
             throw new InvalidPropertyException(getConfigNamespace().concat(".port"), e);
         }
@@ -43,6 +42,10 @@ public class CacheFactory {
     }
     
     private static <T extends Entity> AbstractCacheDriver<T> instantiateDriver(String driver, String host, Integer port) throws InvalidPropertyException {
+        if (driver == null) {
+            driver = "invalid";
+        }
+        
         switch (driver) {
             case "redis":
                 return new RedisCacheDriver<T>(host, port);

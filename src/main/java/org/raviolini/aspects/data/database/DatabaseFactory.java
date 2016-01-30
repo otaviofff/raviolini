@@ -36,7 +36,7 @@ public class DatabaseFactory {
         Integer port;
         
         try {
-            port = Integer.valueOf(map.get("port"));    
+            port = (map.get("port") == null ? null : Integer.valueOf(map.get("port")));    
         } catch (NumberFormatException e) {
             throw new InvalidPropertyException(getConfigNamespace().concat(".port"), e);
         }
@@ -45,6 +45,10 @@ public class DatabaseFactory {
     }
     
     private static <T extends Entity> AbstractDatabaseDriver<T> instantiateDriver(String driver, String engine, String host, Integer port, String name, String user, String pass, Boolean boot) throws InvalidPropertyException {
+        if (driver == null) {
+            driver = "invalid";
+        }
+        
         switch(driver) {
             case "relational":
                 return new RelationalDatabaseDriver<T>(engine, host, port, name, user, pass, boot);
