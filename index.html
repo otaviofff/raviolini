@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Raviolini by otaviofff</title>
-
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-light.css">
     <meta name="viewport" content="width=device-width">
@@ -31,316 +30,344 @@
         <a href="http://otaviofff.tumblr.com/post/137950521882/the-evolution-of-software-architecture">
           <img src="https://dl.dropboxusercontent.com/u/111597/raviolini/logo-small.png" alt="Decoupled services feel like Ravioli" />
         </a>
-        
       </header>
       <section>
-        <h1>
-<a id="intro" class="anchor" href="#intro" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Intro</h1>
-
-<p>Raviolini is a lightweight framework for building RESTful APIs, in Java 8. You simply provide your domain object and, out of the box, Raviolini gives you caching, configuration, logging, persistence, serialization and validation on that object. Moreover, pre- and post-execution hooks wil let you extend Raviolini beyond the original scope of CRUD (Create, Read, Update, Delete) operations.</p>
-
-<p>Raviolini is built on top of <a href="https://github.com/perwendel/spark">Spark</a> (version 2.2) and <a href="https://github.com/j256/ormlite-core">ORM Lite</a> (version 4.48). The former provides a lightweight HTTP foundation, while the latter provides a database abstraction layer and object-relational mapping.</p>
-
-<h1>
-<a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install</h1>
-
-<p>There are only two simple steps for you to install Raviolini in your project.</p>
-
-<p>First, add the <a href="https://jitpack.io/">JitPack</a> repository to your build file (pom.xml):</p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">repositories</span>&gt;
-    &lt;<span class="pl-ent">repository</span>&gt;
-        &lt;<span class="pl-ent">id</span>&gt;jitpack.io&lt;/<span class="pl-ent">id</span>&gt;
-        &lt;<span class="pl-ent">url</span>&gt;https://jitpack.io&lt;/<span class="pl-ent">url</span>&gt;
-    &lt;/<span class="pl-ent">repository</span>&gt;
-&lt;/<span class="pl-ent">repositories</span>&gt;</pre></div>
-
-<p>Second, add the dependency:</p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependencies</span>&gt;
-    &lt;<span class="pl-ent">dependency</span>&gt;
-        &lt;<span class="pl-ent">groupId</span>&gt;com.github.otaviofff&lt;/<span class="pl-ent">groupId</span>&gt;
-        &lt;<span class="pl-ent">artifactId</span>&gt;raviolini&lt;/<span class="pl-ent">artifactId</span>&gt;
-        &lt;<span class="pl-ent">version</span>&gt;0.0.7&lt;/<span class="pl-ent">version</span>&gt;
-    &lt;/<span class="pl-ent">dependency</span>&gt;
-&lt;/<span class="pl-ent">dependencies</span>&gt;</pre></div>
-
-<p>The above code assumes you use <a href="https://github.com/apache/maven">Maven</a> to build your project. However, if you use <a href="https://github.com/gradle/gradle">Gradle</a>, <a href="https://github.com/sbt/sbt">Sbt</a> or <a href="https://github.com/technomancy/leiningen">Leiningen</a>, then you should grab your code from <a href="https://jitpack.io/#otaviofff/raviolini/">Raviolini on JitPack</a>.</p>
-
-<h1>
-<a id="use" class="anchor" href="#use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Use</h1>
-
-<p>First, you need to code the resource you want to expose through your API. In this sample, our domain object is named <code>Dog</code>, and is defined by three simple attributes, namely <code>id</code>, <code>name</code> and <code>neutered</code>. Please note the <code>@JsonIgnore</code> annotation from <a href="https://github.com/FasterXML/jackson">Jackson</a>, as well as the <code>@DatabaseTable</code> and <code>@DatabaseField</code> annotations from <a href="https://github.com/j256/ormlite-core">ORM Lite</a>. Also note that <code>Dog</code> must implement the <code>Entity</code> interface, provided by <a href="https://github.com/otaviofff/raviolini">Raviolini</a> itself. </p>
-
-<div class="highlight highlight-source-java"><pre><span class="pl-k">package</span> <span class="pl-smi">org.muttie.domain</span>;
-
-<span class="pl-k">import</span> <span class="pl-smi">org.raviolini.domain.Entity</span>;
-
-<span class="pl-k">import</span> <span class="pl-smi">com.fasterxml.jackson.annotation.JsonIgnore</span>;
-<span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.field.DatabaseField</span>;
-<span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.table.DatabaseTable</span>;
-
-@DatabaseTable(tableName <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>dog<span class="pl-pds">"</span></span>)
-<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Dog</span> <span class="pl-k">implements</span> <span class="pl-e">Entity</span> {
-
-    <span class="pl-k">@DatabaseField</span>(<span class="pl-c1">generatedId</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>)
-    <span class="pl-k">private</span> <span class="pl-smi">Integer</span> id;
-
-    <span class="pl-k">@DatabaseField</span>
-    <span class="pl-k">private</span> <span class="pl-smi">String</span> name;
-
-    <span class="pl-k">@DatabaseField</span>
-    <span class="pl-k">private</span> <span class="pl-smi">Boolean</span> neutered;
-
-    <span class="pl-k">public</span> <span class="pl-en">Dog</span>() {}
-
-    <span class="pl-k">@Override</span>
-    <span class="pl-k">public</span> <span class="pl-smi">Integer</span> <span class="pl-en">getId</span>() {
-        <span class="pl-k">return</span> id;
-    }
-
-    <span class="pl-k">@JsonIgnore</span>
-    <span class="pl-k">@Override</span>
-    <span class="pl-k">public</span> <span class="pl-smi">Boolean</span> <span class="pl-en">isValid</span>() {
-        <span class="pl-k">return</span> (neutered <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> name <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-k">!</span>name<span class="pl-k">.</span>isEmpty());
-    }
-}</pre></div>
-
-<p>Second, you need to code a front controller for your API. It will just make Raviolini listen to the HTTP port assinged, and add an HTTP router for the domain object you coded in the previous step. This router defines all valid URIs that will compose your final RESTful interface. Note that your <code>FrontController</code> has to extend <code>AbstractController</code>.</p>
-
-<div class="highlight highlight-source-java"><pre><span class="pl-k">package</span> <span class="pl-smi">org.muttie.api</span>;
-
-<span class="pl-k">import</span> <span class="pl-smi">org.muttie.domain.Dog</span>;
-<span class="pl-k">import</span> <span class="pl-smi">org.raviolini.api.AbstractController</span>;
-
-<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">FrontController</span> <span class="pl-k">extends</span> <span class="pl-e">AbstractController</span> {
-
-    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) {
-        listenToAssignedPort();
-        addRouter(<span class="pl-smi">Dog</span><span class="pl-k">.</span>class);
-    }
-}</pre></div>
-
-<p>Finally, you just need to create a configuration file (named <code>application.properties</code>) in order to setup your application, database and cache. Optionally, you may also create another config file (named <code>logging.properties</code>) to setup you logging preferences. Raviolini comes with <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/resources">sample config files</a> to help you out.</p>
-
-<div class="highlight highlight-source-ini"><pre><span class="pl-c">####################</span>
-<span class="pl-c">#  Application</span>
-<span class="pl-c">####################</span>
-
-<span class="pl-k">application.name</span>    = ${pom.name}
-<span class="pl-k">application.version</span> = ${pom.version}
-
-<span class="pl-c">####################</span>
-<span class="pl-c">#  Database</span>
-<span class="pl-c">####################</span>
-
-<span class="pl-k">raviolini.database.driver</span> = relational
-<span class="pl-k">raviolini.database.engine</span> = postgresql
-<span class="pl-k">raviolini.database.host</span>   = localhost
-<span class="pl-k">raviolini.database.port</span>   = 15432
-<span class="pl-k">raviolini.database.name</span>   = db_name
-<span class="pl-k">raviolini.database.user</span>   = db_user
-<span class="pl-k">raviolini.database.pass</span>   = db_pass
-
-<span class="pl-c">####################</span>
-<span class="pl-c">#  Cache</span>
-<span class="pl-c">####################</span>
-
-<span class="pl-k">raviolini.cache.driver</span> = redis
-<span class="pl-k">raviolini.cache.host</span>   = localhost
-<span class="pl-k">raviolini.cache.port</span>   = 16379</pre></div>
-
-<p>The full sample application can be found at repository <a href="https://github.com/otaviofff/raviolini-sample">raviolini-sample</a>.</p>
-
-<p>This is it. Your RESTful API is done. Enjoy your day =)</p>
-
-<h1>
-<a id="execute" class="anchor" href="#execute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Execute</h1>
-
-<h2>
-<a id="create-object" class="anchor" href="#create-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create Object</h2>
-
-<p>Request:</p>
-
-<div class="highlight highlight-source-shell"><pre>POST /dog HTTP/1.1
-Host: localhost:4567
-Content-Type: application/json
-
-{
-    <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
-}</pre></div>
-
-<p>Response:</p>
-
-<div class="highlight highlight-source-shell"><pre>HTTP/1.1 201 Created
-Date: Thu, 05 Nov 2015 12:17:48 GMT
-Content-Type: text/plain
-</pre></div>
-
-<h2>
-<a id="read-object" class="anchor" href="#read-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Read Object</h2>
-
-<p>Request:</p>
-
-<div class="highlight highlight-source-shell"><pre>GET /dog/1 HTTP/1.1
-Host: localhost:4567
-Accept: application/json
-</pre></div>
-
-<p>Response:</p>
-
-<div class="highlight highlight-source-shell"><pre>HTTP/1.1 200 OK
-Date: Thu, 05 Nov 2015 12:18:01 GMT
-Content-Type: application/json
-
-{
-    <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
-    <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
-}</pre></div>
-
-<h2>
-<a id="update-object" class="anchor" href="#update-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Update Object</h2>
-
-<p>Request:</p>
-
-<div class="highlight highlight-source-shell"><pre>PUT /dog/1 HTTP/1.1
-Host: localhost:4567
-Content-Type: application/json
-
-{
-    <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
-    <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-    <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
-}</pre></div>
-
-<p>Response:</p>
-
-<div class="highlight highlight-source-shell"><pre>HTTP/1.1 200 OK
-Date: Thu, 05 Nov 2015 12:18:01 GMT
-Content-Type: text/plain
-</pre></div>
-
-<h2>
-<a id="delete-object" class="anchor" href="#delete-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Delete Object</h2>
-
-<p>Request:</p>
-
-<div class="highlight highlight-source-shell"><pre>DELETE /dog/1 HTTP/1.1
-Host: localhost:4567
-</pre></div>
-
-<p>Response:</p>
-
-<div class="highlight highlight-source-shell"><pre>HTTP/1.1 200 OK
-Date: Thu, 05 Nov 2015 12:18:01 GMT
-Content-Type: text/plain
-</pre></div>
-
-<h2>
-<a id="read-list" class="anchor" href="#read-list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Read List</h2>
-
-<p>Request:</p>
-
-<div class="highlight highlight-source-shell"><pre>GET /dog HTTP/1.1
-Host: localhost:4567
-Accept: application/json
-</pre></div>
-
-<p>Response:</p>
-
-<div class="highlight highlight-source-shell"><pre>HTTP/1.1 200 OK
-Date: Thu, 05 Nov 2015 12:18:01 GMT
-Content-Type: application/json
-
-[
-    {
-        <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
-        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
-    },
-    {
-        <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 2,
-        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Martin<span class="pl-pds">"</span></span>,
-        <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
-    }
-]</pre></div>
-
-<h1>
-<a id="learn" class="anchor" href="#learn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Learn</h1>
-
-<h2>
-<a id="built-in-aspects" class="anchor" href="#built-in-aspects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Built-In Aspects</h2>
-
-<p>By default, Raviolini addresses six major non-functional requirements for your API, namely caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. </p>
-
-<p>For example, you can define whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MySQL, whether serialization will output JSON or XML, whether configuration will be read from File or Environment, and whether logging will output to File or Memory.</p>
-
-<p>Many other drivers are available. Check them out below.</p>
-
-<h3>
-<a id="caching" class="anchor" href="#caching" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Caching</h3>
-
-<ul>
-<li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/caching">org.raviolini.aspects.data.caching</a>
-</li>
-<li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/NullCacheDriver.java">Null</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/RedisCacheDriver.java">Redis</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/MemcachedCacheDriver.java">Memcached</a>
-</li>
-</ul>
-
-<h3>
-<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h3>
-
-<ul>
-<li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/configuration">org.raviolini.aspects.io.configuration</a>
-</li>
-<li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/EnvConfigDriver.java">Environment</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/FileConfigDriver.java">File</a>
-</li>
-</ul>
-
-<h3>
-<a id="logging" class="anchor" href="#logging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Logging</h3>
-
-<ul>
-<li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/logging">org.raviolini.aspects.io.logging</a>
-</li>
-<li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/logging/drivers/DatedFileHandler.java">DatedFile</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Handler.html">java.util.logging.Handler</a> (e.g. <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/ConsoleHandler.html">Console</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/FileHandler.html">File</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/MemoryHandler.html">Memory</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/SocketHandler.html">Socket</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/StreamHandler.html">Stream</a>)</li>
-</ul>
-
-<h3>
-<a id="persistence" class="anchor" href="#persistence" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Persistence</h3>
-
-<ul>
-<li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/database">org.raviolini.aspects.data.database</a>
-</li>
-<li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/database/drivers/RelationalDatabaseDriver.java">Relational</a> (e.g. PostgreSQL, MySQL), MongoDB</li>
-</ul>
-
-<h3>
-<a id="serialization" class="anchor" href="#serialization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Serialization</h3>
-
-<ul>
-<li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/serialization">org.raviolini.aspects.io.serialization</a>
-</li>
-<li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/serialization/drivers/JsonSerializationDriver.java">JSON</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/serialization/drivers/XmlSerializationDriver.java">XML</a>
-</li>
-</ul>
-
-<h3>
-<a id="validation" class="anchor" href="#validation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Validation</h3>
-
-<ul>
-<li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/validation">org.raviolini.aspects.data.validation</a>
-</li>
-</ul>
-
-<h2>
-<a id="architecture" class="anchor" href="#architecture" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Architecture</h2>
-
-<p>As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  </p>
-
-<p><a href="https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png"><img src="https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png" alt="Raviolini UML Package Diagram" /></a></p>
+        <h1><a id="intro" class="anchor" href="#intro" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Intro</h1>
+        
+        <p>Raviolini is a lightweight framework for building RESTful APIs, in Java 8. You simply provide your domain object and, out of the box, Raviolini gives you authentication, caching, configuration, logging, persistence, serialization and validation on that object. Moreover, pre- and post-execution hooks wil let you extend Raviolini beyond the original scope of CRUD (Create, Read, Update, Delete) operations.</p>
+        
+        <p>Raviolini is built on top of <a href="https://github.com/perwendel/spark">Spark</a> (version 2.2) and <a href="https://github.com/j256/ormlite-core">ORM Lite</a> (version 4.48). The former provides a lightweight HTTP foundation, while the latter provides a database abstraction layer and object-relational mapping.</p>
+        
+        <h1><a id="install" class="anchor" href="#install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Install</h1>
+        
+        <p>There are only two simple steps for you to install Raviolini in your project.</p>
+        
+        <p>First, add the <a href="https://jitpack.io/">JitPack</a> repository to your build file (pom.xml):</p>
+
+        <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">repositories</span>&gt;
+            &lt;<span class="pl-ent">repository</span>&gt;
+                &lt;<span class="pl-ent">id</span>&gt;jitpack.io&lt;/<span class="pl-ent">id</span>&gt;
+                &lt;<span class="pl-ent">url</span>&gt;https://jitpack.io&lt;/<span class="pl-ent">url</span>&gt;
+            &lt;/<span class="pl-ent">repository</span>&gt;
+        &lt;/<span class="pl-ent">repositories</span>&gt;</pre></div>
+
+        <p>Second, add the dependency:</p>
+
+        <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependencies</span>&gt;
+            &lt;<span class="pl-ent">dependency</span>&gt;
+                &lt;<span class="pl-ent">groupId</span>&gt;com.github.otaviofff&lt;/<span class="pl-ent">groupId</span>&gt;
+                &lt;<span class="pl-ent">artifactId</span>&gt;raviolini&lt;/<span class="pl-ent">artifactId</span>&gt;
+                &lt;<span class="pl-ent">version</span>&gt;0.0.8&lt;/<span class="pl-ent">version</span>&gt;
+            &lt;/<span class="pl-ent">dependency</span>&gt;
+        &lt;/<span class="pl-ent">dependencies</span>&gt;</pre></div>
+
+        <p>The above code assumes you use <a href="https://github.com/apache/maven">Maven</a> to build your project. However, if you use <a href="https://github.com/gradle/gradle">Gradle</a>, <a href="https://github.com/sbt/sbt">Sbt</a> or <a href="https://github.com/technomancy/leiningen">Leiningen</a>, then you should grab your code from <a href="https://jitpack.io/#otaviofff/raviolini/">Raviolini on JitPack</a>.</p>
+
+        <h1><a id="use" class="anchor" href="#use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Use</h1>
+
+        <p>First, you need to code the resource you want to expose through your API. In this sample, our domain object is named <code>Dog</code>, and is defined by three simple attributes, namely <code>id</code>, <code>name</code> and <code>neutered</code>. Please note the <code>@JsonIgnore</code> annotation from <a href="https://github.com/FasterXML/jackson">Jackson</a>, as well as the <code>@DatabaseTable</code> and <code>@DatabaseField</code> annotations from <a href="https://github.com/j256/ormlite-core">ORM Lite</a>. Also note that <code>Dog</code> must implement the <code>Entity</code> interface, provided by <a href="https://github.com/otaviofff/raviolini">Raviolini</a> itself. </p>
+
+        <div class="highlight highlight-source-java">
+          <pre>
+          <span class="pl-k">package</span> <span class="pl-smi">org.muttie.domain</span>;
+          
+          <span class="pl-k">import</span> <span class="pl-smi">org.raviolini.domain.Entity</span>;
+          
+          <span class="pl-k">import</span> <span class="pl-smi">com.fasterxml.jackson.annotation.JsonIgnore</span>;
+          <span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.field.DatabaseField</span>;
+          <span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.table.DatabaseTable</span>;
+  
+          @DatabaseTable(tableName <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>dog<span class="pl-pds">"</span></span>)
+          <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Dog</span> <span class="pl-k">implements</span> <span class="pl-e">Entity</span> {
+          
+              <span class="pl-k">@DatabaseField</span>(<span class="pl-c1">generatedId</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>)
+              <span class="pl-k">private</span> <span class="pl-smi">Integer</span> id;
+          
+              <span class="pl-k">@DatabaseField</span>
+              <span class="pl-k">private</span> <span class="pl-smi">String</span> name;
+          
+              <span class="pl-k">@DatabaseField</span>
+              <span class="pl-k">private</span> <span class="pl-smi">Boolean</span> neutered;
+          
+              <span class="pl-k">public</span> <span class="pl-en">Dog</span>() {}
+          
+              <span class="pl-k">@Override</span>
+              <span class="pl-k">public</span> <span class="pl-smi">Integer</span> <span class="pl-en">getId</span>() {
+                  <span class="pl-k">return</span> id;
+              }
+          
+              <span class="pl-k">@JsonIgnore</span>
+              <span class="pl-k">@Override</span>
+              <span class="pl-k">public</span> <span class="pl-smi">Boolean</span> <span class="pl-en">isValid</span>() {
+                  <span class="pl-k">return</span> (neutered <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> name <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-k">!</span>name<span class="pl-k">.</span>isEmpty());
+              }
+          }
+          </pre>
+        </div>
+
+        <p>Second, you need to code a front controller for your API. It will just make Raviolini listen to the HTTP port assinged, and add an HTTP router for the domain object you coded in the previous step. This router defines all valid URIs that will compose your final RESTful interface. Note that your <code>FrontController</code> has to extend <code>AbstractController</code>.</p>
+        
+        <div class="highlight highlight-source-java">
+          <pre>
+          <span class="pl-k">package</span> <span class="pl-smi">org.muttie.api</span>;
+          
+          <span class="pl-k">import</span> <span class="pl-smi">org.muttie.domain.Dog</span>;
+          <span class="pl-k">import</span> <span class="pl-smi">org.raviolini.api.AbstractController</span>;
+          
+          <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">FrontController</span> <span class="pl-k">extends</span> <span class="pl-e">AbstractController</span> {
+          
+              <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) {
+                  listenToAssignedPort();
+                  addRouter(<span class="pl-smi">Dog</span><span class="pl-k">.</span>class);
+              }
+          }
+          </pre>
+        </div>
+        
+        <p>Finally, you just need to create a configuration file (named <code>application.properties</code>) in order to setup your application, database, cache, and authentication strategy. Optionally, you may also create another config file (named <code>logging.properties</code>) to setup you logging preferences. Raviolini comes with <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/resources">sample config files</a> to help you out.</p>
+
+        <div class="highlight highlight-source-ini">
+          <pre>
+            <span class="pl-c">####################</span>
+            <span class="pl-c">#  Application</span>
+            <span class="pl-c">####################</span>
+            
+            <span class="pl-k">application.name</span>    = ${pom.name}
+            <span class="pl-k">application.version</span> = ${pom.version}
+            
+            <span class="pl-c">####################</span>
+            <span class="pl-c">#  Database</span>
+            <span class="pl-c">####################</span>
+            
+            <span class="pl-k">raviolini.database.driver</span> = relational
+            <span class="pl-k">raviolini.database.engine</span> = postgresql
+            <span class="pl-k">raviolini.database.host</span>   = localhost
+            <span class="pl-k">raviolini.database.port</span>   = 15432
+            <span class="pl-k">raviolini.database.name</span>   = db_name
+            <span class="pl-k">raviolini.database.user</span>   = db_user
+            <span class="pl-k">raviolini.database.pass</span>   = db_pass
+            
+            <span class="pl-c">####################</span>
+            <span class="pl-c">#  Cache</span>
+            <span class="pl-c">####################</span>
+            
+            <span class="pl-k">raviolini.cache.driver</span> = redis
+            <span class="pl-k">raviolini.cache.host</span>   = localhost
+            <span class="pl-k">raviolini.cache.port</span>   = 16379
+            
+            <span class="pl-c">####################</span>
+            <span class="pl-c">#  Auth</span>
+            <span class="pl-c">####################</span>
+            
+            <span class="pl-k">raviolini.auth.driver</span>  = basic
+            <span class="pl-k">raviolini.auth.user</span>    = username
+            <span class="pl-k">raviolini.auth.pass</span>    = password
+            <span class="pl-k">raviolini.auth.methods</span> = GET,POST,PUT
+          </pre>
+        </div>
+        
+        <p>The full sample application can be found at repository <a href="https://github.com/otaviofff/raviolini-sample">raviolini-sample</a>.</p>
+        
+        <p>This is it. Your RESTful API is done. Enjoy your day =)</p>
+        
+        <h1><a id="execute" class="anchor" href="#execute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Execute</h1>
+        
+        <h2><a id="create-object" class="anchor" href="#create-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create Object</h2>
+        
+        <p>Request:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            POST /dog HTTP/1.1
+            Host: localhost:4567
+            Content-Type: application/json
+            
+            {
+              <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+              <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+            }
+          </pre>
+        </div>
+        
+        <p>Response:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            HTTP/1.1 201 Created
+            Date: Thu, 05 Nov 2015 12:17:48 GMT
+            Content-Type: text/plain
+          </pre>
+        </div>
+        
+        <h2><a id="read-object" class="anchor" href="#read-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Read Object</h2>
+        
+        <p>Request:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            GET /dog/1 HTTP/1.1
+            Host: localhost:4567
+            Accept: application/json
+          </pre>
+        </div>
+        
+        <p>Response:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            HTTP/1.1 200 OK
+            Date: Thu, 05 Nov 2015 12:18:01 GMT
+            Content-Type: application/json
+            
+            {
+              <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
+              <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+              <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+            }
+          </pre>
+        </div>
+        
+        <h2><a id="update-object" class="anchor" href="#update-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Update Object</h2>
+        
+        <p>Request:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            PUT /dog/1 HTTP/1.1
+            Host: localhost:4567
+            Content-Type: application/json
+            
+            {
+              <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
+              <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+              <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
+            }
+          </pre>
+        </div>
+        
+        <p>Response:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            HTTP/1.1 200 OK
+            Date: Thu, 05 Nov 2015 12:18:01 GMT
+            Content-Type: text/plain
+          </pre>
+        </div>
+        
+        <h2><a id="delete-object" class="anchor" href="#delete-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Delete Object</h2>
+        
+        <p>Request:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            DELETE /dog/1 HTTP/1.1
+            Host: localhost:4567
+          </pre>
+        </div>
+        
+        <p>Response:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            HTTP/1.1 200 OK
+            Date: Thu, 05 Nov 2015 12:18:01 GMT
+            Content-Type: text/plain
+          </pre>
+        </div>
+        
+        <h2><a id="read-list" class="anchor" href="#read-list" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Read List</h2>
+        
+        <p>Request:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            GET /dog HTTP/1.1
+            Host: localhost:4567
+            Accept: application/json
+          </pre>
+        </div>
+        
+        <p>Response:</p>
+        
+        <div class="highlight highlight-source-shell">
+          <pre>
+            HTTP/1.1 200 OK
+            Date: Thu, 05 Nov 2015 12:18:01 GMT
+            Content-Type: application/json
+            
+            [
+              {
+                <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+              },
+              {
+                <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 2,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Martin<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
+              }
+            ]
+          </pre>
+        </div>
+        
+        <h1><a id="learn" class="anchor" href="#learn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Learn</h1>
+        
+        <h2><a id="built-in-aspects" class="anchor" href="#built-in-aspects" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Built-In Aspects</h2>
+        
+        <p>By default, Raviolini addresses seven major non-functional requirements for your API, namely authentication, caching, configuration, logging, persistence, serialization, and validation. And this doesn't come at the expense of flexibility at all. You may still configure each one of these aspects by swapping out their drivers. </p>
+        
+        <p>For example, you can define whether authentication will be based on Basic or Digest, whether caching will be powered by Redis or Memcached, whether persistence will be powered by PostgreSQL or MySQL, whether serialization will output JSON or XML, whether configuration will be read from File or Environment, and whether logging will output to File or Memory.</p>
+        
+        <p>Many other drivers are available. Check them out below.</p>
+        
+        <h3><a id="authentication" class="anchor" href="#authentication" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authentication</h3>
+        <ul>
+          <li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/security/auth">org.raviolini.aspects.security.auth</a></li>
+          <li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/NullAuthDriver.java">Null</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/BasicAuthDriver.java">Basic</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/DigestAuthDriver.java">Digest</a></li>
+        </ul>
+          
+        <h3><a id="caching" class="anchor" href="#caching" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Caching</h3>
+        <ul>
+          <li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/caching">org.raviolini.aspects.data.caching</a></li>
+          <li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/NullCacheDriver.java">Null</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/RedisCacheDriver.java">Redis</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/caching/drivers/MemcachedCacheDriver.java">Memcached</a></li>
+        </ul>
+        
+        <h3><a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration</h3>
+        <ul>
+          <li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/configuration">org.raviolini.aspects.io.configuration</a></li>
+          <li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/EnvConfigDriver.java">Environment</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/configuration/drivers/FileConfigDriver.java">File</a></li>
+        </ul>
+        
+        <h3><a id="logging" class="anchor" href="#logging" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Logging</h3>
+        <ul>
+          <li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/logging">org.raviolini.aspects.io.logging</a></li>
+          <li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/logging/drivers/DatedFileHandler.java">DatedFile</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/Handler.html">java.util.logging.Handler</a> (e.g. <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/ConsoleHandler.html">Console</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/FileHandler.html">File</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/MemoryHandler.html">Memory</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/SocketHandler.html">Socket</a>, <a href="https://docs.oracle.com/javase/8/docs/api/java/util/logging/StreamHandler.html">Stream</a>)</li>
+        </ul>
+        
+        <h3><a id="persistence" class="anchor" href="#persistence" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Persistence</h3>
+        <ul>
+          <li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/database">org.raviolini.aspects.data.database</a></li>
+          <li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/data/database/drivers/RelationalDatabaseDriver.java">Relational</a> (e.g. PostgreSQL, MySQL), MongoDB</li>
+        </ul>
+          
+        <h3><a id="serialization" class="anchor" href="#serialization" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Serialization</h3>
+        <ul>
+          <li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/serialization">org.raviolini.aspects.io.serialization</a></li>
+          <li>Drivers: <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/serialization/drivers/JsonSerializationDriver.java">JSON</a>, <a href="https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/serialization/drivers/XmlSerializationDriver.java">XML</a></li>
+        </ul>
+        
+        <h3><a id="validation" class="anchor" href="#validation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Validation</h3>
+        <ul>
+          <li>Package: <a href="https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/validation">org.raviolini.aspects.data.validation</a></li>
+        </ul>
+        
+        <h2><a id="architecture" class="anchor" href="#architecture" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Architecture</h2>
+        
+        <p>As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  </p>
+        
+        <p><a href="https://dl.dropboxusercontent.com/u/111597/raviolini/packages-v2.png"><img src="https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png" alt="Raviolini UML Package Diagram" /></a></p>
+        
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/otaviofff">otaviofff</a></p>
@@ -348,6 +375,5 @@ Content-Type: application/json
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
   </body>
 </html>
