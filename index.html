@@ -44,22 +44,30 @@
         
         <p>First, add the <a href="https://jitpack.io/">JitPack</a> repository to your build file (pom.xml):</p>
 
-        <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">repositories</span>&gt;
-            &lt;<span class="pl-ent">repository</span>&gt;
-                &lt;<span class="pl-ent">id</span>&gt;jitpack.io&lt;/<span class="pl-ent">id</span>&gt;
-                &lt;<span class="pl-ent">url</span>&gt;https://jitpack.io&lt;/<span class="pl-ent">url</span>&gt;
-            &lt;/<span class="pl-ent">repository</span>&gt;
-        &lt;/<span class="pl-ent">repositories</span>&gt;</pre></div>
+        <div class="highlight highlight-text-xml">
+          <pre>
+&lt;<span class="pl-ent">repositories</span>&gt;
+    &lt;<span class="pl-ent">repository</span>&gt;
+        &lt;<span class="pl-ent">id</span>&gt;jitpack.io&lt;/<span class="pl-ent">id</span>&gt;
+        &lt;<span class="pl-ent">url</span>&gt;https://jitpack.io&lt;/<span class="pl-ent">url</span>&gt;
+    &lt;/<span class="pl-ent">repository</span>&gt;
+&lt;/<span class="pl-ent">repositories</span>&gt;
+          </pre>
+        </div>
 
         <p>Second, add the dependency:</p>
 
-        <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependencies</span>&gt;
-            &lt;<span class="pl-ent">dependency</span>&gt;
-                &lt;<span class="pl-ent">groupId</span>&gt;com.github.otaviofff&lt;/<span class="pl-ent">groupId</span>&gt;
-                &lt;<span class="pl-ent">artifactId</span>&gt;raviolini&lt;/<span class="pl-ent">artifactId</span>&gt;
-                &lt;<span class="pl-ent">version</span>&gt;0.0.8&lt;/<span class="pl-ent">version</span>&gt;
-            &lt;/<span class="pl-ent">dependency</span>&gt;
-        &lt;/<span class="pl-ent">dependencies</span>&gt;</pre></div>
+        <div class="highlight highlight-text-xml">
+          <pre>
+&lt;<span class="pl-ent">dependencies</span>&gt;
+    &lt;<span class="pl-ent">dependency</span>&gt;
+        &lt;<span class="pl-ent">groupId</span>&gt;com.github.otaviofff&lt;/<span class="pl-ent">groupId</span>&gt;
+        &lt;<span class="pl-ent">artifactId</span>&gt;raviolini&lt;/<span class="pl-ent">artifactId</span>&gt;
+        &lt;<span class="pl-ent">version</span>&gt;0.0.8&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;/<span class="pl-ent">dependency</span>&gt;
+&lt;/<span class="pl-ent">dependencies</span>&gt;
+          </pre>
+        </div>
 
         <p>The above code assumes you use <a href="https://github.com/apache/maven">Maven</a> to build your project. However, if you use <a href="https://github.com/gradle/gradle">Gradle</a>, <a href="https://github.com/sbt/sbt">Sbt</a> or <a href="https://github.com/technomancy/leiningen">Leiningen</a>, then you should grab your code from <a href="https://jitpack.io/#otaviofff/raviolini/">Raviolini on JitPack</a>.</p>
 
@@ -69,39 +77,39 @@
 
         <div class="highlight highlight-source-java">
           <pre>
-          <span class="pl-k">package</span> <span class="pl-smi">org.muttie.domain</span>;
-          
-          <span class="pl-k">import</span> <span class="pl-smi">org.raviolini.domain.Entity</span>;
-          
-          <span class="pl-k">import</span> <span class="pl-smi">com.fasterxml.jackson.annotation.JsonIgnore</span>;
-          <span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.field.DatabaseField</span>;
-          <span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.table.DatabaseTable</span>;
-  
-          @DatabaseTable(tableName <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>dog<span class="pl-pds">"</span></span>)
-          <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Dog</span> <span class="pl-k">implements</span> <span class="pl-e">Entity</span> {
-          
-              <span class="pl-k">@DatabaseField</span>(<span class="pl-c1">generatedId</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>)
-              <span class="pl-k">private</span> <span class="pl-smi">Integer</span> id;
-          
-              <span class="pl-k">@DatabaseField</span>
-              <span class="pl-k">private</span> <span class="pl-smi">String</span> name;
-          
-              <span class="pl-k">@DatabaseField</span>
-              <span class="pl-k">private</span> <span class="pl-smi">Boolean</span> neutered;
-          
-              <span class="pl-k">public</span> <span class="pl-en">Dog</span>() {}
-          
-              <span class="pl-k">@Override</span>
-              <span class="pl-k">public</span> <span class="pl-smi">Integer</span> <span class="pl-en">getId</span>() {
-                  <span class="pl-k">return</span> id;
-              }
-          
-              <span class="pl-k">@JsonIgnore</span>
-              <span class="pl-k">@Override</span>
-              <span class="pl-k">public</span> <span class="pl-smi">Boolean</span> <span class="pl-en">isValid</span>() {
-                  <span class="pl-k">return</span> (neutered <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> name <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-k">!</span>name<span class="pl-k">.</span>isEmpty());
-              }
-          }
+<span class="pl-k">package</span> <span class="pl-smi">org.muttie.domain</span>;
+
+<span class="pl-k">import</span> <span class="pl-smi">org.raviolini.domain.Entity</span>;
+
+<span class="pl-k">import</span> <span class="pl-smi">com.fasterxml.jackson.annotation.JsonIgnore</span>;
+<span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.field.DatabaseField</span>;
+<span class="pl-k">import</span> <span class="pl-smi">com.j256.ormlite.table.DatabaseTable</span>;
+
+@DatabaseTable(tableName <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>dog<span class="pl-pds">"</span></span>)
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">Dog</span> <span class="pl-k">implements</span> <span class="pl-e">Entity</span> {
+
+    <span class="pl-k">@DatabaseField</span>(<span class="pl-c1">generatedId</span> <span class="pl-k">=</span> <span class="pl-c1">true</span>)
+    <span class="pl-k">private</span> <span class="pl-smi">Integer</span> id;
+
+    <span class="pl-k">@DatabaseField</span>
+    <span class="pl-k">private</span> <span class="pl-smi">String</span> name;
+
+    <span class="pl-k">@DatabaseField</span>
+    <span class="pl-k">private</span> <span class="pl-smi">Boolean</span> neutered;
+
+    <span class="pl-k">public</span> <span class="pl-en">Dog</span>() {}
+
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">Integer</span> <span class="pl-en">getId</span>() {
+        <span class="pl-k">return</span> id;
+    }
+
+    <span class="pl-k">@JsonIgnore</span>
+    <span class="pl-k">@Override</span>
+    <span class="pl-k">public</span> <span class="pl-smi">Boolean</span> <span class="pl-en">isValid</span>() {
+        <span class="pl-k">return</span> (neutered <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> name <span class="pl-k">!=</span> <span class="pl-c1">null</span> <span class="pl-k">&amp;&amp;</span> <span class="pl-k">!</span>name<span class="pl-k">.</span>isEmpty());
+    }
+}
           </pre>
         </div>
 
@@ -109,18 +117,18 @@
         
         <div class="highlight highlight-source-java">
           <pre>
-          <span class="pl-k">package</span> <span class="pl-smi">org.muttie.api</span>;
-          
-          <span class="pl-k">import</span> <span class="pl-smi">org.muttie.domain.Dog</span>;
-          <span class="pl-k">import</span> <span class="pl-smi">org.raviolini.api.AbstractController</span>;
-          
-          <span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">FrontController</span> <span class="pl-k">extends</span> <span class="pl-e">AbstractController</span> {
-          
-              <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) {
-                  listenToAssignedPort();
-                  addRouter(<span class="pl-smi">Dog</span><span class="pl-k">.</span>class);
-              }
-          }
+<span class="pl-k">package</span> <span class="pl-smi">org.muttie.api</span>;
+
+<span class="pl-k">import</span> <span class="pl-smi">org.muttie.domain.Dog</span>;
+<span class="pl-k">import</span> <span class="pl-smi">org.raviolini.api.AbstractController</span>;
+
+<span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">FrontController</span> <span class="pl-k">extends</span> <span class="pl-e">AbstractController</span> {
+
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) {
+        listenToAssignedPort();
+        addRouter(<span class="pl-smi">Dog</span><span class="pl-k">.</span>class);
+    }
+}
           </pre>
         </div>
         
@@ -128,41 +136,41 @@
 
         <div class="highlight highlight-source-ini">
           <pre>
-            <span class="pl-c">####################</span>
-            <span class="pl-c">#  Application</span>
-            <span class="pl-c">####################</span>
-            
-            <span class="pl-k">application.name</span>    = ${pom.name}
-            <span class="pl-k">application.version</span> = ${pom.version}
-            
-            <span class="pl-c">####################</span>
-            <span class="pl-c">#  Database</span>
-            <span class="pl-c">####################</span>
-            
-            <span class="pl-k">raviolini.database.driver</span> = relational
-            <span class="pl-k">raviolini.database.engine</span> = postgresql
-            <span class="pl-k">raviolini.database.host</span>   = localhost
-            <span class="pl-k">raviolini.database.port</span>   = 15432
-            <span class="pl-k">raviolini.database.name</span>   = db_name
-            <span class="pl-k">raviolini.database.user</span>   = db_user
-            <span class="pl-k">raviolini.database.pass</span>   = db_pass
-            
-            <span class="pl-c">####################</span>
-            <span class="pl-c">#  Cache</span>
-            <span class="pl-c">####################</span>
-            
-            <span class="pl-k">raviolini.cache.driver</span> = redis
-            <span class="pl-k">raviolini.cache.host</span>   = localhost
-            <span class="pl-k">raviolini.cache.port</span>   = 16379
-            
-            <span class="pl-c">####################</span>
-            <span class="pl-c">#  Auth</span>
-            <span class="pl-c">####################</span>
-            
-            <span class="pl-k">raviolini.auth.driver</span>  = basic
-            <span class="pl-k">raviolini.auth.user</span>    = username
-            <span class="pl-k">raviolini.auth.pass</span>    = password
-            <span class="pl-k">raviolini.auth.methods</span> = GET,POST,PUT
+<span class="pl-c">####################</span>
+<span class="pl-c">#  Application</span>
+<span class="pl-c">####################</span>
+
+<span class="pl-k">application.name</span>    = ${pom.name}
+<span class="pl-k">application.version</span> = ${pom.version}
+
+<span class="pl-c">####################</span>
+<span class="pl-c">#  Database</span>
+<span class="pl-c">####################</span>
+
+<span class="pl-k">raviolini.database.driver</span> = relational
+<span class="pl-k">raviolini.database.engine</span> = postgresql
+<span class="pl-k">raviolini.database.host</span>   = localhost
+<span class="pl-k">raviolini.database.port</span>   = 15432
+<span class="pl-k">raviolini.database.name</span>   = db_name
+<span class="pl-k">raviolini.database.user</span>   = db_user
+<span class="pl-k">raviolini.database.pass</span>   = db_pass
+
+<span class="pl-c">####################</span>
+<span class="pl-c">#  Cache</span>
+<span class="pl-c">####################</span>
+
+<span class="pl-k">raviolini.cache.driver</span> = redis
+<span class="pl-k">raviolini.cache.host</span>   = localhost
+<span class="pl-k">raviolini.cache.port</span>   = 16379
+
+<span class="pl-c">####################</span>
+<span class="pl-c">#  Auth</span>
+<span class="pl-c">####################</span>
+
+<span class="pl-k">raviolini.auth.driver</span>  = basic
+<span class="pl-k">raviolini.auth.user</span>    = username
+<span class="pl-k">raviolini.auth.pass</span>    = password
+<span class="pl-k">raviolini.auth.methods</span> = GET,POST,PUT
           </pre>
         </div>
         
@@ -178,14 +186,14 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            POST /dog HTTP/1.1
-            Host: localhost:4567
-            Content-Type: application/json
-            
-            {
-              <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-              <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
-            }
+POST /dog HTTP/1.1
+Host: localhost:4567
+Content-Type: application/json
+
+{
+  <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+}
           </pre>
         </div>
         
@@ -193,9 +201,9 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            HTTP/1.1 201 Created
-            Date: Thu, 05 Nov 2015 12:17:48 GMT
-            Content-Type: text/plain
+HTTP/1.1 201 Created
+Date: Thu, 05 Nov 2015 12:17:48 GMT
+Content-Type: text/plain
           </pre>
         </div>
         
@@ -205,9 +213,9 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            GET /dog/1 HTTP/1.1
-            Host: localhost:4567
-            Accept: application/json
+GET /dog/1 HTTP/1.1
+Host: localhost:4567
+Accept: application/json
           </pre>
         </div>
         
@@ -215,15 +223,15 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            HTTP/1.1 200 OK
-            Date: Thu, 05 Nov 2015 12:18:01 GMT
-            Content-Type: application/json
-            
-            {
-              <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
-              <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-              <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
-            }
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: application/json
+
+{
+  <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
+  <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+}
           </pre>
         </div>
         
@@ -233,15 +241,15 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            PUT /dog/1 HTTP/1.1
-            Host: localhost:4567
-            Content-Type: application/json
-            
-            {
-              <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
-              <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-              <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
-            }
+PUT /dog/1 HTTP/1.1
+Host: localhost:4567
+Content-Type: application/json
+
+{
+  <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
+  <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+  <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
+}
           </pre>
         </div>
         
@@ -249,9 +257,9 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            HTTP/1.1 200 OK
-            Date: Thu, 05 Nov 2015 12:18:01 GMT
-            Content-Type: text/plain
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: text/plain
           </pre>
         </div>
         
@@ -261,8 +269,8 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            DELETE /dog/1 HTTP/1.1
-            Host: localhost:4567
+DELETE /dog/1 HTTP/1.1
+Host: localhost:4567
           </pre>
         </div>
         
@@ -270,9 +278,9 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            HTTP/1.1 200 OK
-            Date: Thu, 05 Nov 2015 12:18:01 GMT
-            Content-Type: text/plain
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: text/plain
           </pre>
         </div>
         
@@ -282,9 +290,9 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            GET /dog HTTP/1.1
-            Host: localhost:4567
-            Accept: application/json
+GET /dog HTTP/1.1
+Host: localhost:4567
+Accept: application/json
           </pre>
         </div>
         
@@ -292,22 +300,22 @@
         
         <div class="highlight highlight-source-shell">
           <pre>
-            HTTP/1.1 200 OK
-            Date: Thu, 05 Nov 2015 12:18:01 GMT
-            Content-Type: application/json
-            
-            [
-              {
-                <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
-                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
-                <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
-              },
-              {
-                <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 2,
-                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Martin<span class="pl-pds">"</span></span>,
-                <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
-              }
-            ]
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: application/json
+
+[
+  {
+    <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 1,
+    <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Madalena<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">true</span>
+  },
+  {
+    <span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>: 2,
+    <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Martin<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>neutered<span class="pl-pds">"</span></span>: <span class="pl-c1">false</span>
+  }
+]
           </pre>
         </div>
         
@@ -366,7 +374,7 @@
         
         <p>As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  </p>
         
-        <p><a href="https://dl.dropboxusercontent.com/u/111597/raviolini/packages-v2.png"><img src="https://dl.dropboxusercontent.com/u/111597/raviolini/packages.png" alt="Raviolini UML Package Diagram" /></a></p>
+        <p><a href="https://dl.dropboxusercontent.com/u/111597/raviolini/packages-v2.png"><img src="https://dl.dropboxusercontent.com/u/111597/raviolini/packages-v2.png" alt="Raviolini UML Package Diagram" /></a></p>
         
       </section>
       <footer>
