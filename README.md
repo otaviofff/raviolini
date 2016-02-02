@@ -27,7 +27,7 @@ Second, add the dependency:
     <dependency>
         <groupId>com.github.otaviofff</groupId>
         <artifactId>raviolini</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.9</version>
     </dependency>
 </dependencies>
 ```
@@ -120,14 +120,15 @@ raviolini.database.pass   = db_pass
 raviolini.cache.driver = redis
 raviolini.cache.host   = localhost
 raviolini.cache.port   = 16379
+raviolini.cache.pass   = cache_pass
 
 ####################
 #  Auth
 ####################
 
 raviolini.auth.driver  = basic
-raviolini.auth.user    = username
-raviolini.auth.pass    = password
+raviolini.auth.user    = api_user
+raviolini.auth.pass    = api_pass
 raviolini.auth.methods = GET,POST,PUT
 ```
 
