@@ -49,7 +49,7 @@ public class DatabaseFactory {
             driver = "invalid";
         }
         
-        switch(driver) {
+        switch(driver.toLowerCase()) {
             case "relational":
                 return new RelationalDatabaseDriver<T>(engine, host, port, name, user, pass, boot);
             default:

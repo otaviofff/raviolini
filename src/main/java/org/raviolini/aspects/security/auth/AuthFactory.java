@@ -59,7 +59,7 @@ public class AuthFactory {
             driver = "invalid";
         }
         
-        switch (driver) {
+        switch (driver.toLowerCase()) {
             case "basic":
                 return new BasicAuthDriver(user, pass, methods);
             case "digest":
