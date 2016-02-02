@@ -9,12 +9,14 @@ import org.raviolini.domain.Entity;
 public abstract class AbstractCacheDriver<T extends Entity> {
 
     private String host;
+    private String pass;
     private Integer port;
     private SerializationService<T> serializer;
     
-    public AbstractCacheDriver(String host, Integer port) {
+    public AbstractCacheDriver(String host, Integer port, String pass) {
         this.host = host;
         this.port = port;
+        this.pass = pass;
         this.serializer = null;
     }
     
@@ -24,6 +26,10 @@ public abstract class AbstractCacheDriver<T extends Entity> {
     
     public Integer getPort() {
         return port;
+    }
+    
+    public String getPassword() {
+        return pass;
     }
 
     /***
@@ -76,6 +82,8 @@ public abstract class AbstractCacheDriver<T extends Entity> {
         
         return doExists(key);
     }
+
+    public abstract void disconnect();
     
     protected abstract String doGet(String key) throws CacheConnectionException;
     

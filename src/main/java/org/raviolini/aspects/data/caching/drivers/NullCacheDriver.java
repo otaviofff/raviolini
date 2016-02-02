@@ -4,10 +4,15 @@ import org.raviolini.domain.Entity;
 
 public class NullCacheDriver<T extends Entity> extends AbstractCacheDriver<T> {
 
-    public NullCacheDriver(String host, Integer port) {
-        super(host, port);
+    public NullCacheDriver(String host, Integer port, String pass) {
+        super(host, port, pass);
     }
-
+    
+    @Override
+    public void disconnect() {
+        return;
+    }
+    
     @Override
     protected String doGet(String key) {
         return null;

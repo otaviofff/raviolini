@@ -86,6 +86,8 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
                 | UnserializationException 
                 | SerializationException e) {
             throw new ReadOperationException("Failed to get entity.", e);
+        } finally {
+            getCache().disconnect();
         }
         
         hookAfterGet(entity);
@@ -105,6 +107,8 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
                 | DatabaseCommandException
                 | SerializationException e) {
             throw new WriteOperationException("Failed to post entity.", e);
+        } finally {
+            getCache().disconnect();
         }
         
         hookAfterPost(entity);
@@ -122,6 +126,8 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
                 | CacheConnectionException
                 | SerializationException e) {
             throw new WriteOperationException("Failed to put entity.", e);
+        } finally {
+            getCache().disconnect();
         }
         
         hookAfterPut(entity);
@@ -138,6 +144,8 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
                 | DatabaseCommandException
                 | CacheConnectionException e) {
             throw new WriteOperationException("Failed to delete entity.", e);
+        } finally {
+            getCache().disconnect();
         }
         
         hookAfterDelete(entityId);

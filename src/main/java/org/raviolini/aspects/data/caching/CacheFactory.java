@@ -22,7 +22,7 @@ public class CacheFactory {
     }
     
     private static String[] getConfigKeys() {
-        return new String[] {"driver", "host", "port"};
+        return new String[] {"driver", "host", "port", "pass"};
     }
     
     public static <T extends Entity> AbstractCacheDriver<T> getDriver() throws UnloadableConfigException, InvalidPropertyException {
@@ -30,6 +30,7 @@ public class CacheFactory {
         
         String driver = map.get("driver");
         String host = map.get("host");
+        String pass = map.get("pass");
         Integer port;
         
         try {
@@ -38,21 +39,21 @@ public class CacheFactory {
             throw new InvalidPropertyException(getConfigNamespace().concat(".port"), e);
         }
         
-        return instantiateDriver(driver, host, port);
+        return instantiateDriver(driver, host, port, pass);
     }
     
-    private static <T extends Entity> AbstractCacheDriver<T> instantiateDriver(String driver, String host, Integer port) throws InvalidPropertyException {
+    private static <T extends Entity> AbstractCacheDriver<T> instantiateDriver(String driver, String host, Integer port, String pass) throws InvalidPropertyException {
         if (driver == null) {
             driver = "invalid";
         }
         
-        switch (driver) {
+        switch (driver.toLowerCase()) {
             case "redis":
-                return new RedisCacheDriver<T>(host, port);
+                return new RedisCacheDriver<T>(host, port, pass);
             case "memcached":
-                return new MemcachedCacheDriver<T>(host, port);
+                return new MemcachedCacheDriver<T>(host, port, pass);
             case "null":
-                return new NullCacheDriver<T>(host, port);
+                return new NullCacheDriver<T>(host, port, pass);
             default:
                 throw new InvalidPropertyException(getConfigNamespace().concat(".driver"), null);
         }

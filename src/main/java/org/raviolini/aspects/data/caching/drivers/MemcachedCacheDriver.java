@@ -13,8 +13,8 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
 
     private MemcachedClient cache;
     
-    public MemcachedCacheDriver(String host, Integer port) {
-        super(host, port);
+    public MemcachedCacheDriver(String host, Integer port, String pass) {
+        super(host, port, pass);
     }
     
     private MemcachedClient getCache() throws IOException {
@@ -22,14 +22,14 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
             InetSocketAddress address = new InetSocketAddress(getHost(), getPort());
             cache = new MemcachedClient(address);
         }
-        
+
         return cache;
     }
     
-    private void closeConnection() {
+    @Override
+    public void disconnect() {
         if (cache != null) {
             cache.shutdown();
-            cache = null;
         }
     }
 
@@ -39,8 +39,6 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
             return getCache().get(key).toString();
         } catch (IOException | RuntimeException e) {
             throw new CacheConnectionException(e);
-        } finally {
-            closeConnection();
         }
     }
 
@@ -50,8 +48,6 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
             return getCache().set(key, 0, value).get();
         } catch (IOException | InterruptedException | ExecutionException | RuntimeException e) {
             throw new CacheConnectionException(e);
-        } finally {
-            closeConnection();
         }
     }
 
@@ -61,8 +57,6 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
             return getCache().delete(key).get();
         } catch (IOException | InterruptedException | ExecutionException | RuntimeException e) {
             throw new CacheConnectionException(e);
-        } finally {
-            closeConnection();
         }
     }
 
@@ -72,8 +66,6 @@ public class MemcachedCacheDriver<T extends Entity> extends AbstractCacheDriver<
             return getCache().append(key, "").get();
         } catch (IOException | InterruptedException | ExecutionException | RuntimeException e) {
             throw new CacheConnectionException(e);
-        } finally {
-            closeConnection();
         }
     }
 }

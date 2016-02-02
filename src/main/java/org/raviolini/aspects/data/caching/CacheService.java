@@ -20,6 +20,12 @@ public class CacheService<T extends Entity> {
         return driver;
     }
     
+    public void disconnect() {
+        if (driver != null) {
+            driver.disconnect();
+        }
+    }
+    
     public T get(Integer entityId, Class<T> entityClass) throws CacheConnectionException, UnloadableConfigException, InvalidPropertyException, UnserializationException {
         return getDriver().get(entityId, entityClass);
     }
