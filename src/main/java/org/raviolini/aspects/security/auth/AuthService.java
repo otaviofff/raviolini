@@ -16,12 +16,12 @@ public class AuthService {
         return driver;
     }
     
-    public Boolean authenticate(String encodedCredential) throws UnloadableConfigException, InvalidPropertyException {
-        return getDriver().authenticate(encodedCredential);
+    public Boolean authenticate(String requestMethod, String requestUri, String encodedCredential) throws UnloadableConfigException, InvalidPropertyException {
+        return getDriver().authenticate(requestMethod, requestUri, encodedCredential);
     }
     
-    public Boolean authorize(String method) throws UnloadableConfigException, InvalidPropertyException {
-        return getDriver().authorize(method);
+    public Boolean authorize(String requestMethod) throws UnloadableConfigException, InvalidPropertyException {
+        return getDriver().authorize(requestMethod);
     }
     
     public String challenge() throws UnloadableConfigException, InvalidPropertyException {

@@ -2,44 +2,51 @@ package org.raviolini.aspects.security.auth.drivers;
 
 import java.util.List;
 
-import org.raviolini.aspects.security.auth.Credential;
-
 public abstract class AbstractAuthDriver {
 
     private String expectedUser;
     private String expectedPass;
-    private List<String> authorizedMethods;
+    private String expectedRealm;
+    private List<String> expectedMethods;
     
     public AbstractAuthDriver(String user, String pass, List<String> methods) {
         expectedUser = user;
         expectedPass = pass;
-        authorizedMethods = methods;
+        expectedRealm = "Impenetrable";
+        expectedMethods = methods;
     }
     
-    public Boolean authenticate(String encodedCredential) {
+    public abstract String getName();
+    
+    public abstract String getChallenge();
+    
+    protected String getUsername() {
+        return expectedUser;
+    }
+    
+    protected String getPassword() {
+        return expectedPass;
+    }
+    
+    protected String getRealm() {
+        return expectedRealm;
+    }
+    
+    public Boolean authenticate(String requestMethod, String requestUri, String encodedCredential) {
         if (encodedCredential == null || !encodedCredential.startsWith(getName())) {
             return false;
         }
         
-        Credential credential = parseCredential(encodedCredential.substring(getName().length()).trim());
+        encodedCredential = encodedCredential.substring(getName().length()).trim();
         
-        if (credential == null) {
-            return false;
-        }
-        
-        return expectedUser.equals(credential.getUsername()) &&
-               expectedPass.equals(credential.getPassword());
+        return matchCredential(requestMethod, requestUri, encodedCredential);
     }
     
-    public Boolean authorize(String method) {
-        return method != null
-                && authorizedMethods != null
-                && authorizedMethods.contains(method);
+    public Boolean authorize(String requestMethod) {
+        return requestMethod != null
+            && expectedMethods != null
+            && expectedMethods.contains(requestMethod);
     }
     
-    public abstract String getChallenge();
-    
-    protected abstract String getName();
-    
-    protected abstract Credential parseCredential(String encodedCredential);
+    protected abstract Boolean matchCredential(String requestMethod, String requestUrl, String encodedCredential);
 }

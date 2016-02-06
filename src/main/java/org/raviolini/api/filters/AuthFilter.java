@@ -29,7 +29,7 @@ public class AuthFilter extends FilterImpl {
         String challenge;
         
         try {
-            authenticated = getAuth().authenticate(request.headers("Authorization"));
+            authenticated = getAuth().authenticate(request.requestMethod(), request.uri(), request.headers("Authorization"));
             authorized = getAuth().authorize(request.requestMethod());
             challenge = getAuth().challenge();
         } catch (UnloadableConfigException | InvalidPropertyException e) {
