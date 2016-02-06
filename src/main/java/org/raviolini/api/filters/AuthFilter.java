@@ -32,7 +32,7 @@ public class AuthFilter extends FilterImpl {
             authenticated = getAuth().authenticate(request.requestMethod(), request.uri(), request.headers("Authorization"));
             authorized = getAuth().authorize(request.requestMethod());
             challenge = getAuth().challenge();
-        } catch (UnloadableConfigException | InvalidPropertyException e) {
+        } catch (UnloadableConfigException | InvalidPropertyException | RuntimeException e) {
             throw new InternalServerException(e);
         }
         
