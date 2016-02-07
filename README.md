@@ -27,7 +27,7 @@ Second, add the dependency:
     <dependency>
         <groupId>com.github.otaviofff</groupId>
         <artifactId>raviolini</artifactId>
-        <version>0.0.9</version>
+        <version>0.0.10</version>
     </dependency>
 </dependencies>
 ```
@@ -293,6 +293,22 @@ Many other drivers are available. Check them out below.
 As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  
 
 ![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages-v2.png)
+
+### Exception Handling
+
+Raviolini embrances HTTP and its status codes.
+
+| Code        | Message                | Description                                                                                                                    |
+|-------------|------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| 400         | Bad Request            | API client sent an invalid HTTP request. This could be either a malformed URI, or an empty body for a POST/PUT request.        |
+| 401         | Unauthorized           | API client didn't provide a valid access credential through the HTTP header Authorization. A retry will be welcomed.           |
+| 403         | Forbidden              | API client won't have access to the targeted resource at all, regardless of its access credential. No retry should take place. |
+| 404         | Not Found              | API client sent an HTTP request against a resource that doesn't exist on the server, at this point in time.                    |
+| 405         | Method Not Allowed     | API client sent an HTTP request along with an unsupported HTTP verb. Raviolini handles GET, POST, PUT and DELETE only.         |
+| 406         | Not Acceptable         | API client sent an HTTP GET request with an unsupported media-type on HTTP header Accept. Only JSON and XML are acceptable.    |
+| 415         | Unsupported Media Type | API client sent an HTTP POST/PUT request with an unsupported media-type on HTTP header Content-Type. Only JSON and XML are.    |
+| 500         | Internal Server Error  | API server experienced an exception with one of its components, such as Cache, Configuration, Database, or Log.                |
+
 
 Made in São Paulo, by [Otavio Ferreira](https://github.com/otaviofff/).
 
