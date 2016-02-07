@@ -301,7 +301,7 @@ Raviolini embrances HTTP and its status codes.
 | Code        | Message                | Description                                                                                                                    |
 |-------------|------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | 400         | Bad Request            | API client sent an invalid HTTP request. This could be either a malformed URI, or an empty body for a POST/PUT request.        |
-| 401         | Unauthorized           | API client didn't provide a valid access credential through the HTTP header Authorization. A retry will be welcomed.           |
+| 401         | Unauthorized           | API client didn't provide a valid access credential through HTTP header Authorization. A retry with a different credential will be welcomed.           |
 | 403         | Forbidden              | API client won't have access to the targeted resource at all, regardless of its access credential. No retry should take place. |
 | 404         | Not Found              | API client sent an HTTP request against a resource that doesn't exist on the server, at this point in time.                    |
 | 405         | Method Not Allowed     | API client sent an HTTP request along with an unsupported HTTP verb. Raviolini handles GET, POST, PUT and DELETE only.         |
