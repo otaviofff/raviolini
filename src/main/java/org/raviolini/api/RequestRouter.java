@@ -42,15 +42,15 @@ public class RequestRouter<T extends Entity> {
     }
     
     public void route(Class<T> entityClass) {
+        before((request, response) -> {
+            RequestValidator.validateRequest(request);
+        });
+        
         before(new AuthFilter());
         
         String entityName = entityClass.getSimpleName().toLowerCase();
         String entityListUri = ("/").concat(entityName);
         String entityUri = entityListUri.concat("/:id");
-        
-        before((request, response) -> {
-            RequestValidator.validateRequest(request);
-        });
         
         before(entityUri, (request, response) -> {
             RequestValidator.validateUri(request);
