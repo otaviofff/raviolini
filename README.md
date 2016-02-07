@@ -310,6 +310,15 @@ Raviolini embrances HTTP and its status codes.
 | 500         | Internal Server Error  | API server experienced an exception with one of its components, such as Cache, Configuration, Database, or Log.                |
 
 
+Less specific HTTP status codes, namely 400 (client-side error) and 500 (server-side error), should be interpreted along with the HTTP reponse message body, which will always contain more information about the exception thrown. This is usually an effective approach to troubleshooting your API, in addition to Raviolini logs, of course.
+
+### Authentication Handling
+
+Raviolini is a stateless engine, so are the authentication drivers it provides. Thus, Raviolini's ```Digest``` implmentation makes use of a timestamp-based, signed ```nonce``` value, which is valid within the hour. After this ```nonce``` expires, the client will get a 401 error again, with a new ```nonce```.  
+
+As defined by [RFC2617](https://tools.ietf.org/html/rfc2617#section-3.2.1), the contents of the ```nonce``` are implementation dependent. The quality of the implementation depends on a good choice. And the strategy defined here is Raviolini's take on this matter. 
+
+----------
 Made in São Paulo, by [Otavio Ferreira](https://github.com/otaviofff/).
 
 EOF
