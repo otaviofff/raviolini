@@ -76,7 +76,7 @@ public class DigestAuthDriver extends AbstractAuthDriver {
             token = tokenizer.nextToken().trim();
             match = pattern.matcher(token);
             
-            if (match.matches() && match.groupCount() == 3) {
+            if (match.matches() == false || match.groupCount() != 2) {
                 return false;
             }
             
