@@ -265,6 +265,7 @@ Many other drivers are available. Check them out below.
 #### Authentication
 - Package: [org.raviolini.aspects.security.auth](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/security/auth)
 - Drivers: [Null](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/NullAuthDriver.java), [Basic](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/BasicAuthDriver.java), [Digest](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/security/auth/drivers/DigestAuthDriver.java)
+- Learn more about [Authentication Handling](https://github.com/otaviofff/raviolini#authentication-handling)
 
 #### Caching
 - Package: [org.raviolini.aspects.data.caching](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/caching)
@@ -314,9 +315,9 @@ Less specific HTTP status codes, namely 400 (client-side error) and 500 (server-
 
 ### Authentication Handling
 
-Raviolini is a stateless engine, so are the authentication drivers it provides. Thus, Raviolini's ```Digest``` implmentation makes use of a timestamp-based, signed ```nonce``` value, which is valid within the hour. After this ```nonce``` expires, the client will get a 401 error again, with a new ```nonce```.  
+Raviolini is a stateless engine, so are the authentication drivers it provides. Thus, Raviolini's ```Digest``` implmentation makes use of a signed timestamp ```nonce```, which is valid within the hour, as opposed to a one-off value that would have to be stored on the server. Hence, after this timestamp ```nonce``` expires, the client will get a 401 response message, with a new ```nonce``` on response header ```WWW-Authenticate```.  
 
-As defined by [RFC2617](https://tools.ietf.org/html/rfc2617#section-3.2.1), the contents of the ```nonce``` are implementation dependent. The quality of the implementation depends on a good choice. And the strategy defined here is Raviolini's take on this matter. 
+As defined by [RFC2617](https://tools.ietf.org/html/rfc2617#section-3.2.1), the contents of the ```nonce``` are implementation dependent. The quality of the implementation depends on a good choice. And the strategy defined here is Raviolini's take on it. 
 
 ----------
 Made in São Paulo, by [Otavio Ferreira](https://github.com/otaviofff/).
