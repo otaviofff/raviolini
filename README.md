@@ -27,7 +27,7 @@ Second, add the dependency:
     <dependency>
         <groupId>com.github.otaviofff</groupId>
         <artifactId>raviolini</artifactId>
-        <version>0.0.11</version>
+        <version>1.0.0</version>
     </dependency>
 </dependencies>
 ```
@@ -293,7 +293,22 @@ Many other drivers are available. Check them out below.
 ### Architecture
 As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  
 
-![UML Package Diagram](https://dl.dropboxusercontent.com/u/111597/raviolini/packages-v2.png)
+![UML Package Diagram - Framework](https://dl.dropboxusercontent.com/u/111597/raviolini/ClassDiagram-Framework-v3.png)
+
+Now have a closer look inside package ```org.raviolini.aspects```. Once again, there are no cycles in this dependency structure either, which allows for more reusable building blocks.
+- 0 dependencies:
+    - ```data.validation```
+    - ```io.configuration```
+    - ```io.logging```
+    - ```io.serialization```
+    - ```security.crypt```
+- 1 dependency:
+    - ```data.database``` depends on ```io.configuration```
+- 2 dependencies:
+    - ```data.caching``` depends on ```io.configuration``` and ```io.serialization```
+    - ```security.auth``` deppends on ```io.configuration``` and ```security.crypt``` 
+
+![UML Package Diagram - Aspects](https://dl.dropboxusercontent.com/u/111597/raviolini/ClassDiagram-Aspects-v1.png)
 
 ### Exception Handling
 
