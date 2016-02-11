@@ -157,8 +157,11 @@ Response:
 HTTP/1.1 201 Created
 Date: Thu, 05 Nov 2015 12:17:48 GMT
 Content-Type: text/plain
+Location: http://localhost:4567/dog/1
 
 ```
+Note the HTTP response header ```Location``` informing the URL for the newly created object.
+
 ### Read Object
 
 Request:
@@ -237,6 +240,8 @@ Response:
 HTTP/1.1 200 OK
 Date: Thu, 05 Nov 2015 12:18:01 GMT
 Content-Type: application/json
+X-Items-Stored: 3
+X-Items-Returned: 3
 
 [
     {
@@ -248,9 +253,46 @@ Content-Type: application/json
         "id": 2,
         "name": "Martin",
         "neutered": false
+    },
+    {
+        "id": 3,
+        "name": "Junior",
+        "neutered": false
     }
 ]
 ```
+Note the HTTP response headers ```X-Items-Stored``` and ```X-Items-Returned```, which inform the total number of objects found in the database, and the number of objects returned in this request, respectively.
+
+### Filter, Sort and Paginate List
+
+Request:
+```
+GET /dog?orderby=-name&limit=1&offset=0&name=~ma%25 HTTP/1.1
+Host: localhost:4567
+Accept: application/json
+
+```
+
+Reponse:
+```
+HTTP/1.1 200 OK
+Date: Thu, 05 Nov 2015 12:18:01 GMT
+Content-Type: application/json
+X-Items-Stored: 3
+X-Items-Returned: 1
+
+[
+    {
+        "id": 2,
+        "name": "Martin",
+        "neutered": false
+    }
+]
+```
+Note that, in the example above, the resulting list of objects is constrained as follows:
+- List sorted on field ```name``` in descending order, as defined by that dash prefix (```-```)
+- List paginated with ```limit``` of only 1 object per page, and without ```offset```, so from the begining
+- List composed of objects with field ```name``` starting with ```"ma"```, but case insensitive, as defined by that tilde prefix (```~```)
 
 ## Learn
 
