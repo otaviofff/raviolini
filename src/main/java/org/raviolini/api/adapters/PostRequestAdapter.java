@@ -23,9 +23,12 @@ public class PostRequestAdapter<T extends Entity> extends WriteRequestAdapter<T>
             throw new InternalServerException();
         }
         
+        String id = String.valueOf(entity.getId());
+        
         response.status(201);
         response.body("");
         response.type("text/plain");
+        response.header("Location", request.url().concat("/").concat(id));
         
         return response;
     }

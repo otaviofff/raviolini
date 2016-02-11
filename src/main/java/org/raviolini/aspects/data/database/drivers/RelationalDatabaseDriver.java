@@ -111,4 +111,13 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
             throw new DatabaseCommandException("DELETE", e);
         }
     }
+
+    @Override
+    public Long count(Class<T> entityClass) throws DatabaseCommandException {
+        try {
+            return getDatabase(entityClass).countOf();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("COUNT", e);
+        }
+    }
 }

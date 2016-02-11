@@ -44,4 +44,8 @@ public class DatabaseService<T extends Entity> {
     public Integer delete(Integer entityId, Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
         return getDriver().delete(entityId, entityClass);
     }
+    
+    public Long count(Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
+        return getDriver().count(entityClass);
+    }
 }

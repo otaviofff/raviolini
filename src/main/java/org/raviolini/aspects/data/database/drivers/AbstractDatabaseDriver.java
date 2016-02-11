@@ -65,4 +65,6 @@ public abstract class AbstractDatabaseDriver<T extends Entity> {
     public abstract Integer update(T entity, Class<T> entityClass) throws DatabaseCommandException;
     
     public abstract Integer delete(Integer entityId, Class<T> entityClass) throws DatabaseCommandException;
+    
+    public abstract Long count(Class<T> entityClass) throws DatabaseCommandException;
 }

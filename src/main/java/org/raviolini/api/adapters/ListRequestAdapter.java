@@ -17,9 +17,15 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
     @Override
     public Response handle(Request request, Response response, Class<T> entityClass) throws InternalServerException {
         List<T> list = null;
+        Long itemsReturned, itemsStored = (long) 0;
         
         try {
             list = getService().get(getRequestParams(request), entityClass);
+            itemsReturned = (long) list.size();
+            
+            if (itemsReturned > 0) {
+                itemsStored = getService().count(entityClass);
+            }
         } catch (ReadOperationException | HookExecutionException e) {
             throw new InternalServerException(e);
         } catch (Exception e) {
@@ -32,6 +38,8 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
         response.status(200);
         response.body(body);
         response.type(type);
+        response.header("X-Items-Returned", String.valueOf(itemsReturned));
+        response.header("X-Items-Stored", String.valueOf(itemsStored));
         
         return response;
     }

@@ -151,4 +151,15 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
         
         hookAfterDelete(entityId);
     }
+
+    @Override
+    public Long count(Class<T> entityClass) throws ReadOperationException {
+        try {
+            return getDatabase().count(entityClass);
+        } catch (UnloadableConfigException 
+                | InvalidPropertyException
+                | DatabaseCommandException e) {
+            throw new ReadOperationException("Failed to count entities stored.", e);
+        }
+    }
 }
