@@ -2,14 +2,17 @@ package org.raviolini.aspects.data.database.drivers;
 
 import java.sql.SQLException;
 import java.text.MessageFormat;
+import java.util.HashMap;
 import java.util.List;
 
 import org.raviolini.aspects.data.database.exceptions.DatabaseCommandException;
+import org.raviolini.aspects.data.database.helpers.RelationalDatabaseQuery;
 import org.raviolini.domain.Entity;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -54,6 +57,20 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     public List<T> select(Class<T> entityClass) throws DatabaseCommandException {
         try {
             return getDatabase(entityClass).queryForAll();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("SELECT", e);
+        }
+    }
+    
+    @Override
+    public List<T> select(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException {
+        QueryBuilder<T, String> builder;
+        RelationalDatabaseQuery<T> query;
+        
+        try {
+            builder = getDatabase(entityClass).queryBuilder();
+            query = new RelationalDatabaseQuery<>(builder, params);
+            return getDatabase(entityClass).query(query.prepare());
         } catch (SQLException | IllegalArgumentException e) {
             throw new DatabaseCommandException("SELECT", e);
         }

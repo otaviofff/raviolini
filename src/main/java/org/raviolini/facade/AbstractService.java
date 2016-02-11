@@ -1,5 +1,6 @@
 package org.raviolini.facade;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.raviolini.domain.Entity;
@@ -9,7 +10,7 @@ import org.raviolini.facade.exceptions.WriteOperationException;
 
 public abstract class AbstractService<T extends Entity> {
 
-    public abstract List<T> get(Class<T> entityClass) throws ReadOperationException, HookExecutionException;
+    public abstract List<T> get(HashMap<String, String> params, Class<T> entityClass) throws ReadOperationException, HookExecutionException;
     
     public abstract T get(Integer entityId, Class<T> entityClass) throws ReadOperationException, HookExecutionException;
     

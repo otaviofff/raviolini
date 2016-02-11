@@ -1,5 +1,6 @@
 package org.raviolini.facade;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.raviolini.aspects.data.caching.CacheService;
@@ -46,13 +47,13 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
         return log;
     }
     
-    public final List<T> get(Class<T> entityClass) throws ReadOperationException, HookExecutionException {
+    public final List<T> get(HashMap<String, String> params, Class<T> entityClass) throws ReadOperationException, HookExecutionException {
         hookBeforeList();
         
         List<T> list;
         
         try {
-            list = getDatabase().select(entityClass);
+            list = getDatabase().select(params, entityClass);
         } catch (UnloadableConfigException 
                 | DatabaseCommandException 
                 | InvalidPropertyException e) {

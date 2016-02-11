@@ -1,5 +1,6 @@
 package org.raviolini.aspects.data.database.drivers;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.raviolini.aspects.data.database.exceptions.DatabaseCommandException;
@@ -54,6 +55,8 @@ public abstract class AbstractDatabaseDriver<T extends Entity> {
     }
     
     public abstract List<T> select(Class<T> entityClass) throws DatabaseCommandException;
+    
+    public abstract List<T> select(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException;
     
     public abstract T select(Integer entityId, Class<T> entityClass) throws DatabaseCommandException;
     

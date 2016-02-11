@@ -1,5 +1,6 @@
 package org.raviolini.aspects.data.database;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.raviolini.aspects.data.database.drivers.AbstractDatabaseDriver;
@@ -20,7 +21,11 @@ public class DatabaseService<T extends Entity> {
         return driver;
     }
     
-    public List<T> select(Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
+    public List<T> select(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
+        if (params.size() > 0) {
+            return getDriver().select(params, entityClass);
+        }
+        
         return getDriver().select(entityClass);
     }
     

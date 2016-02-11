@@ -1,6 +1,8 @@
 package org.raviolini.api.adapters;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.raviolini.api.exceptions.InternalServerException;
 import org.raviolini.domain.Entity;
@@ -14,24 +16,35 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
 
     @Override
     public Response handle(Request request, Response response, Class<T> entityClass) throws InternalServerException {
-        String mediaType = request.headers("Accept");
-        
         List<T> list = null;
         
         try {
-            list = getService().get(entityClass);
+            list = getService().get(getRequestParams(request), entityClass);
         } catch (ReadOperationException | HookExecutionException e) {
             throw new InternalServerException(e);
         } catch (Exception e) {
             throw new InternalServerException();
         }
-        
-        String body = serializeResponseBody(list, mediaType);
+
+        String type = request.headers("Accept");
+        String body = serializeResponseBody(list, type);
         
         response.status(200);
         response.body(body);
-        response.type(mediaType);
+        response.type(type);
         
         return response;
+    }
+    
+    private HashMap<String, String> getRequestParams(Request request) {
+        HashMap<String, String> map = new HashMap<>();
+        Set<String> set = request.queryParams();
+        
+        for (String key : set) {
+            String value = request.queryParams(key);
+            map.put(key, value);
+        }
+        
+        return map;
     }
 }
