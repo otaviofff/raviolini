@@ -16,10 +16,6 @@ import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
-//TODO: Check whether DB table exists.
-//More info: https://github.com/j256/ormlite-core/issues/20
-//TableUtils.createTableIfNotExists(this.dbConnection, entityClass);
-
 public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabaseDriver<T> {
 
     private ConnectionSource databaseConnection;
@@ -33,6 +29,22 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
         return MessageFormat.format("jdbc:{0}://{1}:{2}/{3}", getEngine(), getHost(), getPort().toString(), getName());
     }
     
+    /**
+     * Instantiates a properly configured JdbcConnectionSource object.
+     * 
+     * Note that this method also bootstraps the database table associated with
+     *  the entity class in question. However, bootstrapping will only take
+     *  place if the API configuration says so. This conditional is meant to
+     *  avoid an issue with ORM Lite, which will fail if the data-table has 
+     *  already been created earlier.
+     *  
+     * More on this ORM issue can be found at: 
+     *  https://github.com/j256/ormlite-core/issues/20
+     * 
+     * @param Class<T> entityClass
+     * @return ConnectionSource
+     * @throws SQLException
+     */
     private ConnectionSource getConnection(Class<T> entityClass) throws SQLException {
         if (databaseConnection == null) {
             databaseConnection =  new JdbcConnectionSource(getConnectionString(), getUser(), getPass());

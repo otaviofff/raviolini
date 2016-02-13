@@ -13,8 +13,6 @@ import spark.Request;
 
 public class RequestValidator {
     
-    //TODO: Implement authentication.
-    
     private static List<String> supportedMethods = Arrays.asList(
             "GET", 
             "POST", 
