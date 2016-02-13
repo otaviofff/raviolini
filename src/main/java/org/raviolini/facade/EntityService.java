@@ -153,9 +153,9 @@ public class EntityService<T extends Entity> extends AbstractService<T> {
     }
 
     @Override
-    public Long count(Class<T> entityClass) throws ReadOperationException {
+    public Long count(HashMap<String, String> params, Class<T> entityClass) throws ReadOperationException {
         try {
-            return getDatabase().count(entityClass);
+            return getDatabase().count(params, entityClass);
         } catch (UnloadableConfigException 
                 | InvalidPropertyException
                 | DatabaseCommandException e) {

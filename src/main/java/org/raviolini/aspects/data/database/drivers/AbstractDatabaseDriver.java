@@ -67,4 +67,6 @@ public abstract class AbstractDatabaseDriver<T extends Entity> {
     public abstract Integer delete(Integer entityId, Class<T> entityClass) throws DatabaseCommandException;
     
     public abstract Long count(Class<T> entityClass) throws DatabaseCommandException;
+    
+    public abstract Long count(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException;
 }

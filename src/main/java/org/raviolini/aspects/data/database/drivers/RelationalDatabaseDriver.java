@@ -52,6 +52,15 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
         
         return database;
     }
+    
+    private RelationalDatabaseQuery<T> getQuery(HashMap<String, String> params, Boolean countOnly, Class<T> entityClass) throws SQLException {
+        QueryBuilder<T, String> builder;
+        
+        builder = getDatabase(entityClass).queryBuilder();
+        builder.setCountOf(countOnly);
+        
+        return new RelationalDatabaseQuery<T>(builder, params);
+    }
 
     @Override
     public List<T> select(Class<T> entityClass) throws DatabaseCommandException {
@@ -64,12 +73,9 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     
     @Override
     public List<T> select(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException {
-        QueryBuilder<T, String> builder;
-        RelationalDatabaseQuery<T> query;
-        
         try {
-            builder = getDatabase(entityClass).queryBuilder();
-            query = new RelationalDatabaseQuery<>(builder, params);
+            RelationalDatabaseQuery<T> query = getQuery(params, false, entityClass);
+            
             return getDatabase(entityClass).query(query.prepare());
         } catch (SQLException | IllegalArgumentException e) {
             throw new DatabaseCommandException("SELECT", e);
@@ -116,6 +122,17 @@ public class RelationalDatabaseDriver<T extends Entity> extends AbstractDatabase
     public Long count(Class<T> entityClass) throws DatabaseCommandException {
         try {
             return getDatabase(entityClass).countOf();
+        } catch (SQLException | IllegalArgumentException e) {
+            throw new DatabaseCommandException("COUNT", e);
+        }
+    }
+    
+    @Override
+    public Long count(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException {
+        try {
+            RelationalDatabaseQuery<T> query = getQuery(params, true, entityClass);
+            
+            return getDatabase(entityClass).countOf(query.prepare());
         } catch (SQLException | IllegalArgumentException e) {
             throw new DatabaseCommandException("COUNT", e);
         }

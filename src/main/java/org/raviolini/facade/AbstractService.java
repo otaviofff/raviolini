@@ -20,7 +20,7 @@ public abstract class AbstractService<T extends Entity> {
     
     public abstract void delete(Integer entityId, Class<T> entityClass) throws WriteOperationException, HookExecutionException;
     
-    public abstract Long count(Class<T> entityClass) throws ReadOperationException;
+    public abstract Long count(HashMap<String, String> params, Class<T> entityClass) throws ReadOperationException;
     
     /*** Pre-Execution Hooks ***/
     

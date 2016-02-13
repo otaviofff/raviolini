@@ -22,11 +22,7 @@ public class DatabaseService<T extends Entity> {
     }
     
     public List<T> select(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
-        if (params.size() > 0) {
-            return getDriver().select(params, entityClass);
-        }
-        
-        return getDriver().select(entityClass);
+        return getDriver().select(params, entityClass);
     }
     
     public T select(Integer entityId, Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
@@ -45,7 +41,7 @@ public class DatabaseService<T extends Entity> {
         return getDriver().delete(entityId, entityClass);
     }
     
-    public Long count(Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
-        return getDriver().count(entityClass);
+    public Long count(HashMap<String, String> params, Class<T> entityClass) throws DatabaseCommandException, UnloadableConfigException, InvalidPropertyException {
+        return getDriver().count(params, entityClass);
     }
 }

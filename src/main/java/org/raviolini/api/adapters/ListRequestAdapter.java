@@ -18,13 +18,14 @@ public class ListRequestAdapter<T extends Entity> extends ReadRequestAdaptar<T> 
     public Response handle(Request request, Response response, Class<T> entityClass) throws InternalServerException {
         List<T> list = null;
         Long itemsReturned, itemsStored = (long) 0;
+        HashMap<String, String> params = getRequestParams(request);
         
         try {
-            list = getService().get(getRequestParams(request), entityClass);
+            list = getService().get(params, entityClass);
             itemsReturned = (long) list.size();
             
             if (itemsReturned > 0) {
-                itemsStored = getService().count(entityClass);
+                itemsStored = getService().count(params, entityClass);
             }
         } catch (ReadOperationException | HookExecutionException e) {
             throw new InternalServerException(e);
