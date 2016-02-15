@@ -37,7 +37,7 @@ public class SerializationTest {
         
         assertEquals("{\"id\":1,\"name\":\"Otavio\",\"vegan\":false,\"birthdate\":452401200000}", serialized);
     }
-
+    
     @Test
     public void testJsonUnserialization() throws UnserializationException, ParseException {
         String serialized = "{\"name\":\"Otavio\",\"id\":1,\"vegan\":false,\"birthdate\":452401200000}";
@@ -47,6 +47,12 @@ public class SerializationTest {
         assertEquals("Otavio", unserialized.getName());
         assertFalse(unserialized.getVegan());
         assertEquals(452401200000L, unserialized.getBirthdate().getTime());
+    }
+    
+    @Test (expected = UnserializationException.class)
+    public void testJsonUnserializationException() throws UnserializationException {
+        String serialized = "\"name\":\"Otavio\",\"id\":1,\"vegan\":false,\"birthdate\":452401200000}";
+        new SerializationService<Person>("application/json").unserialize(serialized, Person.class);
     }
     
     @Test
@@ -81,6 +87,12 @@ public class SerializationTest {
         assertEquals("Otavio", unserialized.getName());
         assertFalse(unserialized.getVegan());
         assertEquals(452401200000L, unserialized.getBirthdate().getTime());
+    }
+    
+    @Test (expected = UnserializationException.class)
+    public void testXmlUnserializationException() throws UnserializationException {
+        String serialized = "<name>Otavio</name><id>1</id><vegan>false</vegan><birthdate>452401200000</birthdate></Person>";
+        new SerializationService<Person>("application/xml").unserialize(serialized, Person.class);
     }
     
     @Test (expected = RuntimeException.class)
