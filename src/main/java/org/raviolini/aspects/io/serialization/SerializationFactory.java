@@ -15,9 +15,9 @@ public class SerializationFactory {
         } else if (mediaType.startsWith("application/xml")) {
             driver = new XmlSerializationDriver<>();
         } else {
-            //Should never be executed.
+            //Should never be thrown.
             //Media type has already been checked by RequestValidator.
-            driver = null;
+            throw new RuntimeException("Invalid serialization driver.");
         }
         
         return driver;
