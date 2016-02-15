@@ -7,11 +7,21 @@ import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigExcepti
 
 public class ConfigService {
 
+    private Boolean preferEnv;
     private AbstractConfigDriver driver;
+    
+    
+    public ConfigService(Boolean preferEnv) {
+        this.preferEnv = preferEnv;
+    }
+    
+    public ConfigService() {
+        this(false);
+    }
     
     private AbstractConfigDriver getDriver() {
         if (driver == null) {
-            driver = ConfigFactory.getDriver();
+            driver = ConfigFactory.getDriver(preferEnv);
         }
         
         return driver;

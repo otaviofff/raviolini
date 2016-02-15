@@ -12,18 +12,28 @@ public class ConfigFactory {
      * Note that FileConfigDriver 
      *  takes preference over the others, 
      *  given the local nature of its scope.
+     *  
+     * However, this default can be overridden 
+     *  through variable preferEnv.
      * 
      * @return AbstractConfigDriver[]
      */
-    private static AbstractConfigDriver[] getDrivers() {
+    private static AbstractConfigDriver[] getDrivers(Boolean preferEnv) {
+        if (preferEnv) {
+            return new AbstractConfigDriver[] {
+                new EnvConfigDriver(), 
+                new FileConfigDriver()
+            };
+        }
+        
         return new AbstractConfigDriver[] {
-                new FileConfigDriver(), 
-                new EnvConfigDriver()
+            new FileConfigDriver(), 
+            new EnvConfigDriver()
         };
     }
     
-    public static AbstractConfigDriver getDriver() {
-        for (AbstractConfigDriver driver : getDrivers()) {
+    public static AbstractConfigDriver getDriver(Boolean preferEnv) {
+        for (AbstractConfigDriver driver : getDrivers(preferEnv)) {
             if (driver.isActive()) {
                 return driver;
             }
