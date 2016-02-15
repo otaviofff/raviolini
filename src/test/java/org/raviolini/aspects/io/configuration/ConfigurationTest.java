@@ -39,7 +39,9 @@ public class ConfigurationTest {
         Map<String, String> newEnv = new HashMap<>();
         newEnv.put("raviolini.database.driver", "relational");
         newEnv.put("raviolini.database.engine", "mysql");
-        EnvironmentMock.setEnv(newEnv);
+        
+        EnvironmentMock mock = new EnvironmentMock();
+        mock.setEnv(newEnv);
         
         String[] keys = new String[] {"driver", "engine"};
         Map<String, String> values = new ConfigService(true).read("raviolini.database", keys);
@@ -47,5 +49,7 @@ public class ConfigurationTest {
         assertEquals("relational", values.get("driver"));
         assertEquals("mysql", values.get("engine"));
         assertNull(values.get("name"));
+        
+        mock.resetEnv();
     }
 }
