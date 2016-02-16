@@ -21,6 +21,18 @@ public class AuthTest {
         assertFalse(auth.authenticate("GET", "/person", "Basic YXBpX3VzZXJfaW52YWxpZDphcGlfcGFzc19pbnZhbGlk"));
     }
     
+    /**
+     * Tests HTTP digest access authentication.
+     * 
+     * Authentication nonce is valid within the hour only. Thus, in order
+     *  to keep this unit test from failing, if the current hour is about
+     *  to end, we then put the thread to sleep for 5 seconds, which will
+     *  let another hour begin.
+     * 
+     * @throws UnloadableConfigException
+     * @throws InvalidPropertyException
+     * @throws InterruptedException
+     */
     @Test
     public void testDigestAuthentication() throws UnloadableConfigException, InvalidPropertyException, InterruptedException {
         Calendar now = Calendar.getInstance();
@@ -28,18 +40,15 @@ public class AuthTest {
         Integer sec = now.get(Calendar.SECOND);
         
         if (min > 58 && sec > 55) {
-            //Authentication nonce is valid within the hour only. Thus, in order
-            // to keep this unit test from failing, if the current hour is about
-            // to end, we then put the thread to sleep for 5 seconds, which will
-            // let another hour begin.
             Thread.sleep(5000);
         }
         
         AuthService auth = new AuthService();
-        String challenge = auth.challenge();
-        String credential = DigestParser.composeCredentialFromChallenge(challenge, "api_user", "api_pass", "GET", "/person");
+        AuthClient proxy = new AuthClient("api_user", "api_pass", "GET", "/person");
         
-        assertTrue(auth.authenticate("GET", "/person", credential));
+        String encodedCredential = proxy.encodeCredential(auth.challenge());
+        
+        assertTrue(auth.authenticate("GET", "/person", encodedCredential));
     }
     
     @Test

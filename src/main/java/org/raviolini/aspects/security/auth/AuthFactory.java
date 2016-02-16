@@ -8,6 +8,9 @@ import java.util.StringTokenizer;
 import org.raviolini.aspects.io.configuration.ConfigService;
 import org.raviolini.aspects.io.configuration.exceptions.InvalidPropertyException;
 import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigException;
+import org.raviolini.aspects.security.auth.credentials.AbstractCredential;
+import org.raviolini.aspects.security.auth.credentials.BasicCredential;
+import org.raviolini.aspects.security.auth.credentials.DigestCredential;
 import org.raviolini.aspects.security.auth.drivers.AbstractAuthDriver;
 import org.raviolini.aspects.security.auth.drivers.BasicAuthDriver;
 import org.raviolini.aspects.security.auth.drivers.DigestAuthDriver;
@@ -24,18 +27,19 @@ public class AuthFactory {
     }
     
     private static String[] getConfigKeys() {
-        return new String[] {"driver", "user", "pass", "methods"};
+        return new String[] {"driver", "user", "pass", "realm", "methods"};
     }
     
     public static AbstractAuthDriver getDriver() throws UnloadableConfigException, InvalidPropertyException {
         Map<String, String> map = getConfig().read(getConfigNamespace(), getConfigKeys());
         
-        String driver  = map.get("driver");
-        String user    = map.get("user");
-        String pass    = map.get("pass");
+        String driver = map.get("driver");
+        String user = map.get("user");
+        String pass = map.get("pass");
+        String realm = map.get("realm");
         String methods = map.get("methods");
         
-        return instantiateDriver(driver, user, pass, explodeAuthorizedMethods(methods));
+        return instantiateDriver(driver, user, pass, realm, explodeAuthorizedMethods(methods));
     }
     
     private static List<String> explodeAuthorizedMethods(String methods) {
@@ -54,18 +58,22 @@ public class AuthFactory {
         return Arrays.asList(list);
     }
     
-    private static AbstractAuthDriver instantiateDriver(String driver, String user, String pass, List<String> methods) throws InvalidPropertyException {
+    private static AbstractAuthDriver instantiateDriver(String driver, String user, String pass, String realm, List<String> methods) throws InvalidPropertyException {
         if (driver == null) {
             driver = "invalid";
         }
         
+        AbstractCredential credential;
+        
         switch (driver.toLowerCase()) {
             case "basic":
-                return new BasicAuthDriver(user, pass, methods);
+                credential = new BasicCredential(user, pass, realm);
+                return new BasicAuthDriver((BasicCredential) credential, methods);
             case "digest":
-                return new DigestAuthDriver(user, pass, methods);
+                credential = new DigestCredential(user, pass, realm, DigestCredential.composeNonce(), DigestCredential.composeOpaque());
+                return new DigestAuthDriver((DigestCredential) credential, methods);
             case "null":
-                return new NullAuthDriver(user, pass, methods);
+                return new NullAuthDriver();
             default:
                 throw new InvalidPropertyException(getConfigNamespace().concat(".driver"), null);
         }

@@ -1,11 +1,11 @@
 package org.raviolini.aspects.security.auth.drivers;
 
-import java.util.List;
+import org.raviolini.aspects.security.auth.credentials.AbstractCredential;
 
 public class NullAuthDriver extends AbstractAuthDriver {
 
-    public NullAuthDriver(String user, String pass, List<String> methods) {
-        super(user, pass, methods);
+    public NullAuthDriver() {
+        super(null, null);
     }
     
     @Override
@@ -24,7 +24,12 @@ public class NullAuthDriver extends AbstractAuthDriver {
     }
 
     @Override
-    protected Boolean matchCredential(String requestMethod, String requestUri, String encodedCredential) {
-        return true;
+    protected AbstractCredential decodeCredential(String encodedCredential) {
+        return null;
+    }
+
+    @Override
+    protected void scopeExpectedCredential(String requestMethod, String requestUri) {
+        
     }
 }

@@ -7,9 +7,21 @@ import java.util.regex.Pattern;
 
 import org.raviolini.aspects.security.crypt.CryptService;
 
-public class DigestParser {
+public class AuthClient {
     
-    public static String composeCredentialFromChallenge(String challenge, String username, String password, String method, String uri) {
+    private String username;
+    private String password;
+    private String method;
+    private String uri;
+    
+    public AuthClient(String username, String password, String method, String uri) {
+        this.username = username;
+        this.password = password;
+        this.method = method;
+        this.uri = uri;
+    }
+    
+    public String encodeCredential(String challenge) {
         if (challenge.startsWith("Digest")) {
             challenge = challenge.substring("Digest".length()).trim();
         }
@@ -48,27 +60,25 @@ public class DigestParser {
             }
         }
         
-        String response = composeResponse(realm, username, password, method, uri, nonce);
-        String credential = composeCredential(realm, username, nonce, opaque, response);
+        String response = composeResponse(username, password, realm, nonce, method, uri);
+        String encoded = composeCredential(username, realm, nonce, opaque, response);
         
-        return credential;
+        return encoded;
     }
     
-    private static String composeResponse(String realm, String username, String password, String method, String uri, String nonce) {
+    private String composeResponse(String username, String password, String realm, String nonce, String requestMethod, String requestUri) {
         CryptService crypt = new CryptService();
         
-        String mask1, mask2, a1, a2, response;
+        String mask1 = "{0}:{1}:{2}";
+        String mask2 = "{0}:{1}";
+        String a1 = crypt.hash(MessageFormat.format(mask1, username, realm, password));
+        String a2 = crypt.hash(MessageFormat.format(mask2, requestMethod, requestUri));
+        String response = MessageFormat.format(mask1, a1, nonce, a2);
         
-        mask1 = "{0}:{1}:{2}";
-        mask2 = "{0}:{1}";
-        a1 = crypt.hash(MessageFormat.format(mask1, username, realm, password));
-        a2 = crypt.hash(MessageFormat.format(mask2, method, uri));
-        response = crypt.hash(MessageFormat.format(mask1, a1, nonce, a2));
-        
-        return response;
+        return crypt.hash(response);
     }
     
-    private static String composeCredential(String realm, String username, String nonce, String opaque, String response) { 
+    private String composeCredential(String username, String realm, String nonce, String opaque, String response) { 
         String mask = "Digest realm=\"{0}\",username=\"{1}\",nonce=\"{2}\",opaque=\"{3}\",response=\"{4}\"";
         String credential = MessageFormat.format(mask, realm, username, nonce, opaque, response);
         

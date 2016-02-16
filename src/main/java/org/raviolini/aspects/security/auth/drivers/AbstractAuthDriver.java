@@ -2,44 +2,31 @@ package org.raviolini.aspects.security.auth.drivers;
 
 import java.util.List;
 
+import org.raviolini.aspects.security.auth.credentials.AbstractCredential;
+
 public abstract class AbstractAuthDriver {
 
-    private String expectedUser;
-    private String expectedPass;
-    private String expectedRealm;
-    private List<String> expectedMethods;
+    protected AbstractCredential expectedCredential;
+    protected List<String> expectedMethods;
     
-    public AbstractAuthDriver(String user, String pass, List<String> methods) {
-        expectedUser = user;
-        expectedPass = pass;
-        expectedRealm = "Impenetrable";
-        expectedMethods = methods;
-    }
-    
-    public abstract String getName();
-    
-    public abstract String getChallenge();
-    
-    protected String getUsername() {
-        return expectedUser;
-    }
-    
-    protected String getPassword() {
-        return expectedPass;
-    }
-    
-    protected String getRealm() {
-        return expectedRealm;
+    public AbstractAuthDriver(AbstractCredential expectedCredential, List<String> expectedMethods) {
+        this.expectedCredential = expectedCredential;
+        this.expectedMethods = expectedMethods;
     }
     
     public Boolean authenticate(String requestMethod, String requestUri, String encodedCredential) {
+        AbstractCredential decodedCredential;
+        
         if (encodedCredential == null || !encodedCredential.startsWith(getName())) {
             return false;
         }
         
-        encodedCredential = encodedCredential.substring(getName().length()).trim();
+        scopeExpectedCredential(requestMethod, requestUri);
         
-        return matchCredential(requestMethod, requestUri, encodedCredential);
+        encodedCredential = encodedCredential.substring(getName().length()).trim();
+        decodedCredential = decodeCredential(encodedCredential);
+        
+        return expectedCredential.equals(decodedCredential);
     }
     
     public Boolean authorize(String requestMethod) {
@@ -47,6 +34,12 @@ public abstract class AbstractAuthDriver {
             && expectedMethods != null
             && expectedMethods.contains(requestMethod);
     }
+
+    public abstract String getName();
     
-    protected abstract Boolean matchCredential(String requestMethod, String requestUrl, String encodedCredential);
+    public abstract String getChallenge();
+    
+    protected abstract AbstractCredential decodeCredential(String encodedCredential);
+    
+    protected abstract void scopeExpectedCredential(String requestMethod, String requestUri);
 }
