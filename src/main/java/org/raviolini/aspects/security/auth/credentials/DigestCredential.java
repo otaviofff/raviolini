@@ -47,6 +47,8 @@ public class DigestCredential extends BasicCredential {
         try {
             DigestCredential tested = (DigestCredential) obj;
             
+            // Password isn't sent by the API client.
+            // So not tested here.
             return getUsername().equals(tested.getUsername()) &&
                    getRealm().equals(tested.getRealm()) &&
                    getNonce().equals(tested.getNonce()) &&

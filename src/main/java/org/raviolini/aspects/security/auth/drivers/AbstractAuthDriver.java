@@ -26,7 +26,7 @@ public abstract class AbstractAuthDriver {
         encodedCredential = encodedCredential.substring(getName().length()).trim();
         decodedCredential = decodeCredential(encodedCredential);
         
-        return expectedCredential.equals(decodedCredential);
+        return decodedCredential != null && expectedCredential.equals(decodedCredential);
     }
     
     public Boolean authorize(String requestMethod) {

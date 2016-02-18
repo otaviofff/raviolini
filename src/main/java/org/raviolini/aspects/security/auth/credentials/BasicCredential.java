@@ -21,8 +21,9 @@ public class BasicCredential extends AbstractCredential {
         try {
             BasicCredential tested = (BasicCredential) obj;
             
-            return super.equals(tested) &&
-                   getRealm().equals(tested.getRealm());
+            // Realm isn't sent by the API client.
+            // So not tested here.
+            return super.equals(tested);
         } catch (ClassCastException e) {
             return false;
         }
