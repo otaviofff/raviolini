@@ -10,19 +10,19 @@ public class EnvironmentMock {
     private Map<String, String> originalEnv;
     
     @SuppressWarnings("rawtypes")
-    public void setEnv(Map<String, String> newEnv) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    public void set(Map<String, String> newEnv) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         Class[] classes = Collections.class.getDeclaredClasses();
         Map<String, String> oldEnv = System.getenv();
         
         for (Class clazz : classes) {
             if ("java.util.Collections$UnmodifiableMap".equals(clazz.getName())) {
-                replaceEnv(newEnv, oldEnv, clazz);
+                replace(newEnv, oldEnv, clazz);
             }
         }
     }
     
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private void replaceEnv(Map<String, String> newEnv, Map<String, String> oldEnv, Class clazz) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    private void replace(Map<String, String> newEnv, Map<String, String> oldEnv, Class clazz) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         Field field = clazz.getDeclaredField("m");
         field.setAccessible(true);
         
@@ -34,9 +34,9 @@ public class EnvironmentMock {
         map.putAll(newEnv);
     }
     
-    public void resetEnv() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    public void reset() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
         if (originalEnv != null) {
-            setEnv(originalEnv);
+            set(originalEnv);
             originalEnv = null;
         }
     }
