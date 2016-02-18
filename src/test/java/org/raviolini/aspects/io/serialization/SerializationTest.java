@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.junit.Test;
 import org.raviolini.aspects.io.serialization.exceptions.SerializationException;
@@ -17,9 +18,12 @@ public class SerializationTest {
 
     @Test
     public void testJsonListSerialization() throws SerializationException, ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+        
         List<Person> list = new ArrayList<>();
-        list.add(new Person(1, "Otavio", false, new SimpleDateFormat("yyyy/MM/dd").parse("1984/05/03")));
-        list.add(new Person(2, "Eduardo", true, new SimpleDateFormat("yyyy/MM/dd").parse("2016/03/11")));
+        list.add(new Person(1, "Otavio", false, format.parse("1984-05-03T00:00:00Z")));
+        list.add(new Person(2, "Eduardo", true, format.parse("2016-03-11T00:00:00Z")));
         
         String serialized = new SerializationService<Person>("application/json").serialize(list);
         
@@ -32,7 +36,10 @@ public class SerializationTest {
     
     @Test
     public void testJsonSerialization() throws SerializationException, ParseException {
-        Person person = new Person(1, "Otavio", false, new SimpleDateFormat("yyyy/MM/dd").parse("1984/05/03"));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+        
+        Person person = new Person(1, "Otavio", false, format.parse("1984-05-03T00:00:00Z"));
         String serialized = new SerializationService<Person>("application/json").serialize(person);
         
         assertEquals("{\"id\":1,\"name\":\"Otavio\",\"vegan\":false,\"birthdate\":452401200000}", serialized);
@@ -57,9 +64,12 @@ public class SerializationTest {
     
     @Test
     public void testXmlListSerialization() throws SerializationException, ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+        
         List<Person> list = new ArrayList<>();
-        list.add(new Person(1, "Otavio", false, new SimpleDateFormat("yyyy/MM/dd").parse("1984/05/03")));
-        list.add(new Person(2, "Eduardo", true, new SimpleDateFormat("yyyy/MM/dd").parse("2016/03/11")));
+        list.add(new Person(1, "Otavio", false, format.parse("1984-05-03T00:00:00Z")));
+        list.add(new Person(2, "Eduardo", true, format.parse("2016-03-11T00:00:00Z")));
         
         String serialized = new SerializationService<Person>("application/xml").serialize(list);
         
@@ -72,7 +82,10 @@ public class SerializationTest {
     
     @Test
     public void testXmlSerialization() throws SerializationException, ParseException {
-        Person person = new Person(1, "Otavio", false, new SimpleDateFormat("yyyy/MM/dd").parse("1984/05/03"));
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        format.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+        
+        Person person = new Person(1, "Otavio", false, format.parse("1984-05-03T00:00:00Z"));
         String serialized = new SerializationService<Person>("application/xml").serialize(person);
         
         assertEquals("<Person><id>1</id><name>Otavio</name><vegan>false</vegan><birthdate>452401200000</birthdate></Person>", serialized);
