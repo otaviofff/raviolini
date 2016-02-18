@@ -10,12 +10,21 @@ import org.raviolini.aspects.io.configuration.exceptions.UnloadableConfigExcepti
 
 public class FileConfigDriver extends AbstractConfigDriver {
 
+    private String fileName;
     private InputStream file;
     private Properties properties;
     
+    public FileConfigDriver() {
+        this.fileName = "application.properties";
+    }
+    
+    public FileConfigDriver(String fileName) {
+        this.fileName = fileName;
+    }
+    
     private InputStream getFile() {
         if (file == null) {
-            file = getClass().getClassLoader().getResourceAsStream("application.properties");
+            file = getClass().getClassLoader().getResourceAsStream(fileName);
         }
         
         return file;
