@@ -62,6 +62,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>io.airbrake</groupId>
+            <artifactId>airbrake-java</artifactId>
+            <version>2.2.8</version>
+        </dependency>
     </dependencies>
     
     <build>
