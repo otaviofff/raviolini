@@ -5,9 +5,9 @@ import static spark.SparkBase.port;
 import org.raviolini.domain.Entity;
 import org.raviolini.facade.EntityService;
 
-public abstract class AbstractController {
+public class Application {
 
-    protected static int listenToAssignedPort() {
+    public int listenToAssignedPort() {
         ProcessBuilder builder = new ProcessBuilder();
         String value = builder.environment().get("PORT");
         Integer port = 4567; //Default port set by Spark.
@@ -21,7 +21,7 @@ public abstract class AbstractController {
         return port;
     }
     
-    protected static <T extends Entity> void addRouter(Class<T> entityClass, EntityService<T> entityService) {
+    public <T extends Entity> void addRouter(Class<T> entityClass, EntityService<T> entityService) {
         RequestRouter<T> router = new RequestRouter<>();
         
         router.route(entityClass);
@@ -31,7 +31,7 @@ public abstract class AbstractController {
         }
     }
     
-    protected static <T extends Entity> void addRouter(Class<T> entityClass) {
+    public <T extends Entity> void addRouter(Class<T> entityClass) {
         addRouter(entityClass, null);
     }
 }
