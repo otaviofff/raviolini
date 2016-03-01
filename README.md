@@ -75,19 +75,20 @@ public class Dog implements Entity {
 }
 ```
 
-Second, you need to code a front controller for your API. It will just make Raviolini listen to the HTTP port assinged, and add an HTTP router for the domain object you coded in the previous step. This router defines all valid URIs that will compose your final RESTful interface. Note that your `FrontController` has to extend `AbstractController`.
+Second, you need to code a `FrontController` to your API, which will hold your `main` function. This controller will instantiate `Application`, and add an HTTP router for the domain object you coded in the previous step. This router defines all valid URIs that will compose your final RESTful interface. Also note that `Application` can take a boolean parameter through its constructor. When set to `true`, this parameter will make your `Application` listen to the HTTP port assigned to it by your environment (such as [Heroku](http://heroku.com/)).
 
 ```java
 package org.muttie.api;
 
 import org.muttie.domain.Dog;
-import org.raviolini.api.AbstractController;
+import org.raviolini.api.Application;
 
-public class FrontController extends AbstractController {
+public class FrontController {
 
     public static void main(String[] args) {
-        listenToAssignedPort();
-        addRouter(Dog.class);
+        Application app = new Application(true);
+        
+        app.addRouter(Dog.class);
     }
 }
 ```
