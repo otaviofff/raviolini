@@ -45,7 +45,7 @@ public class LogService {
     
     private Integer notifyException(Exception e) {
         try {
-            Map<String, String> keys = getConfig().read(null, getConfigKeys());
+            Map<String, String> keys = getConfig().read("", getConfigKeys());
             
             String apiKey = keys.get("AIRBRAKE_API_KEY");
             String envKey = keys.get("AIRBRAKE_ENV");
