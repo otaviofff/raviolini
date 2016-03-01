@@ -27,7 +27,7 @@ Second, add the dependency:
     <dependency>
         <groupId>com.github.otaviofff</groupId>
         <artifactId>raviolini</artifactId>
-        <version>1.0.3/version>
+        <version>1.1.0/version>
     </dependency>
 </dependencies>
 ```
@@ -321,6 +321,7 @@ Many other drivers are available. Check them out below.
 #### Logging
 - Package: [org.raviolini.aspects.io.logging](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/io/logging)
 - Drivers: [DatedFile](https://github.com/otaviofff/raviolini/blob/master/src/main/java/org/raviolini/aspects/io/logging/drivers/DatedFileHandler.java), [java.util.logging.Handler](https://docs.oracle.com/javase/8/docs/api/java/util/logging/Handler.html) (e.g. [Console](https://docs.oracle.com/javase/8/docs/api/java/util/logging/ConsoleHandler.html), [File](https://docs.oracle.com/javase/8/docs/api/java/util/logging/FileHandler.html), [Memory](https://docs.oracle.com/javase/8/docs/api/java/util/logging/MemoryHandler.html), [Socket](https://docs.oracle.com/javase/8/docs/api/java/util/logging/SocketHandler.html), [Stream](https://docs.oracle.com/javase/8/docs/api/java/util/logging/StreamHandler.html))
+- Exceptions logged can also be pushed automatically into [Airbrake](https://airbrake.io/)
 
 #### Persistence
 - Package: [org.raviolini.aspects.data.database](https://github.com/otaviofff/raviolini/tree/master/src/main/java/org/raviolini/aspects/data/database)
