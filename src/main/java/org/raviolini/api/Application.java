@@ -7,6 +7,16 @@ import org.raviolini.facade.EntityService;
 
 public class Application {
 
+    public Application() {
+        this(false);
+    }
+    
+    public Application(Boolean listenToAssignedPort) {
+        if (listenToAssignedPort) {
+            listenToAssignedPort();
+        }
+    }
+    
     public int listenToAssignedPort() {
         ProcessBuilder builder = new ProcessBuilder();
         String value = builder.environment().get("PORT");
