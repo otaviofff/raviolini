@@ -1,6 +1,7 @@
 # Raviolini Framework
 [![](https://jitpack.io/v/otaviofff/raviolini.svg)](https://jitpack.io/#otaviofff/raviolini)
 [![Build Status](https://travis-ci.org/otaviofff/raviolini.svg?branch=master)](https://travis-ci.org/otaviofff/raviolini)
+[![Coverage Status](https://coveralls.io/repos/github/otaviofff/raviolini/badge.svg?branch=master)](https://coveralls.io/github/otaviofff/raviolini?branch=master)
 
 Raviolini is a lightweight framework for building RESTful APIs, in Java 8. You simply provide your domain object and, out of the box, Raviolini gives you authentication, caching, configuration, logging, persistence, serialization and validation on that object. Moreover, pre- and post-execution hooks wil let you extend Raviolini beyond the original scope of CRUD (Create, Read, Update, Delete) operations.
 
