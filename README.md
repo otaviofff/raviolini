@@ -340,7 +340,7 @@ Many other drivers are available. Check them out below.
 ### Architecture
 As depicted by the following UML diagram, Raviolini is composed of lightweight, loosely-coupled, cohesive packages, with no cycles in its dependency structure.  
 
-![UML Package Diagram - Framework](https://dl.dropboxusercontent.com/u/111597/raviolini/ClassDiagram-Framework-v3.png)
+![UML Package Diagram - Framework](https://www.dropbox.com/s/il2wvnnzevrljek/ClassDiagram-Framework-v3.png?raw=1)
 
 Now have a closer look inside package ```org.raviolini.aspects```. Once again, there are no cycles in this dependency structure either, which allows for more reusable building blocks.
 - 0 dependencies:
@@ -355,7 +355,7 @@ Now have a closer look inside package ```org.raviolini.aspects```. Once again, t
     - ```data.caching``` depends on ```io.configuration``` and ```io.serialization```
     - ```security.auth``` deppends on ```io.configuration``` and ```security.crypt``` 
 
-![UML Package Diagram - Aspects](https://dl.dropboxusercontent.com/u/111597/raviolini/ClassDiagram-Aspects-v1.png)
+![UML Package Diagram - Aspects](https://www.dropbox.com/s/4h39j0y4ydrccjn/ClassDiagram-Aspects-v1.png?raw=1)
 
 ### Exception Handling
 
