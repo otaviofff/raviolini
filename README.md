@@ -3,9 +3,9 @@
 [![Build Status](https://travis-ci.org/otaviofff/raviolini.svg?branch=master)](https://travis-ci.org/otaviofff/raviolini)
 [![Coverage Status](https://coveralls.io/repos/github/otaviofff/raviolini/badge.svg?branch=master)](https://coveralls.io/github/otaviofff/raviolini?branch=master)
 
-Raviolini is a lightweight framework for building RESTful APIs, in Java 8. You simply provide your domain object and, out of the box, Raviolini gives you authentication, caching, configuration, logging, persistence, serialization and validation on that object. Moreover, pre- and post-execution hooks wil let you extend Raviolini beyond the original scope of CRUD (Create, Read, Update, Delete) operations.
+Raviolini is a lightweight framework for building RESTful Web services, in Java 8. You simply provide your domain objects and, out of the box, Raviolini gives you authentication, caching, configuration, logging, persistence, serialization and validation on those objects. Moreover, Raviolini gives you pre- and post-execution hooks that let you extend Raviolini beyond the scope of CRUD (Create, Read, Update, Delete) operations.
 
-Raviolini is built on top of [Spark](https://github.com/perwendel/spark) (version 2.2) and [ORM Lite](https://github.com/j256/ormlite-core) (version 4.48). The former provides a lightweight HTTP foundation, while the latter provides both a database abstraction layer and object-relational mapping.
+Raviolini is built on top of [Spark](https://github.com/perwendel/spark) (version 2.2) and [ORM Lite](https://github.com/j256/ormlite-core) (version 4.48). The former provides a lightweight HTTP foundation, whereas the latter provides a database abstraction layer and simple object-relational mapping capability.
 
 ## Install
 
@@ -22,7 +22,7 @@ First, add the [JitPack](https://jitpack.io/) repository to your build file (pom
 </repositories>
 ```
 
-Second, add the dependency:
+Second, add Raviolini as a dependency:
 
 ```xml
 <dependencies>
@@ -265,7 +265,7 @@ X-Items-Returned: 3
     }
 ]
 ```
-Note the HTTP response headers ```X-Items-Stored``` and ```X-Items-Returned```, which inform the total number of objects found in the database, and the number of objects returned in this request, respectively.
+Note the HTTP response headers ```X-Items-Stored``` and ```X-Items-Returned```, which inform the total number of objects found in the database, and the number of objects returned for this request, respectively.
 
 ### Filter, Sort and Paginate List
 
@@ -364,8 +364,8 @@ Raviolini embrances HTTP and its status codes.
 | Code        | Message                | Description                                                                                                                    |
 |-------------|------------------------|--------------------------------------------------------------------------------------------------------------------------------|
 | 400         | Bad Request            | API client sent an invalid HTTP request. This could be either a malformed URI, or an empty body for a POST/PUT request.        |
-| 401         | Unauthorized           | API client didn't provide a valid access credential through HTTP header Authorization. A retry with a different credential will be welcomed.           |
-| 403         | Forbidden              | API client won't have access to the targeted resource at all, regardless of its access credential. No retry should take place. |
+| 401         | Unauthorized           | API client didn't provide a valid access credential through HTTP header Authorization. API client may retry the request with different credentials.           |
+| 403         | Forbidden              | API client won't have access to the target resource at all, regardless of its access credentials. No retry should be attempted. |
 | 404         | Not Found              | API client sent an HTTP request against a resource that doesn't exist on the server, at this point in time.                    |
 | 405         | Method Not Allowed     | API client sent an HTTP request along with an unsupported HTTP verb. Raviolini handles GET, POST, PUT and DELETE only.         |
 | 406         | Not Acceptable         | API client sent an HTTP GET request with an unsupported media-type on HTTP header Accept. Only JSON and XML are acceptable.    |
